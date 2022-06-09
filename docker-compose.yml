@@ -1,0 +1,45 @@
+version: '3'
+services:
+
+  backend:
+    build: ./stusy-api
+    restart: on-failure
+    container_name: stusy-api
+    environment:
+      - SECRET=cannabis
+      - PORT=8080
+      - DB_NAME=ecosys
+      - DB_PASS=asd1qwd
+      - DB_USER=root
+    ports:
+      - 8080:8080
+    networks:
+      - fullstack
+
+  frontend:
+    build: ./stusy-ui
+    container_name: stusy-ui
+    ports:
+      - 80:80
+
+  database:
+    image: mysql:5.7
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=asd1qwd
+      - MYSQL_DATABASE=ecosys
+      - MYSQL_ROOT_HOST=localhost
+    ports:
+      - 3306:3306
+    volumes:
+      - ./stusy-db:/var/lib/mysql
+    container_name: stusy-db
+    networks:
+      - fullstack
+
+networks:
+  fullstack:
+    driver: bridge
+
+volumes:
+  stusy-db:
