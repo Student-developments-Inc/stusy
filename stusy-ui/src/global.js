@@ -1,4 +1,4 @@
-export const url = "http://studentsystem.xyz:8080";
+export const url = `http://${window.location.hostname}:8080`;
 
 export function getCookie(name) {
     const value = `; ${document.cookie}`;
