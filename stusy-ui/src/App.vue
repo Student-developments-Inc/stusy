@@ -26,5 +26,41 @@ body {
 
   --blue: #2255f4;
   --blue-mate: #1e42bb;
+
+  overflow: hidden;
+}
+
+.input-form {
+  margin: 10px 0;
+  text-align: left;
+}
+
+.input-form input {
+  margin: 10px 0;
+  padding: 25px 25px;
+  width: 100%;
+  background: rgba(69, 70, 79, 0.1);
+  font-size: 18px;
+  border: none;
+  border-radius: 15px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.button-login input[type='submit'] {
+  color: #ffffff;
+  background: var(--blue);
+  border: none;
+  border-radius: 15px;
+  font-size: 18px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 25px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.button-login input[type='submit']:hover {
+  background: var(--blue-mate);
 }
 </style>
