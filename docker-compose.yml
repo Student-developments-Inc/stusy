@@ -23,12 +23,12 @@ services:
       - 80:80
 
   database:
-    image: mysql:5.7
+    image: mariadb
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=asd1qwd
-      - MYSQL_DATABASE=ecosys
-      - MYSQL_ROOT_HOST=%
+      - MARIADB_ROOT_PASSWORD=asd1qwd
+      - MARIADB_DATABASE=ecosys
+      - MARIADB_ROOT_HOST=%
     ports:
       - 3306:3306
     volumes:
