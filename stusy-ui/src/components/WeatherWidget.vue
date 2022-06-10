@@ -7,7 +7,7 @@
     />
     <p id="dateNowDay">Сегодня {{ getNowDay() }}, сейчас {{ weather }}&deg;</p>
     <p>У вас 4 пары</p>
-    <p>К концу занятий температура поднимется до {{ lastLessonWeather }}°</p>
+    <p>Температура к концу занятий {{ getDiff() + lastLessonWeather }}°</p>
     <p>Контрольных точек не запланировано</p>
   </div>
 </template>
@@ -18,9 +18,9 @@ export default {
   data() {
     return {
       city: "Волгодонск",
-      weather: '',
+      weather: "",
       lastLessonTime: 1705,
-      lastLessonWeather: ''
+      lastLessonWeather: ""
     };
   },
   methods: {
@@ -46,14 +46,19 @@ export default {
       let closestTime;
       let j = Math.floor(this.lastLessonTime / 100);
       if (j % 3 > 1) {
-        closestTime = j + 1
+        closestTime = j + 1;
       } else {
-        closestTime = j - j % 3
+        closestTime = j - j % 3;
       }
       if (closestTime === 24) {
         closestTime = 0;
       }
-      return closestTime / 3
+      return closestTime / 3;
+    },
+    getDiff() {
+      if (this.weather == this.lastLessonWeather) return 'останется '
+      if (this.weather > this.lastLessonWeather) return 'понизится до '
+      if (this.weather < this.lastLessonWeather) return 'повысится до '
     }
   },
   mounted() {
