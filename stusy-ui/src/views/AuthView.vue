@@ -61,7 +61,7 @@ export default {
   methods: {
     auth() {
       this.loading = true;
-      fetch(url + "/users/sign-in", {
+      fetch(`${url}/users/login`, {
         method: "POST",
         body: JSON.stringify({
           email: this.email,
