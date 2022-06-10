@@ -1,4 +1,27 @@
 <template>
+  <ModalWindow v-if="modal">
+    <form>
+      <label class="input-form">
+        <p>Имя</p>
+        <input
+            type="text"
+            placeholder="Элеонора"
+            required
+        />
+      </label>
+      <label class="input-form">
+        <p>Фамилия</p>
+        <input
+            type="text"
+            placeholder="Розенталь"
+            required
+        />
+      </label>
+      <div class="button-login">
+        <input type="submit" value="Сохранить"/>
+      </div>
+    </form>
+  </ModalWindow>
   <div class="home">
     <aside id="menuVertical">
       <h1>StudentSystem</h1>
@@ -149,17 +172,19 @@
 <script>
 import {url, getCookie} from "@/global";
 import WeatherWidget from "@/components/WeatherWidget";
+import ModalWindow from "@/components/ModalWindow";
 
 export default {
   name: "HomeView",
-  components: {WeatherWidget},
+  components: {WeatherWidget, ModalWindow},
   data() {
     return {
       menu: false,
       userData: {
-        first_name: '',
-        last_name: ''
-      }
+        first_name: "Имя",
+        last_name: "Фамилия"
+      },
+      modal: false
     };
   },
   methods: {
@@ -167,29 +192,28 @@ export default {
       this.menu = !this.menu;
     },
     getUserData() {
-      fetch(`${url}/users/${getCookie('ID')}/info`, {
+      fetch(`${url}/users/${getCookie("ID")}/info`, {
         headers: {
-          'Authorization': `Bearer ${getCookie('TOKEN')}`
-        },
+          "Authorization": `Bearer ${getCookie("TOKEN")}`
+        }
       }).then(response => {
         if (response.ok) return response.json();
         if (response.status === 401) {
-          document.cookie = 'TOKEN=null;max-age=0'
-          document.cookie = 'ID=null;max-age=0'
-          this.$router.push("/auth")
+          document.cookie = "TOKEN=null;max-age=0";
+          document.cookie = "ID=null;max-age=0";
+          this.$router.push("/auth");
         }
-        //TODO:Ввод данных в модальное окно;
-        if (response.status === 404) prompt('Введите данные');
+        if (response.status === 404) this.modal = true;
       }).then(data => {
-        this.userData.first_name = data.first_name
-        this.userData.last_name = data.last_name
+        this.userData.first_name = data.first_name;
+        this.userData.last_name = data.last_name;
       }).catch(err => {
-        console.error('Cannot fetch', err)
-      })
+        console.error("Cannot fetch", err);
+      });
     }
   },
   mounted() {
-    this.getUserData();
+    if (getCookie("ID") !== undefined) this.getUserData();
 
     if (!getCookie("TOKEN")) {
       this.$router.push("/auth");
@@ -350,6 +374,8 @@ export default {
 
 .content {
   padding: 15px 24px 24px;
+  height: 100vh;
+  overflow: auto;
 }
 
 .mainContent {
@@ -359,6 +385,7 @@ export default {
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-evenly;
+  margin-bottom: 30px;
 }
 
 .block {
@@ -512,6 +539,18 @@ export default {
 
 .block-schedule p {
   margin: 15px 0;
+}
+
+form {
+  background: var(--light);
+  padding: 12px;
+  border-radius: 20px;
+}
+
+form p {
+  color: #000000;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 @media (max-width: 1600px) {
