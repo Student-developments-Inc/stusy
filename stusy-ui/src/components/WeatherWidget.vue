@@ -2,7 +2,7 @@
   <div class="block" id="weather">
     <img
         id="wicon"
-        v-bind:src="[`http://openweathermap.org/img/wn/01d@2x.png`]"
+        v-bind:src="require(`../assets/weather/${weatherCode}.svg`)"
         alt="weathericon"
     />
     <p id="dateNowDay">Сегодня {{ getNowDay() }}, сейчас {{ weather }}&deg;</p>
@@ -20,7 +20,8 @@ export default {
       city: "Волгодонск",
       weather: "",
       lastLessonTime: 1705,
-      lastLessonWeather: ""
+      lastLessonWeather: "",
+      weatherCode: 185
     };
   },
   methods: {
@@ -37,6 +38,7 @@ export default {
           .then((data) => {
             this.weather = data.current_condition[0].FeelsLikeC;
             this.lastLessonWeather = data.weather[0].hourly[this.timeIndex()].FeelsLikeC;
+            this.weatherCode = data.weather[0].hourly[this.timeIndex()]["weatherCode"];
           })
           .catch((err) => {
             console.error("Невозможно отправить запрос", err);
@@ -56,9 +58,9 @@ export default {
       return closestTime / 3;
     },
     getDiff() {
-      if (this.weather == this.lastLessonWeather) return 'останется '
-      if (this.weather > this.lastLessonWeather) return 'понизится до '
-      if (this.weather < this.lastLessonWeather) return 'повысится до '
+      if (this.weather == this.lastLessonWeather) return "останется ";
+      if (this.weather > this.lastLessonWeather) return "понизится до ";
+      if (this.weather < this.lastLessonWeather) return "повысится до ";
     }
   },
   mounted() {
@@ -82,5 +84,6 @@ export default {
   position: absolute;
   right: -10px;
   top: -10px;
+  height: 100px;
 }
 </style>
