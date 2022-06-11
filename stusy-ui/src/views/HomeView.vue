@@ -1,24 +1,26 @@
 <template>
   <ModalWindow v-if="modal">
-    <form>
+    <form v-on:submit="putUserData()">
       <label class="input-form">
         <p>Имя</p>
         <input
+            v-model="userData.first_name"
             type="text"
-            placeholder="Элеонора"
+            placeholder="Введите имя"
             required
         />
       </label>
       <label class="input-form">
         <p>Фамилия</p>
         <input
+            v-model="userData.last_name"
             type="text"
-            placeholder="Розенталь"
+            placeholder="Введите фамилию"
             required
         />
       </label>
       <div class="button-login">
-        <input type="submit" value="Сохранить"/>
+        <input type="submit" value="Сохранить">
       </div>
     </form>
   </ModalWindow>
@@ -45,7 +47,7 @@
     </aside>
     <div class="content">
       <header>
-        <h1>Доброе утро, {{ userData.first_name }}</h1>
+        <h1>Доброе утро{{ userData.first_name && userData.last_name ? `, ${userData.first_name}` : "" }}</h1>
         <nav>
           <ul id="topMenu">
             <li>
@@ -71,7 +73,9 @@
             </li>
             <li>
               <a v-on:click="menuAction">
-                <span>{{ `${userData.first_name} ${userData.last_name[0]}.` }}</span>
+                <span>{{
+                    userData.first_name && userData.last_name ? `${userData.first_name} ${userData.last_name[0]}.` : "Меню"
+                  }}</span>
                 <div class="avatar-arrow" v-bind:style="[menu?{'transform':'rotate(90deg)'}:{}]">
                   <img src="@/assets/arrow.svg"/>
                 </div>
@@ -79,7 +83,7 @@
               <transition name="slide-fade">
                 <ul class="sub-menu" v-if="menu">
                   <li><a href="#">Профиль</a></li>
-                  <li><a href="#">Выйти</a></li>
+                  <li v-on:click="logout()"><a href="#">Выйти</a></li>
                 </ul>
               </transition>
             </li>
@@ -181,8 +185,8 @@ export default {
     return {
       menu: false,
       userData: {
-        first_name: "Имя",
-        last_name: "Фамилия"
+        first_name: "",
+        last_name: ""
       },
       modal: false
     };
@@ -192,28 +196,51 @@ export default {
       this.menu = !this.menu;
     },
     getUserData() {
-      fetch(`${url}/users/${getCookie("ID")}/info`, {
+      fetch(`${url}/users/${getCookie("ID")}`, {
         headers: {
           "Authorization": `Bearer ${getCookie("TOKEN")}`
         }
       }).then(response => {
         if (response.ok) return response.json();
         if (response.status === 401) {
-          document.cookie = "TOKEN=null;max-age=0";
-          document.cookie = "ID=null;max-age=0";
-          this.$router.push("/auth");
+          this.logout();
         }
         if (response.status === 404) this.modal = true;
       }).then(data => {
-        this.userData.first_name = data.first_name;
-        this.userData.last_name = data.last_name;
+        if (data !== undefined) {
+          this.userData.first_name = data.first_name;
+          this.userData.last_name = data.last_name;
+        }
       }).catch(err => {
         console.error("Cannot fetch", err);
       });
+    },
+    putUserData() {
+      fetch(`${url}/users/${getCookie("ID")}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${getCookie("TOKEN")}`
+        },
+        body: JSON.stringify({
+          "first_name": this.userData.first_name,
+          "last_name": this.userData.last_name
+        })
+      }).then(response => {
+        if (response.ok) return response.json();
+      }).then(data => {
+        console.log(data);
+      }).catch(err => {
+        console.error("Cannot fetch", err);
+      });
+    },
+    logout() {
+      document.cookie = "TOKEN=null;max-age=0";
+      document.cookie = "ID=null;max-age=0";
+      this.$router.push("/auth");
     }
   },
   mounted() {
-    if (getCookie("ID") !== undefined) this.getUserData();
+    if (getCookie("ID") !== undefined && this.userData.first_name === "") this.getUserData();
 
     if (!getCookie("TOKEN")) {
       this.$router.push("/auth");
