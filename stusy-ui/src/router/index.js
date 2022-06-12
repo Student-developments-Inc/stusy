@@ -13,6 +13,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/AuthView.vue'),
     },
     {
+        path:'/profile',
+        name: 'Профиль',
+        component: () => import(/* webpackChunkName: "about" */ '../views/ProfileView'),
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'Не найдено',
         component: () => import(/* webpackChunkName: "about" */ '../views/404View.vue'),
