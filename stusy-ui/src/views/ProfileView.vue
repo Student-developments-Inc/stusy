@@ -154,6 +154,8 @@ export default {
   gap: 10px;
   width: 100%;
   padding: 15px 24px 24px;
+  height: 100vh;
+  overflow: auto;
 }
 
 .main header {
@@ -179,10 +181,9 @@ export default {
 .AvatarAndPersonalDataAndContacts {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: stretch;
+  justify-content: space-evenly;
   gap: 1%;
-  padding: 0 200px 0 0;
+  flex-wrap: wrap;
 }
 
 .AvatarProfile {
@@ -200,6 +201,7 @@ export default {
   width: 349px;
   height: 350px;
   background: #2255f4;
+  border-radius: 15px;
 }
 
 .personalData, .contactsData {
@@ -210,14 +212,14 @@ export default {
   gap: 45px;
 }
 
-.personalDataContent {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  column-gap: 100px;
-}
+/*.personalDataContent {*/
+/*  display: flex;*/
+/*  flex-direction: row;*/
+/*  flex-wrap: wrap;*/
+/*  align-items: flex-start;*/
+/*  justify-content: space-between;*/
+/*  column-gap: 100px;*/
+/*}*/
 
 .personalDataContentForm, .contactsDataForm {
   display: flex;
@@ -263,7 +265,7 @@ h1 {
   resize: none;
   height: 10rem;
   overflow: auto;
-  width: 50%;
+  max-width: 950px;
   padding: 20px;
   font-weight: 300;
   font-size: 24px;
