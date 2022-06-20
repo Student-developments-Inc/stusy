@@ -10,17 +10,17 @@ const routes = [
     {
         path: '/auth',
         name: 'Вход',
-        component: () => import(/* webpackChunkName: "about" */ '../views/AuthView.vue'),
+        component: () => import('../views/AuthView.vue'),
     },
     {
         path:'/profile',
         name: 'Профиль',
-        component: () => import(/* webpackChunkName: "about" */ '../views/ProfileView'),
+        component: () => import('../views/ProfileView'),
     },
     {
         path: '/:pathMatch(.*)*',
         name: 'Не найдено',
-        component: () => import(/* webpackChunkName: "about" */ '../views/404View.vue'),
+        component: () => import('../views/404View.vue'),
     },
 ];
 
