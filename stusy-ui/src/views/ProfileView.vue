@@ -1,67 +1,10 @@
 <template>
   <div class="profile">
-    <aside id="menuVertical">
-      <h1>StudentSystem</h1>
-      <ol>
-        <li id="li_1"><a href="#">
-          <div class="LeftMenu_icon">
-            <img src="@/assets/home.svg">
-          </div>
-          <span style="color: var(--light)">Домашняя страница</span></a></li>
-        <li><a href="#">
-          <div class="LeftMenu_icon">
-            <img src="@/assets/book.svg">
-          </div>
-          <span>Мои курсы</span></a></li>
-        <li><a href="#">
-          <div class="LeftMenu_icon">
-            <img src="@/assets/calendar.svg">
-          </div>
-          <span>Расписание</span></a></li>
-      </ol>
-    </aside>
+    <AsideMenu/>
     <div class="main">
       <header>
         <h1>Ваш профиль</h1>
-        <nav>
-          <ul id="topMenu">
-            <li>
-              <a href="#">
-              <span class="topMenu_icon">
-                <img src="@/assets/search.svg" alt="Search">
-              </span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <span class="topMenu_icon">
-                  <img src="@/assets/bell.svg" alt="Bell">
-                </span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-              <span>
-                <img src="@/assets/avatar.png" alt="Avatar"/>
-              </span>
-              </a>
-            </li>
-            <li>
-              <a v-on:click="menuAction">
-                <span>Элеонора А.</span>
-                <div class="avatar-arrow" v-bind:style="[menu?{'transform':'rotate(90deg)'}:{}]">
-                  <img src="@/assets/arrow.svg"/>
-                </div>
-              </a>
-              <transition name="slide-fade">
-                <ul class="sub-menu" v-if="menu">
-                  <li><a href="#">Профиль</a></li>
-                  <li><a href="#">Выйти</a></li>
-                </ul>
-              </transition>
-            </li>
-          </ul>
-        </nav>
+        <TopMenu/>
       </header>
       <div class="mainContent">
         <div class="AvatarAndPersonalDataAndContacts">
@@ -145,7 +88,6 @@
                 <input
                     type="text"
                     placeholder="name@gmail.com"
-                    v-model="email"
                     required
                 />
               </label>
@@ -188,72 +130,20 @@
 </template>
 
 <script>
+import AsideMenu from "@/components/AsideMenu";
+import TopMenu from "@/components/TopMenu";
+
 export default {
-  name: "ProfileView"
+  name: "ProfileView",
+  components: {AsideMenu, TopMenu},
 };
 </script>
 
 <style scoped>
-body {
-  overflow: auto !important;
-}
-
 .profile {
   display: flex !important;
   min-height: 100vh;
   background: var(--dark-mate-mate);
-}
-
-#menuVertical {
-  display: block;
-  text-align: center;
-  padding: 39px 24px;
-  width: 300px;
-  min-height: 100%;
-  box-sizing: border-box;
-  border-radius: 0 25px 0 0;
-  background: var(--light);
-}
-
-#menuVertical h1 {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 28px;
-  color: var(--blue);
-  margin-top: 0;
-  margin-bottom: 30px;
-}
-
-#menuVertical ol {
-  display: block;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  position: relative;
-}
-
-#menuVertical ol li {
-  display: list-item;
-  box-sizing: border-box;
-  padding: 16px 21px;
-  width: 252px;
-  height: 54px;
-  border-radius: 15px;
-}
-
-#li_1 {
-  background: var(--blue);
-}
-
-#menuVertical ol li a {
-  display: flex;
-  color: var(--dark);
-  text-decoration: none;
-  font-size: 18px;
-}
-
-.LeftMenu_icon {
-  padding: 0 13px 0 0;
 }
 
 .main {
@@ -264,8 +154,6 @@ body {
   gap: 10px;
   width: 100%;
   padding: 15px 24px 24px;
-  overflow: auto;
-
 }
 
 .main header {
@@ -278,75 +166,6 @@ body {
   font-weight: 500;
   font-size: 36px;
   margin: 0;
-}
-
-#topMenu {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-#topMenu li a {
-  display: flex;
-  color: var(--dark);
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  font-size: 18px;
-  height: 100%;
-  position: relative;
-  white-space: nowrap;
-}
-
-#topMenu li {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 18px;
-  display: flex;
-  margin-right: 16px;
-  text-align: center;
-}
-
-.sub-menu {
-  position: absolute;
-  top: 65px;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  background: var(--light);
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  overflow: hidden;
-}
-
-.sub-menu li {
-  margin-right: 0 !important;
-  padding: 10px 36px;
-  cursor: pointer;
-}
-
-.sub-menu li:hover {
-  background: var(--light-mate);
-}
-
-#topMenu > li:last-child {
-  background: var(--light);
-  border-radius: 10px;
-  padding: 0 36px;
-  position: relative;
-  user-select: none;
-}
-
-.avatar-arrow {
-  margin-left: 7px;
-  transition: .3s;
-}
-
-.topMenu_icon {
-  background: var(--light);
-  border-radius: 15px;
-  padding: 20px;
 }
 
 .mainContent {
@@ -416,7 +235,7 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 20px ;
+  gap: 20px;
 }
 
 .input-form label span {
