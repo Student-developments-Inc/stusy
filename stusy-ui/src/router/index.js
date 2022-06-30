@@ -18,6 +18,11 @@ const routes = [
         component: () => import('../views/ProfileView'),
     },
     {
+        path:'/courses',
+        name: 'Курсы',
+        component: () => import('../views/MyCourses'),
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'Не найдено',
         component: () => import('../views/404View.vue'),

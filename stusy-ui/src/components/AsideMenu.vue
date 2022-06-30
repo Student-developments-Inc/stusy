@@ -7,7 +7,7 @@ refactor:<template>
           <img src="@/assets/home.svg">
         </div>
         <span style="color: var(--light)">Домашняя страница</span></a></li>
-      <li><a href="#">
+      <li><a href="/courses">
         <div class="LeftMenu_icon">
           <img src="@/assets/book.svg">
         </div>
