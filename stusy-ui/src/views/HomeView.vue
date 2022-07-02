@@ -170,14 +170,10 @@ export default {
         if (response.ok) return response.json();
       }).then(data => {
         console.log(data);
+        this.$router.push('/');
       }).catch(err => {
         console.error("Cannot fetch", err);
       });
-    },
-    logout() {
-      document.cookie = "TOKEN=null;max-age=0";
-      document.cookie = "ID=null;max-age=0";
-      this.$router.push("/auth");
     }
   },
   mounted() {

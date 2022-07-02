@@ -32,7 +32,7 @@
         <transition name="slide-fade">
           <ul class="sub-menu" v-if="menu">
             <li><a href="/profile">Профиль</a></li>
-            <li><a href="#">Выйти</a></li>
+            <li v-on:click="logout"><a>Выйти</a></li>
           </ul>
         </transition>
       </li>
@@ -51,6 +51,11 @@ export default {
   methods: {
     menuAction() {
       this.menu = !this.menu;
+    },
+    logout() {
+      document.cookie = "TOKEN=null;max-age=0";
+      document.cookie = "ID=null;max-age=0";
+      this.$router.push("/auth");
     }
   }
 }
