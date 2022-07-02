@@ -35,6 +35,7 @@ export default {
 
 <style scoped>
 .avatar-arrow {
+  filter: invert(22%) sepia(61%) saturate(6241%) hue-rotate(228deg) brightness(102%) contrast(92%);
   margin-right: 13px;
 }
 
@@ -42,4 +43,22 @@ export default {
   text-decoration: none;
   color: var(--dark);
 }
+
+.tab__content {
+  margin-left: 22px;
+}
+
+.tab__header a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.tab__header a strong {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+}
+
 </style>
