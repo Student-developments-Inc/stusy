@@ -1,6 +1,6 @@
 <template>
   <ModalWindow v-if="modal">
-    <form v-on:submit="putUserData()">
+    <form v-on:submit.prevent="putUserData()">
       <label class="input-form">
         <p>Имя</p>
         <input
