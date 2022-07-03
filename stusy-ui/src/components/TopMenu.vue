@@ -24,7 +24,7 @@
       </li>
       <li v-on:click="menuAction">
         <a>
-          <span>Элеонора А.</span>
+          <span>{{ `${userData.first_name} ${userData.last_name[0]}.` }}</span>
           <div class="avatar-arrow" v-bind:style="[menu?{'transform':'rotate(90deg)'}:{}]">
             <img src="@/assets/arrow.svg"/>
           </div>
@@ -41,11 +41,17 @@
 </template>
 
 <script>
+import {getCookie, logout, url} from "@/global";
+
 export default {
   name: "TopMenu",
   data() {
     return {
-      menu: false
+      menu: false,
+      userData: {
+        first_name: "Загрузка",
+        last_name: "😉"
+      },
     }
   },
   methods: {
@@ -53,10 +59,31 @@ export default {
       this.menu = !this.menu;
     },
     logout() {
-      document.cookie = "TOKEN=null;max-age=0";
-      document.cookie = "ID=null;max-age=0";
-      this.$router.push("/auth");
-    }
+      logout()
+    },
+    getUserData() {
+      fetch(`${url}/users/${getCookie("ID")}`, {
+        headers: {
+          "Authorization": `Bearer ${getCookie("TOKEN")}`
+        }
+      }).then(response => {
+        if (response.ok) return response.json();
+        if (response.status === 401) {
+          logout();
+        }
+        if (response.status === 404) this.modal = true;
+      }).then(data => {
+        if (data !== undefined) {
+          this.userData.first_name = data.first_name;
+          this.userData.last_name = data.last_name;
+        }
+      }).catch(err => {
+        console.error("Cannot fetch", err);
+      });
+    },
+  },
+  mounted() {
+    this.getUserData()
   }
 }
 </script>
