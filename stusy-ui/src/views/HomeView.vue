@@ -114,7 +114,7 @@
   </div>
 </template>
 <script>
-import {url, getCookie} from "@/global";
+import {url, getCookie, logout} from "@/global";
 import WeatherWidget from "@/components/WeatherWidget";
 import ModalWindow from "@/components/ModalWindow";
 import AsideMenu from "@/components/AsideMenu";
@@ -144,7 +144,7 @@ export default {
       }).then(response => {
         if (response.ok) return response.json();
         if (response.status === 401) {
-          this.logout();
+          logout();
         }
         if (response.status === 404) this.modal = true;
       }).then(data => {
