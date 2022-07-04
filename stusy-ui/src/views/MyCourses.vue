@@ -157,6 +157,13 @@ ol {
   line-height: 23px;
 }
 
+.coursesAbout h1 {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
+}
+
 .coursesAboutInfo {
   margin-top: 16px;
   display: flex;

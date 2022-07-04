@@ -5,10 +5,10 @@
          class="tab__link"
          @click.prevent="active = !active">
         <span class="avatar-arrow" v-show="!active">
-          <img src="@/assets/arrow.svg"/>
+          <img src="@/assets/arrow.svg" style="transform:rotate(-90deg);"/>
         </span>
         <span class="avatar-arrow" v-show="active">
-          <img src="@/assets/arrow.svg" style="transform:rotate(-90deg);"/>
+          <img src="@/assets/arrow.svg"/>
         </span>
         <strong>{{ title }}</strong>
       </a>
