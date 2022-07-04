@@ -19,9 +19,18 @@
           </label>
           <div class="sections">
             <h1>Разделы</h1>
-            <div class="button-save">
-              <img src="@/assets/added.svg">
-              <input type="submit" value="Создать новый"/>
+            <div class="createNew">
+              <div class="button-save" v-bind:class="{ active: menu }" @click="menuAction">
+                <img src="@/assets/added.svg">
+                <input type="submit" value="Создать новый"/>
+              </div>
+              <transition name="slide-fade">
+                <ul class="sub-menu" v-if="menu">
+                  <li><a>C подпунктами</a></li>
+                  <li><a>Ссылка</a></li>
+                  <li><a>Объявление</a></li>
+                </ul>
+              </transition>
             </div>
           </div>
           <ul class="createdCoursesContent">
@@ -29,15 +38,10 @@
               <img class="moving-icon" src="@/assets/moving.svg">
               <a href="">Введение</a></li>
             <li class="redactorModule">
-              <img class="moving-icon" src="@/assets/moving.svg">
-              <AccordionMenu title="Модуль 1" class="accordionMenu"></AccordionMenu>
-              <img class="redactor-icon" src="@/assets/addedV2.svg">
-              <img class="redactor-icon" src="@/assets/pen.svg">
-              <img class="trash-icon" src="@/assets/trash.svg">
+              <AccordionMenu title="Модуль 1" v-bind:role="this.role" class="accordionMenu"></AccordionMenu>
             </li>
             <li class="redactorModule">
-              <img class="moving-icon" src="@/assets/moving.svg">
-              <AccordionMenu title="Модуль 2" class="accordionMenu">
+              <AccordionMenu title="Модуль 2" v-bind:role="this.role" class="accordionMenu">
                 <ol>
                   <li><a href="#">Как сжать звуковые файлы</a></li>
                   <li><a href="#">Как сжать графические файлы</a></li>
@@ -45,21 +49,17 @@
                   <li><a href="#">&#10071; Контрольная точка 2 - Тестирование</a></li>
                 </ol>
               </AccordionMenu>
-              <img class="redactor-icon" src="@/assets/addedV2.svg">
-              <img class="redactor-icon" src="@/assets/pen.svg">
-              <img class="trash-icon" src="@/assets/trash.svg">
             </li>
             <li class="redactorModule">
-              <img class="moving-icon" src="@/assets/moving.svg">
-              <AccordionMenu title="Модуль 3" class="accordionMenu"></AccordionMenu>
-              <img class="redactor-icon" src="@/assets/addedV2.svg">
-              <img class="redactor-icon" src="@/assets/pen.svg">
-              <img class="trash-icon" src="@/assets/trash.svg">
+              <AccordionMenu title="Модуль 3" v-bind:role="this.role" class="accordionMenu"></AccordionMenu>
             </li>
           </ul>
         </div>
         <div class="coursesAbout">
           <h1>О курсе</h1>
+          <label class="input-form">
+            <input type="text" alt="coursesName"/>
+          </label>
         </div>
       </div>
     </div>
@@ -73,11 +73,31 @@ import AccordionMenu from "@/components/AccordionMenu";
 
 export default {
   name: "CreatedCourses",
-  components: {AccordionMenu, TopMenu, AsideMenu}
+  components: {AccordionMenu, TopMenu, AsideMenu},
+  data() {
+    return {
+      menu: false,
+      role: "teacher"
+    };
+  },
+  methods: {
+    menuAction() {
+      this.menu = !this.menu;
+    }
+  }
 };
 </script>
 
 <style scoped>
+ul {
+  list-style-type: none;
+}
+
+li {
+  display: flex;
+  flex-direction: row;
+}
+
 h1 {
   font-style: normal;
   font-weight: 400;
@@ -86,12 +106,20 @@ h1 {
 }
 
 a {
+  cursor: pointer;
   text-decoration: none;
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 23px;
   color: var(--blue);
+}
+
+input {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21px;
 }
 
 .creatingCourses {
@@ -155,6 +183,7 @@ a {
   font-weight: 500;
   font-size: 24px;
   line-height: 28px;
+  margin-bottom: 46px;
 }
 
 .coursesContentCreating-topRow {
@@ -194,7 +223,7 @@ a {
   background: none;
 }
 
-.button-save:hover {
+.button-save:hover, .sub-menu li:hover {
   background: var(--blue-mate);
 }
 
@@ -208,22 +237,10 @@ a {
   cursor: pointer !important;
 }
 
-.redactor-icon {
-  margin-right: 12px;
-}
-
-.trash-icon {
-  margin-left: 5px;
-}
-
 .createdCoursesContent {
   display: flex;
   flex-direction: column;
   gap: 30px;
-}
-
-.accordionMenu {
-  margin-right: 9px;
 }
 
 .accordionMenu ol {
@@ -231,14 +248,40 @@ a {
   flex-direction: column;
   gap: 30px;
   margin-top: 30px;
+  margin-left: 51px;
 }
 
-ul {
-  list-style-type: none;
-}
-
-li {
+.sub-menu {
+  position: absolute;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  border-radius: 0 0 15px 15px;
+  background-color: var(--blue);
+}
+
+.active {
+  padding: 17px 15px 16px;
+  border-radius: 15px 15px 0 0;
+  border-bottom: 1px solid #1E42BB;
+}
+
+.sub-menu li a{
+  padding: 15px 15.52px 21px 45px;
+  border-radius: 15px;
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: var(--light);
+}
+
+.sub-menu li {
+  border-radius: 15px;
+}
+
+.createNew {
+  background-color: var(--blue);
+  border-radius: 15px;
 }
 </style>
