@@ -276,8 +276,8 @@ input {
   color: var(--light);
 }
 
-.sub-menu li {
-  border-radius: 15px;
+.sub-menu > li:last-child {
+  border-radius: 0 0 15px 15px;
 }
 
 .createNew {
