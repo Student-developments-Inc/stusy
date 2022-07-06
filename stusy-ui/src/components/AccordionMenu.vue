@@ -7,10 +7,7 @@
           <img src="@/assets/moving.svg">
         </span>
         <div class="mainTitle" @click.prevent="active = !active">
-        <span class="avatar-arrow" v-show="!active">
-          <img src="@/assets/arrow.svg" style="transform:rotate(-90deg);"/>
-        </span>
-          <span class="avatar-arrow" v-show="active">
+        <span class="avatar-arrow" v-bind:style="[!active?{'transform':'rotate(-90deg)'}:{}]">
           <img src="@/assets/arrow.svg"/>
         </span>
           <strong>{{ title }}</strong>
@@ -27,7 +24,7 @@
               </a>
             </li>
             <li><a>Тест</a></li>
-            <li><a>Ссылка</a></li>
+            <li @click="isModalOpen = true"><a>Ссылка</a></li>
             <li><a>Файлы</a></li>
             <li><a>Текст</a></li>
           </ul>
@@ -40,15 +37,36 @@
         </span>
       </a>
     </div>
-    <div class="tab__content" v-show="active">
-      <slot/>
-    </div>
+    <transition name="fade">
+      <div class="tab__content" v-show="active">
+        <slot/>
+      </div>
+    </transition>
+    <ModalWindow v-if="isModalOpen">
+      <div class="modal-window">
+        <div>
+          <img src="@/assets/diskette.svg" @click="isModalOpen = false">
+          <h1>Создание ссылки:</h1>
+        </div>
+        <label class="input-form">
+          <label>Название</label>
+          <input type="text" alt="coursesName"/>
+        </label>
+        <label class="input-form">
+          <label>Ссылка</label>
+          <input type="text" alt="coursesName"/>
+        </label>
+      </div>
+    </ModalWindow>
   </div>
 </template>
 
 <script>
+import ModalWindow from "@/components/ModalWindow";
+
 export default {
   name: "AccordionMenu",
+  components: {ModalWindow},
   props: [
     "title",
     "role"
@@ -56,7 +74,8 @@ export default {
   data() {
     return {
       menu: false,
-      active: false
+      active: false,
+      isModalOpen: false
     };
   },
   methods: {
@@ -80,6 +99,7 @@ ul {
 .avatar-arrow {
   filter: invert(22%) sepia(61%) saturate(6241%) hue-rotate(228deg) brightness(102%) contrast(92%);
   margin-right: 13px;
+  transition: .3s;
 }
 
 .viewSection-arrow {
@@ -159,5 +179,44 @@ ul {
 
 .sub-menu li:hover {
   background: var(--blue-mate);
+}
+
+.modal-window {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  background-color: var(--light);
+  border-radius: 15px;
+  padding: 30px 20px;
+}
+
+.modal-window h1 {
+  margin-bottom: 10px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 41px;
+}
+
+.modal-window label {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+}
+
+.fade-enter-active {
+  animation: scale-up-ver-top .2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+@keyframes scale-up-ver-top {
+  0% {
+    transform: scaleY(0.4);
+    transform-origin: 100% 0;
+  }
+  100% {
+    transform: scaleY(1);
+    transform-origin: 100% 0;
+  }
 }
 </style>
