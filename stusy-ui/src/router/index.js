@@ -23,6 +23,11 @@ const routes = [
         component: () => import('../views/MyCourses'),
     },
     {
+        path:'/creatingCourses',
+        name: 'Создание курса',
+        component: () => import('../views/CreatingCourses'),
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'Не найдено',
         component: () => import('../views/404View.vue'),
