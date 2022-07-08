@@ -6,7 +6,7 @@
         <TopMenu/>
       </header>
       <div class="mainContent">
-        <div class="coursesMain">
+        <div class="coursesMainLeft" id="coursesMain">
           <h1>Архивация и сжатие данных</h1>
           <section class="advertisement">
             <h1>Объявление</h1>
@@ -16,7 +16,7 @@
               fugiat nulla pariatur.
             </article>
           </section>
-          <ol class="courseContent">
+          <ol class="accordionMenu-list">
             <li><a href="">Введение</a></li>
             <AccordionMenu title="Модуль 1" class="accordionMenu">
 
@@ -34,7 +34,7 @@
             </AccordionMenu>
           </ol>
         </div>
-        <div class="coursesAbout">
+        <div class="coursesMainAbout">
           <h1>О курсе</h1>
           <div class="coursesAboutInfo">
             <p>3 зачетных единицы</p>
@@ -95,41 +95,7 @@ ol {
   list-style-type: none;
 }
 
-.courses {
-  display: flex !important;
-  background: var(--dark-mate-mate);
-  min-height: 100vh;
-}
-
-.main {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-  gap: 10px;
-  width: 100%;
-  padding: 15px 24px 24px;
-  height: 100vh;
-  overflow: auto;
-}
-
-.main header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-bottom: 29px;
-}
-
-.mainContent {
-  height: 100%;
-  display: flex;
-  align-items: flex-start;
-  flex-direction: row;
-  justify-content: center;
-  gap: 16px;
-}
-
-.coursesMain {
+#coursesMain {
   display: flex;
   flex: 3;
   flex-direction: column;
@@ -141,27 +107,11 @@ ol {
   border-radius: 25px;
 }
 
-.coursesAbout {
-  flex: 1;
-  max-width: 22%;
-  min-height: 70%;
-  padding: 20px;
-  background: var(--light);
-  border-radius: 25px;
-}
-
-.coursesAbout p {
+.coursesMainAbout p {
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
   line-height: 23px;
-}
-
-.coursesAbout h1 {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 28px;
 }
 
 .coursesAboutInfo {
@@ -191,12 +141,6 @@ ol {
   font-size: 20px;
   line-height: 160%;
   text-align: justify;
-}
-
-.courseContent {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
 }
 
 .accordionMenu ol {
