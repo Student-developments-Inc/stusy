@@ -34,7 +34,7 @@
           </div>
           <div class="groupForm-row">
             <label>Тип ответа:</label>
-            <a>Выбрать</a>
+            <a @click="isModalOpen = true">Выбрать</a>
             <a>Повторить</a>
             <label>Количество баллов за вопрос:</label>
             <label class="input-form">
@@ -61,7 +61,7 @@
               <input type="text" alt="questionText"/>
             </label>
           </div>
-          <div class="button-save-right">
+          <div class="form-group-right">
             <div class="button-save">
               <img src="@/assets/diskette.svg">
               <input type="submit" value="Сохранить"/>
@@ -109,19 +109,77 @@
       </div>
     </div>
   </div>
+  <ModalWindow v-if="isModalOpen">
+    <div class="modal-window">
+      <img src="@/assets/close.svg" class="close-button" @click="isModalOpen = false">
+      <h1>Выбор типа ответа</h1>
+      <div class="form-group selectResponseType">
+        <label class="radio-button">
+          <input
+              name="responseType"
+              type="radio"
+              value="1"
+              checked
+          />
+          <span>Один/несколько правильных ответов</span>
+        </label>
+        <label class="radio-button">
+          <input
+              name="responseType"
+              type="radio"
+              value="2"
+          />
+          <span>Соотнести</span>
+        </label>
+        <label class="radio-button">
+          <input
+              name="responseType"
+              type="radio"
+              value="3"
+          />
+          <span>Письменный ответ</span>
+        </label>
+        <label class="radio-button">
+          <input
+              name="responseType"
+              type="radio"
+              value="4"
+          />
+          <span>Числовой ответ</span>
+        </label>
+        <label class="radio-button">
+          <input
+              name="responseType"
+              type="radio"
+              value="5"
+          />
+          <span>Расчёт по формуле</span>
+        </label>
+      </div>
+      <textarea placeholder="Описание"></textarea>
+      <div class="form-group-right">
+        <div class="button-save">
+          <img src="@/assets/diskette.svg">
+          <input type="submit" value="Выбрать"/>
+        </div>
+      </div>
+    </div>
+  </ModalWindow>
 </template>
 
 <script>
 import TopMenu from "@/components/TopMenu";
 import AsideMenu from "@/components/AsideMenu";
 import AccordionMenu from "@/components/AccordionMenu";
+import ModalWindow from "@/components/ModalWindow";
 
 export default {
   name: "CreatingTest",
-  components: {AccordionMenu, AsideMenu, TopMenu},
+  components: {ModalWindow, AccordionMenu, AsideMenu, TopMenu},
   data() {
     return {
-      role: "teacher"
+      role: "teacher",
+      isModalOpen: false
     };
   }
 };
@@ -150,6 +208,11 @@ a {
   font-size: 20px;
   line-height: 23px;
   color: var(--blue);
+}
+
+textarea {
+  background-color: var(--dark-mate-mate);
+  height: 7rem;
 }
 
 .input-form, .input-form input {
@@ -193,7 +256,7 @@ a {
   background-image: url(../assets/tick.svg);
 }
 
-.button-save-right {
+.form-group-right {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -201,5 +264,41 @@ a {
 
 .accordionMenu-list {
   gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 26px;
+}
+
+
+input[type='radio']:after {
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  top: -2px;
+  left: -1px;
+  position: relative;
+  background-color: white;
+  content: '';
+  display: inline-block;
+  visibility: visible;
+  border: 2px solid var(--blue);
+}
+
+input[type='radio']:checked:after {
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  top: -2px;
+  left: -1px;
+  position: relative;
+  background-color: var(--blue);
+  content: '';
+  display: inline-block;
+  visibility: visible;
+  box-shadow:  inset 0 0 0 0.15em var(--light);
 }
 </style>

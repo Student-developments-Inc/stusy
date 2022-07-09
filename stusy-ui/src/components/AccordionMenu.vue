@@ -12,7 +12,7 @@
         </span>
           <strong>{{ title }}</strong>
         </div>
-        <div class="createNewViewSection" v-if="role === `teacher && added-icon`">
+        <div class="createNewViewSection" v-if="addedIco === `true` && role === `teacher`">
           <span @click="menuAction" v-if="!menu">
             <img src="@/assets/addedV2.svg"/>
           </span>
@@ -70,7 +70,7 @@ export default {
     "title",
     "titleAfter",
     "role",
-    "added-icon"
+    "addedIco"
   ],
   data() {
     return {
@@ -181,41 +181,6 @@ ul {
 
 .sub-menu li:hover {
   background: var(--blue-mate);
-}
-
-.modal-window {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 30%;
-  gap: 17px;
-  background-color: var(--light);
-  border-radius: 15px;
-  padding: 30px 20px;
-}
-
-.modal-window h1 {
-  margin-bottom: 10px;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 36px;
-  line-height: 41px;
-}
-
-.modal-window label {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 23px;
-}
-
-.close-button {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
 }
 
 .fade-enter-active {
