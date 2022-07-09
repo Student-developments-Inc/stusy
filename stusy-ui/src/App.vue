@@ -35,6 +35,13 @@ body {
   text-align: left;
 }
 
+input {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21px;
+}
+
 .input-form input {
   margin: 10px 0;
   padding: 25px 25px;
@@ -45,6 +52,71 @@ body {
   border-radius: 15px;
   box-sizing: border-box;
   outline: none;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 29px;
+  width: 100%;
+  padding: 15px 24px 24px;
+  height: 100vh;
+  overflow: auto;
+}
+
+.main header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.mainContent {
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+}
+
+.courses {
+  display: flex !important;
+  background: var(--dark-mate-mate);
+  min-height: 100vh;
+}
+
+.coursesMainLeft {
+  display: flex;
+  flex: 3;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 21px;
+  padding: 21px 26px;
+  max-width: 70%;
+  min-height: 80%;
+  background: var(--light);
+  border-radius: 25px;
+}
+
+.coursesMainAbout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 22%;
+  min-height: 70%;
+  padding: 21px 20px;
+  background: var(--light);
+  border-radius: 25px;
+}
+
+.coursesMainAbout h1 {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
 }
 
 .button-login input[type='submit'] {
@@ -63,4 +135,66 @@ body {
 .button-login input[type='submit']:hover {
   background: var(--blue-mate);
 }
+
+.button-save {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  padding: 17px 15px;
+  gap: 13px;
+  background: var(--blue);
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.button-save input {
+  cursor: pointer;
+  color: #ffffff;
+  border: none;
+  background: none;
+}
+
+.button-save:hover, .sub-menu li:hover {
+  background: var(--blue-mate);
+}
+
+.redactorContentCreating-topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.redactorContentCreating-headerOfSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 26px;
+}
+
+.groupForm-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 21px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+}
+
+.groupForm-row .input-form-allWidth {
+  flex-grow: 1;
+}
+
+
+.accordionMenu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  list-style-type: none;
+}
+
 </style>
