@@ -12,7 +12,7 @@
         </span>
           <strong>{{ title }}</strong>
         </div>
-        <div class="createNewViewSection" v-if="role === `teacher`">
+        <div class="createNewViewSection" v-if="role === `teacher && added-icon`">
           <span @click="menuAction" v-if="!menu">
             <img src="@/assets/addedV2.svg"/>
           </span>
@@ -35,6 +35,7 @@
         <span class="trash-icon" v-if="role === `teacher`">
           <img src="@/assets/trash.svg"/>
         </span>
+        <strong>{{ titleAfter }}</strong>
       </a>
     </div>
     <transition name="fade">
@@ -44,17 +45,15 @@
     </transition>
     <ModalWindow v-if="isModalOpen">
       <div class="modal-window">
-        <div>
-          <img src="@/assets/diskette.svg" @click="isModalOpen = false">
-          <h1>Создание ссылки:</h1>
-        </div>
+        <img src="@/assets/close.svg" class="close-button" @click="isModalOpen = false">
+        <h1>Создание ссылки:</h1>
         <label class="input-form">
           <label>Название</label>
           <input type="text" alt="coursesName"/>
         </label>
         <label class="input-form">
           <label>Ссылка</label>
-          <input type="text" alt="coursesName"/>
+          <input type="text" alt="coursesLink"/>
         </label>
       </div>
     </ModalWindow>
@@ -69,7 +68,9 @@ export default {
   components: {ModalWindow},
   props: [
     "title",
-    "role"
+    "titleAfter",
+    "role",
+    "added-icon"
   ],
   data() {
     return {
@@ -113,6 +114,7 @@ ul {
 
 .trash-icon {
   margin-left: 5px;
+  margin-right: 14px;
 }
 
 .mainTitle {
@@ -182,8 +184,10 @@ ul {
 }
 
 .modal-window {
+  position: relative;
   display: flex;
   flex-direction: column;
+  width: 30%;
   gap: 17px;
   background-color: var(--light);
   border-radius: 15px;
@@ -203,6 +207,15 @@ ul {
   font-weight: 400;
   font-size: 20px;
   line-height: 23px;
+}
+
+.close-button {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 }
 
 .fade-enter-active {
