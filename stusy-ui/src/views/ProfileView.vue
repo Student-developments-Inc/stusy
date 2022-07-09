@@ -174,6 +174,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: stretch;
   gap: 30px;
   padding: 57px 29px;
 }
@@ -271,11 +272,6 @@ h1 {
   font-size: 24px;
   border: 1px solid var(--blue);
   border-radius: 10px;
-}
-
-.aboutMeInput:focus {
-  outline: none !important;
-  border: 1px solid var(--blue-mate);
 }
 
 .linksToSocialNetworksForm {

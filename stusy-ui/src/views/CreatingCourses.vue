@@ -39,10 +39,10 @@
               <a href="">Введение</a>
             </li>
             <li>
-              <AccordionMenu title="Модуль 1" v-bind:role="this.role" class="accordionMenu"></AccordionMenu>
+              <AccordionMenu title="Модуль 1" addedIco="true" v-bind:role="this.role"  class="accordionMenu"></AccordionMenu>
             </li>
             <li>
-              <AccordionMenu title="Модуль 2" v-bind:role="this.role" class="accordionMenu">
+              <AccordionMenu title="Модуль 2" addedIco="true" v-bind:role="this.role" class="accordionMenu">
                 <ol>
                   <li><a href="#">Как сжать звуковые файлы</a></li>
                   <li><a href="#">Как сжать графические файлы</a></li>
@@ -52,7 +52,7 @@
               </AccordionMenu>
             </li>
             <li>
-              <AccordionMenu title="Модуль 3" v-bind:role="this.role" class="accordionMenu"></AccordionMenu>
+              <AccordionMenu title="Модуль 3" addedIco="true" v-bind:role="this.role" class="accordionMenu"></AccordionMenu>
             </li>
           </ul>
         </div>

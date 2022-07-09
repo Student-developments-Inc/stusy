@@ -42,6 +42,23 @@ input {
   line-height: 21px;
 }
 
+textarea {
+  resize: none;
+  height: 10rem;
+  overflow: auto;
+  max-width: 950px;
+  padding: 20px;
+  font-weight: 300;
+  font-size: 24px;
+  border: 1px solid var(--blue);
+  border-radius: 10px;
+}
+
+textarea:focus {
+  outline: none !important;
+  border: 1px solid var(--blue-mate);
+}
+
 .input-form input {
   margin: 10px 0;
   padding: 25px 25px;
@@ -75,9 +92,9 @@ input {
 .mainContent {
   height: 100%;
   display: flex;
-  align-items: flex-start;
   flex-direction: row;
   justify-content: center;
+  align-items: flex-start;
   gap: 16px;
 }
 
@@ -195,6 +212,49 @@ input {
   flex-direction: column;
   gap: 30px;
   list-style-type: none;
+}
+
+.radio-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.modal-window {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 30%;
+  gap: 17px;
+  background-color: var(--light);
+  border-radius: 15px;
+  padding: 30px 20px;
+}
+.modal-window h1 {
+  margin-bottom: 10px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 41px;
+}
+
+.modal-window label {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+}
+
+.close-button {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 }
 
 </style>
