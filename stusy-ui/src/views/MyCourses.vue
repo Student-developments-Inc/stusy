@@ -107,13 +107,6 @@ ol {
   border-radius: 25px;
 }
 
-.coursesMainAbout p {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 23px;
-}
-
 .coursesAboutInfo {
   margin-top: 16px;
   display: flex;

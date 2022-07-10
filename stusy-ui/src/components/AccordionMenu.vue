@@ -16,8 +16,8 @@
           <span @click="menuAction" v-if="!menu">
             <img src="@/assets/addedV2.svg"/>
           </span>
-          <ul class="sub-menu" v-if="menu">
-            <li @click="menuAction">
+          <ul class="sub-menu" v-if="menu" @click="menuAction">
+            <li>
               <a>
                 <img class="viewSection-arrow" src="@/assets/arrow.svg">
                 <span>Вид раздела</span>
