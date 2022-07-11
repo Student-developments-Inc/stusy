@@ -20,7 +20,7 @@ const routes = [
     {
         path:'/courses',
         name: 'Курсы',
-        component: () => import('../views/MyCourses'),
+        component: () => import('../views/Courses'),
     },
     {
         path:'/creatingCourses',
