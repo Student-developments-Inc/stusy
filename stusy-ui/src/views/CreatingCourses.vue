@@ -19,19 +19,23 @@
           </label>
           <div class="redactorContentCreating-headerOfSection">
             <h1>Разделы</h1>
-            <div class="createNew">
-              <div class="button-save" v-bind:class="{ active: menu }" @click="menuAction">
-                <img src="@/assets/added.svg">
-                <input type="submit" value="Создать новый"/>
-              </div>
-              <transition name="slide-fade">
-                <ul class="sub-menu" v-if="menu">
-                  <li><a>C подпунктами</a></li>
-                  <li><a>Ссылка</a></li>
-                  <li><a>Объявление</a></li>
-                </ul>
-              </transition>
-            </div>
+            <ul class="createNew">
+              <li @click="menuAction">
+                <a>
+                  <div class="button-save" v-bind:class="{ active: menu }">
+                    <img src="@/assets/added.svg">
+                    <input type="submit" value="Создать новый"/>
+                  </div>
+                </a>
+                <transition name="slide-fade">
+                  <ul class="sub-menu" v-if="menu">
+                    <li><a>C подпунктами</a></li>
+                    <li><a>Ссылка</a></li>
+                    <li><a>Объявление</a></li>
+                  </ul>
+                </transition>
+              </li>
+            </ul>
           </div>
           <ul class="accordionMenu-list">
             <li>
@@ -147,6 +151,9 @@ a {
   position: absolute;
   display: flex;
   flex-direction: column;
+  right: 0;
+  left: 0;
+  top: 55px;
   border-radius: 0 0 15px 15px;
   background-color: var(--blue);
 }
@@ -157,9 +164,12 @@ a {
   border-bottom: 1px solid #1E42BB;
 }
 
+.sub-menu li {
+  cursor: pointer;
+  padding: 7px 0 7px 45px;
+}
+
 .sub-menu li a {
-  padding: 15px 15.52px 21px 45px;
-  border-radius: 15px;
   text-decoration: none;
   font-style: normal;
   font-weight: 400;
@@ -169,11 +179,11 @@ a {
 }
 
 .sub-menu > li:last-child {
+  padding-bottom: 20px;
   border-radius: 0 0 15px 15px;
 }
 
-.createNew {
-  background-color: var(--blue);
-  border-radius: 15px;
+.createNew > li:first-child {
+  position: relative;
 }
 </style>
