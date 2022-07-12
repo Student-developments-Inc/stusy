@@ -1,10 +1,5 @@
 <template>
   <div class="block" id="weather">
-    <!--    <img-->
-    <!--        id="wicon"-->
-    <!--        v-bind:src="require(`../assets/weather/${weatherCode}.svg`)"-->
-    <!--        alt="weathericon"-->
-    <!--      />-->
     <span id="wicon">
       {{ weatherSymbols[weatherCodes[weatherCode]] }}
     </span>
