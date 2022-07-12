@@ -257,4 +257,33 @@ textarea:focus {
   cursor: pointer;
 }
 
+.block-courses {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 14px -5px 0 0;
+}
+
+.block-courses div {
+  flex: 1 1;
+  margin: 5px;
+  padding: 21px 10px;
+  border: 1px solid var(--blue);
+  border-radius: 25px;
+}
+
+.block-courses div img {
+  display: block;
+  margin: auto;
+}
+
+.block-courses div p {
+  margin: auto;
+  max-width: 258px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  text-align: center;
+}
+
 </style>
