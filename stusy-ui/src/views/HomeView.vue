@@ -137,6 +137,7 @@ export default {
       this.menu = !this.menu;
     },
     getUserData() {
+      if (getCookie("ID") === undefined) logout()
       fetch(`${url}/users/${getCookie("ID")}`, {
         headers: {
           "Authorization": `Bearer ${getCookie("TOKEN")}`

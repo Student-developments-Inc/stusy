@@ -97,7 +97,7 @@ export default {
     }
   },
   mounted() {
-    if (getCookie("TOKEN")) {
+    if (getCookie("TOKEN") && getCookie("ID") !== undefined) {
       this.$router.push("/");
     }
   }
