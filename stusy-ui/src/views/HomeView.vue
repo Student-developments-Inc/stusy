@@ -227,8 +227,9 @@ export default {
   margin-top: 12px;
   flex-wrap: wrap;
   align-items: flex-start;
-  justify-content: space-evenly;
+  justify-content: center;
   margin-bottom: 30px;
+  align-content: flex-start;
 }
 
 .block {
@@ -241,34 +242,6 @@ export default {
   flex-direction: column;
   justify-content: space-evenly;
   margin: 0 10px 10px;
-}
-
-.block-courses {
-  display: flex;
-  justify-content: space-between;
-  margin: 14px -5px 0 0;
-}
-
-.block-courses div {
-  flex: 1 1;
-  margin: 0 5px;
-  padding: 21px 10px;
-  border: 1px solid var(--blue);
-  border-radius: 25px;
-}
-
-.block-courses div img {
-  display: block;
-  margin: auto;
-}
-
-.block-courses div p {
-  margin: auto;
-  max-width: 258px;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  text-align: center;
 }
 
 #courses {
