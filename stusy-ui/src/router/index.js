@@ -33,6 +33,11 @@ const routes = [
         component: () => import('../views/CreatingTest'),
     },
     {
+        path:'/mycourses',
+        name: 'Мои курсы',
+        component: () => import('../views/MyCourses'),
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'Не найдено',
         component: () => import('../views/404View.vue'),
