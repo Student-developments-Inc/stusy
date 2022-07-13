@@ -2,17 +2,20 @@
   <nav>
     <ul id="topMenu">
       <li>
-        <a href="#">
-              <span class="topMenu_icon">
-                <img src="@/assets/search.svg" alt="Search">
-              </span>
-        </a>
+        <div class="search">
+          <input type="search" placeholder="Введите поисковой запрос">
+          <a href="#">
+            <button type="submit" class="topMenu_icon">
+              <img src="@/assets/search.svg" alt="Search">
+            </button>
+          </a>
+        </div>
       </li>
       <li>
         <a href="#">
-                <span class="topMenu_icon">
-                  <img src="@/assets/bell.svg" alt="Bell">
-                </span>
+          <span class="topMenu_icon">
+            <img src="@/assets/bell.svg" alt="Bell">
+          </span>
         </a>
       </li>
       <li>
@@ -51,15 +54,15 @@ export default {
       userData: {
         first_name: "Загрузка",
         last_name: "😉"
-      },
-    }
+      }
+    };
   },
   methods: {
     menuAction() {
       this.menu = !this.menu;
     },
     logout() {
-      logout()
+      logout();
     },
     getUserData() {
       fetch(`${url}/users/${getCookie("ID")}`, {
@@ -80,15 +83,24 @@ export default {
       }).catch(err => {
         console.error("Cannot fetch", err);
       });
-    },
+    }
   },
   mounted() {
-    this.getUserData()
+    this.getUserData();
   }
-}
+};
 </script>
 
 <style scoped>
+.search button {
+  height: 100%;
+  border: none;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  cursor: pointer;
+}
+
 #topMenu {
   display: flex;
   list-style: none;
@@ -155,8 +167,45 @@ export default {
 
 .topMenu_icon {
   background: var(--light);
+  border: none;
   border-radius: 15px;
   padding: 20px;
+}
+
+.search {
+  padding: 0;
+  position: relative;
+  display: inline-block;
+}
+
+input[type="search"] {
+  position: absolute;
+  display: inline-block;
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  background: none;
+  padding: 24px 100% 24px 0;
+  width: 0;
+  height: 100%;
+  top: 0;
+  right: 0;
+  z-index: 3;
+  transition: width .4s cubic-bezier(0.000, 0.795, 0.000, 1.000);
+  cursor: pointer;
+  color: var(--dark);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+}
+
+input[type="search"]:focus {
+  padding-left: 25px;
+  width: 458px;
+  z-index: 1;
+  background-color: var(--light);
+  cursor: text;
 }
 
 </style>
