@@ -84,7 +84,7 @@ export default {
               this.error = false;
               document.cookie = "TOKEN=" + data["access_token"];
               document.cookie = "ID=" + data["user_id"];
-              this.$router.push("/");
+              this.$router.push("/home");
             }
           })
           .catch((err) => {
@@ -98,7 +98,7 @@ export default {
   },
   mounted() {
     if (getCookie("TOKEN") && getCookie("ID") !== undefined) {
-      this.$router.push("/");
+      this.$router.push("/home");
     }
   }
 };

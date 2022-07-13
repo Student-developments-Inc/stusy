@@ -3,9 +3,14 @@ import HomeView from '../views/HomeView.vue';
 
 const routes = [
     {
+        path: '/home',
+        name: 'Домашнаяя',
+        component: HomeView,
+    },
+    {
         path: '/',
         name: 'Главная',
-        component: HomeView,
+        component: () => import('../views/MainView.vue'),
     },
     {
         path: '/auth',

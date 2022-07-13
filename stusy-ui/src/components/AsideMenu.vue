@@ -2,7 +2,7 @@ refactor:<template>
   <aside id="menuVertical">
     <h1>StudentSystem</h1>
     <ol>
-      <li id="li_1"><a href="/">
+      <li id="li_1"><a href="/home">
         <div class="LeftMenu_icon">
           <img src="@/assets/home.svg">
         </div>

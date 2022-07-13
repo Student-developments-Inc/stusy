@@ -171,7 +171,7 @@ export default {
         if (response.ok) return response.json();
       }).then(data => {
         console.log(data);
-        this.$router.push('/');
+        this.$router.push('/home');
       }).catch(err => {
         console.error("Cannot fetch", err);
       });
