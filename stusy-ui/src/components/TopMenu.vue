@@ -127,6 +127,7 @@ export default {
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
   overflow: hidden;
+  box-shadow: #0000003b 6px 8px 9px 0px;
 }
 
 .sub-menu li {
