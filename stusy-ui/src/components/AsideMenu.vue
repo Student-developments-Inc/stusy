@@ -1,29 +1,45 @@
-refactor:<template>
+<template>
   <aside id="menuVertical">
-    <h1>StudentSystem</h1>
+    <h1>
+      <router-link to="/home">StudentSystem</router-link>
+    </h1>
     <ol>
-      <li id="li_1"><a href="/home">
-        <div class="LeftMenu_icon">
-          <img src="@/assets/home.svg">
-        </div>
-        <span style="color: var(--light)">Домашняя страница</span></a></li>
-      <li><a href="/mycourses">
-        <div class="LeftMenu_icon">
-          <img src="@/assets/book.svg">
-        </div>
-        <span>Мои курсы</span></a></li>
-      <li><a href="#">
-        <div class="LeftMenu_icon">
-          <img src="@/assets/calendar.svg">
-        </div>
-        <span>Расписание</span></a></li>
+      <li>
+        <router-link to="/home" v-bind:id="[status==='home'?'active':'']" v-on:click="[status='home']">
+          <div class="LeftMenu_icon">
+            <img src="@/assets/home.svg">
+          </div>
+          <span>Домашняя страница</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/mycourses" v-bind:id="[status==='mycourses'?'active':'']" v-on:click="[status='mycourses']">
+          <div class="LeftMenu_icon">
+            <img src="@/assets/book.svg">
+          </div>
+          <span>Мои курсы</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="#" v-bind:id="[status==='timetable'?'active':'']" v-on:click="[status='timetable']">
+          <div class="LeftMenu_icon">
+            <img src="@/assets/calendar.svg">
+          </div>
+          <span>Расписание</span>
+        </router-link>
+      </li>
     </ol>
   </aside>
 </template>
 
 <script>
 export default {
-  name: "AsideMenu"
+  name: "AsideMenu",
+  data() {
+    return {
+      status: 'home'
+    };
+  }
 }
 </script>
 
@@ -39,13 +55,17 @@ export default {
   background: var(--light);
 }
 
-#menuVertical h1 {
-  font-style: normal;
+
+#menuVertical > h1 {
+  margin-bottom: 30px;
+}
+
+#menuVertical > h1 > a {
   font-weight: 500;
   font-size: 28px;
   color: var(--blue);
   margin-top: 0;
-  margin-bottom: 30px;
+  text-decoration: none;
 }
 
 #menuVertical ol {
@@ -59,22 +79,33 @@ export default {
 #menuVertical ol li {
   display: list-item;
   box-sizing: border-box;
-  padding: 16px 21px;
   width: 252px;
   height: 54px;
-  border-radius: 15px;
 }
 
-#li_1 {
+#active {
   background: var(--blue);
 }
+
+#active img {
+  filter: invert();
+}
+
+#active > span {
+  color: var(--light)
+}
+
 
 #menuVertical ol li a {
   display: flex;
   color: var(--dark);
   text-decoration: none;
   font-size: 18px;
+  padding: 16px 21px;
+  border-radius: 15px;
+  margin-bottom: 15px;
 }
+
 .LeftMenu_icon {
   padding: 0 13px 0 0;
 }
