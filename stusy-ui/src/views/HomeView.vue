@@ -34,7 +34,7 @@
       <div class="mainContent">
         <WeatherWidget/>
         <div class="block" id="schedule">
-          <h1>Понедельник, 16.05</h1>
+          <h1>{{ localeDate }}</h1>
           <div class="block-schedule">
             <div>
               <ul class="block-schedule_topLeft-content">
@@ -125,6 +125,7 @@ export default {
   components: {WeatherWidget, ModalWindow, AsideMenu, TopMenu},
   data() {
     return {
+      localeDate: "",
       userData: {
         first_name: "",
         last_name: ""
@@ -133,11 +134,16 @@ export default {
     };
   },
   methods: {
+    getDate() {
+      const options = { weekday: 'long', month: 'numeric', day: 'numeric' };
+      this.localeDate = new Date().toLocaleDateString(undefined, options)
+      this.localeDate = this.localeDate.charAt(0).toUpperCase() + this.localeDate.slice(1)
+    },
     menuAction() {
       this.menu = !this.menu;
     },
     getUserData() {
-      if (getCookie("ID") === undefined) logout()
+      if (getCookie("ID") === undefined) logout();
       fetch(`${url}/users/${getCookie("ID")}`, {
         headers: {
           "Authorization": `Bearer ${getCookie("TOKEN")}`
@@ -178,6 +184,8 @@ export default {
     }
   },
   mounted() {
+    this.getDate()
+
     if (getCookie("ID") !== undefined && this.userData.first_name === "") this.getUserData();
 
     if (!getCookie("TOKEN")) {
