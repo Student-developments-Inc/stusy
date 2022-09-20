@@ -58,9 +58,19 @@ func Info() http.HandlerFunc {
 		userData.FirstName = data["first_name"]
 
 		if userData.ID == 0 {
+
+			res, _ := json.MarshalIndent(struct {
+				FirstName string `json:"first_name"`
+				LastName  string `json:"last_name"`
+			}{
+				FirstName: userData.LastName,
+				LastName:  userData.FirstName,
+			}, "", "	")
+
 			userData.UserID = user.ID
 			models.DB.Create(&userData)
 			w.WriteHeader(http.StatusCreated)
+			w.Write(res)
 			return
 		}
 
