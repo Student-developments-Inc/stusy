@@ -1,5 +1,4 @@
 <template>
-  <p>Пустой слой</p>
   <router-view/>
 </template>
 

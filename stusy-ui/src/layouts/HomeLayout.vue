@@ -1,5 +1,4 @@
 <template>
-  <p>Домашний слой</p>
   <div class="homepage">
     <AsideMenu/>
     <router-view/>
