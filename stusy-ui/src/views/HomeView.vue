@@ -175,11 +175,17 @@ export default {
         })
       }).then(response => {
         if (response.ok) return response.json();
+        console.log(response)
+        switch (response.status){
+          case 400:
+            console.log('Неверные данные')
+            break
+        }
       }).then(data => {
         console.log(data);
-        this.$router.push('/home');
+        this.$router.push('/auth');
       }).catch(err => {
-        console.error("Cannot fetch", err);
+        console.error("Cannot fetch" + err);
       });
     }
   },
