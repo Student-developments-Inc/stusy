@@ -1,6 +1,5 @@
 <template>
   <div class="courses">
-    <AsideMenu/>
     <div class="main">
       <header>
         <TopMenu/>
@@ -73,13 +72,12 @@
 </template>
 
 <script>
-import AsideMenu from "@/components/AsideMenu";
 import TopMenu from "@/components/TopMenu";
 import AccordionMenu from "@/components/AccordionMenu";
 
 export default {
   name: "CreatedCourses",
-  components: {AccordionMenu, TopMenu, AsideMenu},
+  components: {AccordionMenu, TopMenu},
   data() {
     return {
       menu: false,

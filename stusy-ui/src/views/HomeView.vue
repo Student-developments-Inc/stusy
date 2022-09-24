@@ -25,7 +25,6 @@
     </form>
   </ModalWindow>
   <div class="home">
-    <AsideMenu/>
     <div class="content">
       <header>
         <h1>Доброе утро{{ userData.first_name && userData.last_name ? `, ${userData.first_name}` : "" }}</h1>
@@ -117,12 +116,11 @@
 import {url, getCookie, logout} from "@/global";
 import WeatherWidget from "@/components/WeatherWidget";
 import ModalWindow from "@/components/ModalWindow";
-import AsideMenu from "@/components/AsideMenu";
 import TopMenu from "@/components/TopMenu";
 
 export default {
   name: "HomeView",
-  components: {WeatherWidget, ModalWindow, AsideMenu, TopMenu},
+  components: {WeatherWidget, ModalWindow, TopMenu},
   data() {
     return {
       localeDate: "",

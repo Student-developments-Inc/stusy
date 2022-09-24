@@ -1,6 +1,5 @@
 <template>
   <div class="profile">
-    <AsideMenu/>
     <div class="main">
       <header>
         <h1>Ваш профиль</h1>
@@ -130,12 +129,11 @@
 </template>
 
 <script>
-import AsideMenu from "@/components/AsideMenu";
 import TopMenu from "@/components/TopMenu";
 
 export default {
   name: "ProfileView",
-  components: {AsideMenu, TopMenu},
+  components: {TopMenu},
 };
 </script>
 

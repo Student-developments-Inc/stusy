@@ -1,6 +1,5 @@
 <template>
   <div class="courses">
-    <AsideMenu/>
     <div class="main">
       <header>
         <TopMenu/>
@@ -52,12 +51,11 @@
 </template>
 
 <script>
-import AsideMenu from "@/components/AsideMenu";
 import TopMenu from "@/components/TopMenu";
 
 export default {
   name: "MyCourses",
-  components: {TopMenu, AsideMenu},
+  components: {TopMenu},
   data() {
     return {
       menu: false

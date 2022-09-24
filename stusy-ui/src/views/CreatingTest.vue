@@ -1,6 +1,5 @@
 <template>
   <div class="courses">
-    <AsideMenu/>
     <div class="main">
       <header>
         <TopMenu/>
@@ -169,13 +168,12 @@
 
 <script>
 import TopMenu from "@/components/TopMenu";
-import AsideMenu from "@/components/AsideMenu";
 import AccordionMenu from "@/components/AccordionMenu";
 import ModalWindow from "@/components/ModalWindow";
 
 export default {
   name: "CreatingTest",
-  components: {ModalWindow, AccordionMenu, AsideMenu, TopMenu},
+  components: {ModalWindow, AccordionMenu, TopMenu},
   data() {
     return {
       role: "teacher",
