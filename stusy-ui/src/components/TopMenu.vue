@@ -27,7 +27,7 @@
       </li>
       <li v-on:click="menuAction">
         <a>
-          <span>{{ `${userData.first_name} ${userData.last_name[0]}.` }}</span>
+          <span>{{ userData.first_name && userData.last_name ? `${userData.first_name} ${userData.last_name[0]}.` : "Профиль" }}</span>
           <div class="avatar-arrow" v-bind:style="[menu?{'transform':'rotate(90deg)'}:{}]">
             <img src="@/assets/arrow.svg"/>
           </div>
@@ -52,8 +52,8 @@ export default {
     return {
       menu: false,
       userData: {
-        first_name: "Загрузка",
-        last_name: "😉"
+        first_name: "",
+        last_name: ""
       }
     };
   },
