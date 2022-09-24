@@ -1,8 +1,26 @@
 <template>
-  <router-view/>
+  <component :is="layout">
+    <router-view/>
+  </component>
+
 </template>
 
-<script></script>
+<script>
+import HomeLayout from "@/layouts/HomeLayout";
+import EmptyLayout from "@/layouts/EmptyLayout";
+
+export default {
+  computed: {
+    layout() {
+      console.log(this.$route.meta.layout)
+      return this.$route.meta.layout
+    }
+  },
+  components: {
+    HomeLayout, EmptyLayout
+  }
+}
+</script>
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
@@ -233,6 +251,7 @@ textarea:focus {
   border-radius: 15px;
   padding: 30px 20px;
 }
+
 .modal-window h1 {
   margin-bottom: 10px;
   font-style: normal;
