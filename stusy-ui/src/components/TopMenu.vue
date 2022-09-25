@@ -27,14 +27,18 @@
       </li>
       <li v-on:click="menuAction">
         <a>
-          <span>{{ userData.first_name && userData.last_name ? `${userData.first_name} ${userData.last_name[0]}.` : "Профиль" }}</span>
+          <span>{{
+              userData.first_name && userData.last_name ? `${userData.first_name} ${userData.last_name[0]}.` : "Профиль"
+            }}</span>
           <div class="avatar-arrow" v-bind:style="[menu?{'transform':'rotate(90deg)'}:{}]">
             <img src="@/assets/arrow.svg"/>
           </div>
         </a>
         <transition name="slide-fade">
           <ul class="sub-menu" v-if="menu">
-            <li><a href="/profile">Профиль</a></li>
+            <li>
+              <router-link to="/profile">Профиль</router-link>
+            </li>
             <li v-on:click="logout"><a>Выйти</a></li>
           </ul>
         </transition>
