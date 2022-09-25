@@ -32,7 +32,7 @@ export default {
 body {
   display: block;
   font-family: "Ubuntu", sans-serif;
-  background: var(--light);
+  background: var(--dark-mate-mate);
 
   --dark: #121212;
   --dark-mate: #292a2d;
@@ -107,12 +107,13 @@ textarea:focus {
 }
 
 .mainContent {
-  /*height: 100%;*/
+  /* height: 100%; */
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
   justify-content: center;
   align-items: flex-start;
   gap: 16px;
+  margin-bottom: 30px;
 }
 
 .courses {
