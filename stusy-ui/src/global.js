@@ -10,5 +10,5 @@ export function getCookie(name) {
 export function logout() {
     document.cookie = "TOKEN=null;max-age=0";
     document.cookie = "ID=null;max-age=0";
-    window.location.reload()
+    window.location.href = '/'
 }
