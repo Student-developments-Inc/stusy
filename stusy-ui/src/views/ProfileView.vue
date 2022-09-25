@@ -1,10 +1,4 @@
 <template>
-  <div class="profile">
-    <div class="main">
-      <header>
-        <h1>Ваш профиль</h1>
-        <TopMenu/>
-      </header>
       <div class="mainContent">
         <div class="AvatarAndPersonalDataAndContacts">
           <div class="AvatarProfile">
@@ -124,57 +118,26 @@
           </form>
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
 <script>
-import TopMenu from "@/components/TopMenu";
 
 export default {
   name: "ProfileView",
-  components: {TopMenu},
+  components: {},
 };
 </script>
 
 <style scoped>
-.profile {
-  display: flex !important;
-  min-height: 100vh;
-  background: var(--dark-mate-mate);
-}
-
-.main {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-  gap: 10px;
-  width: 100%;
-  padding: 15px 24px 24px;
-  height: 100vh;
-  overflow: auto;
-}
-
-.main header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.main header h1 {
-  font-weight: 500;
-  font-size: 36px;
-  margin: 0;
-}
 
 .mainContent {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: flex-start;
   align-items: stretch;
   gap: 30px;
   padding: 57px 29px;
+  flex-wrap: wrap;
 }
 
 .AvatarAndPersonalDataAndContacts {

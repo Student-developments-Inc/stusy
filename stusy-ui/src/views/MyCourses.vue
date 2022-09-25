@@ -1,61 +1,53 @@
 <template>
-  <div class="courses">
-    <div class="main">
-      <header>
-        <TopMenu/>
-      </header>
-      <div class="mainContent">
-        <div class="coursesMainLeft" id="coursesMain">
-          <h1>Мои курсы</h1>
-          <div class="block-courses">
-            <div v-on:click="goToCourse(1)">
-              <img src="@/assets/data_archiving_and_compression.svg">
-              <p>Архивация и сжатие данных</p>
-            </div>
-            <div v-on:click="goToCourse(1)">
-              <img src="@/assets/botany_and_plant_physiology.svg">
-              <p>Ботаника и физиология растений</p>
-            </div>
-            <div v-on:click="goToCourse(1)">
-              <img src="@/assets/data_archiving_and_compression.svg">
-              <p>Архивация и сжатие данных</p>
-            </div>
-            <div v-on:click="goToCourse(1)">
-              <img src="@/assets/botany_and_plant_physiology.svg">
-              <p>Ботаника и физиология растений</p>
-            </div>
-            <div v-on:click="goToCourse(1)">
-              <img src="@/assets/data_archiving_and_compression.svg">
-              <p>Архивация и сжатие данных</p>
-            </div>
-            <div v-on:click="goToCourse(1)">
-              <img src="@/assets/botany_and_plant_physiology.svg">
-              <p>Ботаника и физиология растений</p>
-            </div>
-            <div v-on:click="goToCourse(1)">
-              <img src="@/assets/data_archiving_and_compression.svg">
-              <p>Архивация и сжатие данных</p>
-            </div>
-            <div v-on:click="goToCourse(1)">
-              <img src="@/assets/botany_and_plant_physiology.svg">
-              <p>Ботаника и физиология растений</p>
-            </div>
-          </div>
+  <div class="mainContent">
+    <div class="coursesMainLeft" id="coursesMain">
+      <h1>Мои курсы</h1>
+      <div class="block-courses">
+        <div v-on:click="goToCourse(1)">
+          <img src="@/assets/data_archiving_and_compression.svg">
+          <p>Архивация и сжатие данных</p>
         </div>
-        <div class="coursesMainAbout">
-          <h1>Какая-то инфа</h1>
+        <div v-on:click="goToCourse(1)">
+          <img src="@/assets/botany_and_plant_physiology.svg">
+          <p>Ботаника и физиология растений</p>
+        </div>
+        <div v-on:click="goToCourse(1)">
+          <img src="@/assets/data_archiving_and_compression.svg">
+          <p>Архивация и сжатие данных</p>
+        </div>
+        <div v-on:click="goToCourse(1)">
+          <img src="@/assets/botany_and_plant_physiology.svg">
+          <p>Ботаника и физиология растений</p>
+        </div>
+        <div v-on:click="goToCourse(1)">
+          <img src="@/assets/data_archiving_and_compression.svg">
+          <p>Архивация и сжатие данных</p>
+        </div>
+        <div v-on:click="goToCourse(1)">
+          <img src="@/assets/botany_and_plant_physiology.svg">
+          <p>Ботаника и физиология растений</p>
+        </div>
+        <div v-on:click="goToCourse(1)">
+          <img src="@/assets/data_archiving_and_compression.svg">
+          <p>Архивация и сжатие данных</p>
+        </div>
+        <div v-on:click="goToCourse(1)">
+          <img src="@/assets/botany_and_plant_physiology.svg">
+          <p>Ботаника и физиология растений</p>
         </div>
       </div>
+    </div>
+    <div class="coursesMainAbout">
+      <h1>Какая-то инфа</h1>
     </div>
   </div>
 </template>
 
 <script>
-import TopMenu from "@/components/TopMenu";
 
 export default {
   name: "MyCourses",
-  components: {TopMenu},
+  components: {},
   data() {
     return {
       menu: false

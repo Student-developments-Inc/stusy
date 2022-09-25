@@ -24,142 +24,107 @@
       </div>
     </form>
   </ModalWindow>
-  <div class="home">
-    <div class="content">
-      <header>
-        <h1>Доброе утро{{ userData.first_name && userData.last_name ? `, ${userData.first_name}` : "" }}</h1>
-        <TopMenu/>
-      </header>
-      <div class="mainContent">
-        <WeatherWidget/>
-        <div class="block" id="schedule">
-          <h1>{{ localeDate }}</h1>
-          <div class="block-schedule">
-            <div>
-              <ul class="block-schedule_topLeft-content">
-                <li>8:40–10:15</li>
-                <li>лекц.</li>
-                <li>3-612</li>
-              </ul>
-              <ul class="block-schedule_topRight-content">
-                <li class="right-post">доцент</li>
-                <li>Смирин О.А.</li>
-              </ul>
-            </div>
-            <p>Теория вероятностей. Математическая статистика.</p>
-          </div>
-          <div class="block-schedule">
-            <div>
-              <ul class="block-schedule_topLeft-content">
-                <li>8:40–10:15</li>
-                <li>лекц.</li>
-                <li>3-612</li>
-              </ul>
-              <ul class="block-schedule_topRight-content">
-                <li class="right-post">доцент</li>
-                <li>Смирин О.А.</li>
-              </ul>
-            </div>
-            <p>Теория вероятностей. Математическая статистика.</p>
-          </div>
-          <div class="block-schedule">
-            <div>
-              <ul class="block-schedule_topLeft-content">
-                <li>8:40–10:15</li>
-                <li>лекц.</li>
-                <li>3-612</li>
-              </ul>
-              <ul class="block-schedule_topRight-content">
-                <li class="right-post">доцент</li>
-                <li>Смирин О.А.</li>
-              </ul>
-            </div>
-            <p>Теория вероятностей. Математическая статистика.</p>
-          </div>
-          <div class="block-schedule">
-            <div>
-              <ul class="block-schedule_topLeft-content">
-                <li>8:40–10:15</li>
-                <li>лекц.</li>
-                <li>3-612</li>
-              </ul>
-              <ul class="block-schedule_topRight-content">
-                <li class="right-post">доцент</li>
-                <li>Смирин О.А.</li>
-              </ul>
-            </div>
-            <p>Теория вероятностей. Математическая статистика.</p>
-          </div>
+  <div class="mainContent">
+    <WeatherWidget/>
+    <div class="block" id="schedule">
+      <h1>{{ localeDate }}</h1>
+      <div class="block-schedule">
+        <div>
+          <ul class="block-schedule_topLeft-content">
+            <li>8:40–10:15</li>
+            <li>лекц.</li>
+            <li>3-612</li>
+          </ul>
+          <ul class="block-schedule_topRight-content">
+            <li class="right-post">доцент</li>
+            <li>Смирин О.А.</li>
+          </ul>
         </div>
-        <div class="block" id="courses">
-          <div>
-            <h1>Ваши курсы</h1>
-            <a href="#">Смотреть все</a>
-          </div>
-          <div class="block-courses">
-            <div>
-              <img src="@/assets/data_archiving_and_compression.svg">
-              <p>Архивация и сжатие данных</p>
-            </div>
-            <div>
-              <img src="@/assets/botany_and_plant_physiology.svg">
-              <p>Ботаника и физиология растений</p>
-            </div>
-          </div>
+        <p>Теория вероятностей. Математическая статистика.</p>
+      </div>
+      <div class="block-schedule">
+        <div>
+          <ul class="block-schedule_topLeft-content">
+            <li>8:40–10:15</li>
+            <li>лекц.</li>
+            <li>3-612</li>
+          </ul>
+          <ul class="block-schedule_topRight-content">
+            <li class="right-post">доцент</li>
+            <li>Смирин О.А.</li>
+          </ul>
+        </div>
+        <p>Теория вероятностей. Математическая статистика.</p>
+      </div>
+      <div class="block-schedule">
+        <div>
+          <ul class="block-schedule_topLeft-content">
+            <li>8:40–10:15</li>
+            <li>лекц.</li>
+            <li>3-612</li>
+          </ul>
+          <ul class="block-schedule_topRight-content">
+            <li class="right-post">доцент</li>
+            <li>Смирин О.А.</li>
+          </ul>
+        </div>
+        <p>Теория вероятностей. Математическая статистика.</p>
+      </div>
+      <div class="block-schedule">
+        <div>
+          <ul class="block-schedule_topLeft-content">
+            <li>8:40–10:15</li>
+            <li>лекц.</li>
+            <li>3-612</li>
+          </ul>
+          <ul class="block-schedule_topRight-content">
+            <li class="right-post">доцент</li>
+            <li>Смирин О.А.</li>
+          </ul>
+        </div>
+        <p>Теория вероятностей. Математическая статистика.</p>
+      </div>
+    </div>
+    <div class="block" id="courses">
+      <div>
+        <h1>Ваши курсы</h1>
+        <a href="#">Смотреть все</a>
+      </div>
+      <div class="block-courses">
+        <div>
+          <img src="@/assets/data_archiving_and_compression.svg">
+          <p>Архивация и сжатие данных</p>
+        </div>
+        <div>
+          <img src="@/assets/botany_and_plant_physiology.svg">
+          <p>Ботаника и физиология растений</p>
         </div>
       </div>
-
     </div>
   </div>
-</template>
+</template>--
 <script>
-import {url, getCookie, logout} from "@/global";
+import {url, getCookie} from "@/global";
 import WeatherWidget from "@/components/WeatherWidget";
 import ModalWindow from "@/components/ModalWindow";
-import TopMenu from "@/components/TopMenu";
 
 export default {
   name: "HomeView",
-  components: {WeatherWidget, ModalWindow, TopMenu},
+  components: {WeatherWidget, ModalWindow},
   data() {
     return {
       localeDate: "",
-      userData: {
-        first_name: "",
-        last_name: ""
-      },
       modal: false
     };
   },
   methods: {
     getDate() {
-      const options = { weekday: 'long', month: 'numeric', day: 'numeric' };
+      const options = {weekday: 'long', month: 'numeric', day: 'numeric'};
       this.localeDate = new Date().toLocaleDateString(undefined, options)
       this.localeDate = this.localeDate.charAt(0).toUpperCase() + this.localeDate.slice(1)
     },
     menuAction() {
       this.menu = !this.menu;
-    },
-    getUserData() {
-      if (getCookie("ID") === undefined) logout();
-      fetch(`${url}/users/${getCookie("ID")}`, {
-        headers: {
-          "Authorization": `Bearer ${getCookie("TOKEN")}`
-        }
-      }).then(response => {
-        if (response.ok) return response.json();
-        if (response.status === 401) {
-          logout();
-        }
-        if (response.status === 404) this.modal = true;
-      }).then(data => {
-        if (data !== undefined) {
-          this.userData.first_name = data.first_name;
-          this.userData.last_name = data.last_name;
-        }
-      }).catch(err => {
-        console.error("Cannot fetch", err);
-      });
     },
     putUserData() {
       fetch(`${url}/users/${getCookie("ID")}`, {
@@ -174,7 +139,7 @@ export default {
       }).then(response => {
         if (response.ok) return response.json();
         console.log(response)
-        switch (response.status){
+        switch (response.status) {
           case 400:
             console.log('Неверные данные')
             break
@@ -189,8 +154,6 @@ export default {
   },
   mounted() {
     this.getDate()
-
-    if (getCookie("ID") !== undefined && this.userData.first_name === "") this.getUserData();
 
     if (!getCookie("TOKEN")) {
       this.$router.push("/auth");
@@ -210,38 +173,12 @@ export default {
   opacity: 0;
 }
 
-.home {
-  display: flex !important;
-  min-height: 100vh;
-  background: var(--dark-mate-mate);
-}
-
-.content header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.content header h1 {
-  font-weight: 500;
-  font-size: 36px;
-  margin: 0;
-}
-
-.content {
-  padding: 15px 24px 24px;
-  height: 100vh;
-  overflow: auto;
-}
-
 .mainContent {
   display: flex;
   width: 100%;
-  margin-top: 12px;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: center;
-  margin-bottom: 30px;
   align-content: flex-start;
 }
 

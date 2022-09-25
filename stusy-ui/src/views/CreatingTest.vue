@@ -1,9 +1,4 @@
 <template>
-  <div class="courses">
-    <div class="main">
-      <header>
-        <TopMenu/>
-      </header>
       <div class="mainContent">
         <div class="coursesMainLeft">
           <div class="redactorContentCreating-topRow">
@@ -106,8 +101,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
   <ModalWindow v-if="isModalOpen">
     <div class="modal-window">
       <img src="@/assets/close.svg" class="close-button" @click="isModalOpen = false">
@@ -167,13 +160,12 @@
 </template>
 
 <script>
-import TopMenu from "@/components/TopMenu";
 import AccordionMenu from "@/components/AccordionMenu";
 import ModalWindow from "@/components/ModalWindow";
 
 export default {
   name: "CreatingTest",
-  components: {ModalWindow, AccordionMenu, TopMenu},
+  components: {ModalWindow, AccordionMenu},
   data() {
     return {
       role: "teacher",

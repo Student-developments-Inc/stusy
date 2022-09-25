@@ -1,9 +1,4 @@
 <template>
-  <div class="courses">
-    <div class="main">
-      <header>
-        <TopMenu/>
-      </header>
       <div class="mainContent">
         <div class="coursesMainLeft" id="coursesMain">
           <h1>Архивация и сжатие данных</h1>
@@ -41,17 +36,14 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
 <script>
-import TopMenu from "@/components/TopMenu";
 import AccordionMenu from "@/components/AccordionMenu";
 
 export default {
   name: "MyCourses",
-  components: {AccordionMenu, TopMenu},
+  components: {AccordionMenu},
   data() {
     return {
       menu: false
