@@ -6,6 +6,7 @@ import (
 	"api/server/models"
 
 	"log"
+	"time"
 	"net/http"
 )
 
@@ -19,10 +20,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	log.Println("Initializing database connections pool")
-	err = models.InitDB()
-	if err != nil {
-		log.Fatal(err)
+	ok bool = 0
+	while (!ok) {
+		log.Println("Initializing database connections pool")
+		err = models.InitDB()
+		if err == nil {
+			ok = 1
+		} else {
+			time.Sleep(3 * time.Second)
+		}
 	}
 
 	log.Println("Starting local server")
