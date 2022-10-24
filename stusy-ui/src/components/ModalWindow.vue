@@ -32,6 +32,7 @@ export default {
   align-items: center;
   justify-content: center;
   background: #000000a6;
-  z-index: 2;
+  z-index: 100;
 }
+
 </style>
