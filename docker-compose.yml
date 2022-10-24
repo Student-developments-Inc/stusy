@@ -2,6 +2,9 @@ version: '3'
 services:
 
   backend:
+    depends_on: 
+      - database
+    command: ["./wait-for-it.sh", "db:3306"]
     build: ./stusy-api
     restart: on-failure
     container_name: stusy-api
