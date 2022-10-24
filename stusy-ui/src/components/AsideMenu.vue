@@ -1,7 +1,7 @@
 <template>
   <aside id="menuVertical">
     <h1>
-      <router-link to="/home">StudentSystem</router-link>
+      <router-link to="/home" v-on:click="[status='home']">StudentSystem</router-link>
     </h1>
     <ol>
       <li>
@@ -25,7 +25,39 @@
           <div class="LeftMenu_icon">
             <img src="@/assets/calendar.svg">
           </div>
-          <span>Расписание</span>
+          <span>Меню для тестов</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/courses" v-bind:id="[status==='timetable'?'active':'']" v-on:click="[status='timetable']">
+          <div class="LeftMenu_icon">
+            <img src="@/assets/calendar.svg">
+          </div>
+          <span>Курсы</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/creatingCourses" v-bind:id="[status==='timetable'?'active':'']" v-on:click="[status='timetable']">
+          <div class="LeftMenu_icon">
+            <img src="@/assets/calendar.svg">
+          </div>
+          <span>Создание курса</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/creatingTest" v-bind:id="[status==='timetable'?'active':'']" v-on:click="[status='timetable']">
+          <div class="LeftMenu_icon">
+            <img src="@/assets/calendar.svg">
+          </div>
+          <span>Создание теста</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/asdasd" v-bind:id="[status==='timetable'?'active':'']" v-on:click="[status='timetable']">
+          <div class="LeftMenu_icon">
+            <img src="@/assets/calendar.svg">
+          </div>
+          <span>Не найдено</span>
         </router-link>
       </li>
     </ol>
