@@ -20,8 +20,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	ok bool = 0
-	while (!ok) {
+	var ok int = 0
+	while (ok == 0) {
 		log.Println("Initializing database connections pool")
 		err = models.InitDB()
 		if err == nil {
