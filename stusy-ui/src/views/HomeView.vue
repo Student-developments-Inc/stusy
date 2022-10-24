@@ -1,29 +1,4 @@
 <template>
-  <ModalWindow v-if="modal">
-    <form v-on:submit.prevent="putUserData()">
-      <label class="input-form">
-        <p>Имя</p>
-        <input
-            v-model="userData.first_name"
-            type="text"
-            placeholder="Введите имя"
-            required
-        />
-      </label>
-      <label class="input-form">
-        <p>Фамилия</p>
-        <input
-            v-model="userData.last_name"
-            type="text"
-            placeholder="Введите фамилию"
-            required
-        />
-      </label>
-      <div class="button-login">
-        <input type="submit" value="Сохранить">
-      </div>
-    </form>
-  </ModalWindow>
   <div class="mainContent">
     <WeatherWidget/>
     <div class="block" id="schedule">
@@ -104,17 +79,15 @@
   </div>
 </template>--
 <script>
-import {url, getCookie} from "@/global";
+import {getCookie} from "@/global";
 import WeatherWidget from "@/components/WeatherWidget";
-import ModalWindow from "@/components/ModalWindow";
 
 export default {
   name: "HomeView",
-  components: {WeatherWidget, ModalWindow},
+  components: {WeatherWidget},
   data() {
     return {
-      localeDate: "",
-      modal: false
+      localeDate: ""
     };
   },
   methods: {
@@ -125,31 +98,6 @@ export default {
     },
     menuAction() {
       this.menu = !this.menu;
-    },
-    putUserData() {
-      fetch(`${url}/users/${getCookie("ID")}`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${getCookie("TOKEN")}`
-        },
-        body: JSON.stringify({
-          "first_name": this.userData.first_name,
-          "last_name": this.userData.last_name
-        })
-      }).then(response => {
-        if (response.ok) return response.json();
-        console.log(response)
-        switch (response.status) {
-          case 400:
-            console.log('Неверные данные')
-            break
-        }
-      }).then(data => {
-        console.log(data);
-        this.$router.push('/auth');
-      }).catch(err => {
-        console.error("Cannot fetch" + err);
-      });
     }
   },
   mounted() {
@@ -305,18 +253,6 @@ export default {
 
 .block-schedule p {
   margin: 15px 0;
-}
-
-form {
-  background: var(--light);
-  padding: 12px;
-  border-radius: 20px;
-}
-
-form p {
-  color: #000000;
-  font-size: 18px;
-  font-weight: bold;
 }
 
 @media (max-width: 1600px) {
