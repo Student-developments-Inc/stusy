@@ -20,12 +20,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var ok int = 0
-	while (ok == 0) {
+	for ; ; {
 		log.Println("Initializing database connections pool")
 		err = models.InitDB()
 		if err == nil {
-			ok = 1
+			break
 		} else {
 			time.Sleep(3 * time.Second)
 		}
