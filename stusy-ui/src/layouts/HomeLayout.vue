@@ -66,8 +66,7 @@ export default {
 }
 
 .home {
-  display: flex !important;
-  min-height: 100vh;
+  flex-grow: 1;
   background: var(--dark-mate-mate);
 }
 
