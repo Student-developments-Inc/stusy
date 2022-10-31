@@ -4,7 +4,7 @@
     <div class="home">
       <div class="content">
         <header>
-          <h1>Доброе утро{{ userData.first_name && userData.last_name ? `, ${userData.first_name}` : "" }}</h1>
+          <h1>{{ localeHours }}{{ userData.first_name && userData.last_name ? `, ${userData.first_name}` : "" }}</h1>
           <TopMenu/>
         </header>
         <router-view/>
@@ -25,6 +25,7 @@ export default {
   },
   data() {
     return {
+      localeHours: "",
       userData: {
         first_name: "",
         last_name: ""
@@ -32,6 +33,13 @@ export default {
     };
   },
   methods: {
+    getLocaleWelcome() {
+      this.localeHours = new Date().getHours();
+      if (this.localeHours > 3 && this.localeHours < 12) this.localeHours = "Доброе утро";
+      else if (this.localeHours > 11 && this.localeHours < 19) this.localeHours = "Добрый день";
+      else if (this.localeHours > 18 && this.localeHours < 24) this.localeHours = "Добрый вечер";
+      else if (this.localeHours > 23 || this.localeHours < 4) this.localeHours = "Привет полуночникам";
+    },
     getUserData() {
       if (getCookie("ID") === undefined) logout();
       fetch(`${url}/users/${getCookie("ID")}`, {
@@ -55,9 +63,10 @@ export default {
     }
   },
   mounted() {
+    this.getLocaleWelcome();
     if (getCookie("ID") !== undefined && this.userData.first_name === "") this.getUserData();
   }
-}
+};
 </script>
 
 <style scoped>
