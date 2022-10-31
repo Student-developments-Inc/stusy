@@ -13,21 +13,17 @@
           <strong>{{ title }}</strong>
         </div>
         <div class="createNewViewSection" v-if="addedIco === `true` && role === `teacher`">
-          <span @click="menuAction" v-if="!menu">
-            <img src="@/assets/addedV2.svg"/>
-          </span>
-          <ul class="sub-menu" v-if="menu" @click="menuAction">
-            <li>
-              <a>
-                <img class="viewSection-arrow" src="@/assets/arrow.svg">
-                <span>Вид раздела</span>
-              </a>
-            </li>
-            <li><a>Тест</a></li>
-            <li @click="isModalOpen = true"><a>Ссылка</a></li>
-            <li><a>Файлы</a></li>
-            <li><a>Текст</a></li>
-          </ul>
+          <dropdown-menu class="button-save" :title="`Вид раздела`">
+            <template v-slot:top-title>
+              <img src="@/assets/addedV2.svg"/>
+            </template>
+            <template v-slot:item>
+              <li class="sub-menu-item"><a>Тест</a></li>
+              <li class="sub-menu-item" @click="isModalOpen = true"><a>Ссылка</a></li>
+              <li class="sub-menu-item"><a>Файлы</a></li>
+              <li class="sub-menu-item"><a>Текст</a></li>
+            </template>
+          </dropdown-menu>
         </div>
         <span class="redactor-icon-pen" v-if="role === `teacher`">
           <img src="@/assets/pen.svg"/>
@@ -62,10 +58,11 @@
 
 <script>
 import ModalWindow from "@/components/ModalWindow";
+import DropdownMenu from "@/components/DropdownMenu";
 
 export default {
   name: "AccordionMenu",
-  components: {ModalWindow},
+  components: {DropdownMenu, ModalWindow},
   props: [
     "title",
     "titleAfter",
@@ -74,15 +71,9 @@ export default {
   ],
   data() {
     return {
-      menu: false,
       active: false,
       isModalOpen: false
     };
-  },
-  methods: {
-    menuAction() {
-      this.menu = !this.menu;
-    }
   }
 };
 </script>
@@ -90,6 +81,10 @@ export default {
 <style scoped>
 ul {
   list-style-type: none;
+}
+
+.button-save {
+  color: white;
 }
 
 .moving-icon {
@@ -132,6 +127,11 @@ ul {
   margin-left: 22px;
 }
 
+.tab__header {
+  display: flex;
+  align-items: center;
+}
+
 .tab__header a {
   display: flex;
   flex-direction: row;
@@ -146,37 +146,29 @@ ul {
 }
 
 .createNewViewSection {
-  height: 24px;
-  min-width: 24px;
   margin-right: 12px;
 }
 
-.sub-menu {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  border-radius: 15px;
+.sub-menu-item {
   background-color: var(--blue);
+  min-width: 100px;
+  color: white;
+}
+
+.sub-menu-item a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0;
+  text-decoration: none;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 21px;
-  color: var(--light);
-}
-
-.sub-menu li {
-  padding: 7px 6px 7px 45px;
-}
-
-.sub-menu > li:first-child {
-  padding: 16px 6px 8px 17px;
-  border-radius: 15px 15px 0 0;
-  border-bottom: 1px solid #1E42BB;
 }
 
 .sub-menu > li:last-child {
-  padding: 7px 6px 23px 45px;
-  border-radius: 0 0 15px 15px;
+  border-radius: 0 0 10px 10px;
 }
 
 .sub-menu li:hover {
@@ -185,6 +177,10 @@ ul {
 
 .fade-enter-active {
   animation: scale-up-ver-top .2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+.sub-menu-accordionMenu {
+  box-shadow: #0000003b 6px 8px 9px 0px;
 }
 
 @keyframes scale-up-ver-top {
