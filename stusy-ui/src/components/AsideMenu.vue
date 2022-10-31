@@ -6,56 +6,51 @@
     <ol>
       <li>
         <router-link to="/home" v-bind:id="[status==='home'?'active':'']" v-on:click="[status='home']">
-          <div class="LeftMenu_icon">
-            <img src="@/assets/home.svg">
+          <div class="LeftMenu_icon" id="home-ico">
           </div>
           <span>Домашняя страница</span>
         </router-link>
       </li>
       <li>
         <router-link to="/mycourses" v-bind:id="[status==='mycourses'?'active':'']" v-on:click="[status='mycourses']">
-          <div class="LeftMenu_icon">
-            <img src="@/assets/book.svg">
+          <div class="LeftMenu_icon" id="book-ico">
           </div>
           <span>Мои курсы</span>
         </router-link>
       </li>
       <li>
         <router-link to="#" v-bind:id="[status==='timetable'?'active':'']" v-on:click="[status='timetable']">
-          <div class="LeftMenu_icon">
-            <img src="@/assets/calendar.svg">
+          <div class="LeftMenu_icon" id="calendar-ico">
           </div>
           <span>Меню для тестов</span>
         </router-link>
       </li>
       <li>
         <router-link to="/courses" v-bind:id="[status==='timetable'?'active':'']" v-on:click="[status='timetable']">
-          <div class="LeftMenu_icon">
-            <img src="@/assets/calendar.svg">
+          <div class="LeftMenu_icon" id="calendar-ico">
           </div>
           <span>Курсы</span>
         </router-link>
       </li>
       <li>
-        <router-link to="/creatingCourses" v-bind:id="[status==='timetable'?'active':'']" v-on:click="[status='timetable']">
-          <div class="LeftMenu_icon">
-            <img src="@/assets/calendar.svg">
+        <router-link to="/creatingCourses" v-bind:id="[status==='timetable'?'active':'']"
+                     v-on:click="[status='timetable']">
+          <div class="LeftMenu_icon" id="calendar-ico">
           </div>
           <span>Создание курса</span>
         </router-link>
       </li>
       <li>
-        <router-link to="/creatingTest" v-bind:id="[status==='timetable'?'active':'']" v-on:click="[status='timetable']">
-          <div class="LeftMenu_icon">
-            <img src="@/assets/calendar.svg">
+        <router-link to="/creatingTest" v-bind:id="[status==='timetable'?'active':'']"
+                     v-on:click="[status='timetable']">
+          <div class="LeftMenu_icon" id="calendar-ico">
           </div>
           <span>Создание теста</span>
         </router-link>
       </li>
       <li>
         <router-link to="/asdasd" v-bind:id="[status==='timetable'?'active':'']" v-on:click="[status='timetable']">
-          <div class="LeftMenu_icon">
-            <img src="@/assets/calendar.svg">
+          <div class="LeftMenu_icon" id="calendar-ico">
           </div>
           <span>Не найдено</span>
         </router-link>
@@ -139,6 +134,19 @@ export default {
 }
 
 .LeftMenu_icon {
-  padding: 0 13px 0 0;
+  margin: 0 13px 0 0;
+}
+
+#home-ico {
+  background: url("@/assets/home.svg");
+  width: 21px;
+}
+#book-ico {
+  background: url("@/assets/book.svg");
+  width: 19px;
+}
+#calendar-ico{
+  background: url("@/assets/calendar.svg");
+  width: 19px;
 }
 </style>
