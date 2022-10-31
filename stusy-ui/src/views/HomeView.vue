@@ -1,6 +1,6 @@
 <template>
   <div class="mainContent">
-    <WeatherWidget/>
+    <HomeWidget/>
     <TimetableWidget/>
     <div class="block" id="courses">
       <div>
@@ -19,15 +19,15 @@
       </div>
     </div>
   </div>
-</template>--
+</template>
 <script>
 import {getCookie} from "@/global";
-import WeatherWidget from "@/components/WeatherWidget";
+import HomeWidget from "@/components/HomeWidget";
 import TimetableWidget from "@/components/TimetableWidget"
 
 export default {
   name: "HomeView",
-  components: {WeatherWidget, TimetableWidget},
+  components: {HomeWidget, TimetableWidget},
   data() {
     return {
     };
