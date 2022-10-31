@@ -1,5 +1,5 @@
 <template>
-  <div class='block' id='weather' v-if="weather.fetchDate !== 0">
+  <div class='block' id='weather' v-if="weather !== null">
     <span id='wicon'>
       {{ weatherEmoji }}
     </span>
@@ -20,17 +20,12 @@ import {ref, computed, onMounted} from 'vue'
 import {weatherCodes, weatherSymbols} from '@/global';
 import ScreenLoader from "@/components/ScreenLoader";
 
+const weatherPromise = fetchTemperature();
 onMounted(() => {
-  getTemperature()
+  getTemperature(weatherPromise)
 })
 
-const weather = ref({
-  weather: 0,
-  lastLessonWeather: 0,
-  weatherCode: 0,
-  fetchDate: 0,
-})
-const city = 'Волгодонск'
+const weather = ref(null)
 let lastLessonTime = 1705
 
 const weatherEmoji = computed(() => {
@@ -48,14 +43,14 @@ const getDiff = computed(() => {
   throw Error('weather check error')
 })
 
-async function getTemperature() {
+async function getTemperature(weatherPromise) {
   const storedWeather = JSON.parse(localStorage.getItem('weather'));
   if (storedWeather !== null && !isWeatherExpired(storedWeather)) {
     console.log('Есть погода')
     weather.value = storedWeather;
   } else {
     console.log('Нет погоды')
-    weather.value = await fetchTemperature();
+    weather.value = await weatherPromise;
     localStorage.setItem('weather', JSON.stringify(weather.value));
   }
 }
@@ -83,6 +78,7 @@ function timeIndex() {
 }
 
 function fetchTemperature() {
+  const city = 'Волгодонск';
   return fetch(
       `https://wttr.in/${city}?format=j1`
   )
