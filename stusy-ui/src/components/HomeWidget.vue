@@ -20,9 +20,9 @@ import {ref, computed, onMounted} from 'vue'
 import {weatherCodes, weatherSymbols} from '@/global';
 import ScreenLoader from "@/components/ScreenLoader";
 
-const weatherPromise = fetchTemperature();
+const temperaturePromise = getTemperature();
 onMounted(() => {
-  getTemperature(weatherPromise)
+  setTemperature(temperaturePromise);
 })
 
 const weather = ref(null)
@@ -43,16 +43,18 @@ const getDiff = computed(() => {
   throw Error('weather check error')
 })
 
-async function getTemperature(weatherPromise) {
+async function setTemperature(temperaturePromise) {
+  weather.value = await temperaturePromise;
+}
+
+async function getTemperature() {
   const storedWeather = JSON.parse(localStorage.getItem('weather'));
   if (storedWeather !== null && !isWeatherExpired(storedWeather)) {
-    console.log('Есть погода')
-    weather.value = storedWeather;
-  } else {
-    console.log('Нет погоды')
-    weather.value = await weatherPromise;
-    localStorage.setItem('weather', JSON.stringify(weather.value));
+    return storedWeather;
   }
+  const fetchedWeather = await fetchTemperature();
+  localStorage.setItem('weather', JSON.stringify(fetchedWeather));
+  return fetchedWeather;
 }
 
 function isWeatherExpired(weather) {
