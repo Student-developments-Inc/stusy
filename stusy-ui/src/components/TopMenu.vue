@@ -26,7 +26,7 @@
   </ModalWindow>
   <nav>
     <ul id="topMenu">
-      <li>
+      <li class="menu-item">
         <div class="search">
           <input type="search" placeholder="Введите поисковой запрос">
           <a href="#">
@@ -36,49 +36,63 @@
           </a>
         </div>
       </li>
-      <li>
+      <li class="menu-item">
         <a href="#">
           <span class="topMenu_icon">
             <img src="@/assets/bell.svg" alt="Bell">
           </span>
         </a>
       </li>
-      <li>
+      <li class="menu-item">
         <a href="#">
               <span>
                 <img src="@/assets/avatar.png" alt="Avatar"/>
               </span>
         </a>
       </li>
-      <li v-on:click="menuAction">
-        <a>
-          <span>{{
-              userData.first_name && userData.last_name ? `${userData.first_name} ${userData.last_name[0]}.` : "Профиль"
-            }}</span>
-          <div class="avatar-arrow" v-bind:style="[menu?{'transform':'rotate(90deg)'}:{}]">
-            <img src="@/assets/arrow.svg"/>
-          </div>
-        </a>
-        <transition name="slide-fade">
-          <ul class="sub-menu" v-if="menu">
-            <li>
-              <router-link to="/profile">Профиль</router-link>
-            </li>
-            <li v-on:click="logout"><a>Выйти</a></li>
-          </ul>
-        </transition>
-      </li>
+      <DropdownMenu class="menu-item" :title="``">
+        <template v-slot:top-title>
+          <a id="profile-title">
+                <span>
+                  {{
+                    userData.first_name && userData.last_name ? `${userData.first_name} ${userData.last_name[0]}.` : "Профиль"
+                  }}
+                </span>
+            <div class="avatar-arrow" v-bind:style="[menu?{'transform':'rotate(90deg)'}:{}]">
+              <img src="@/assets/arrow.svg"/>
+            </div>
+          </a>
+        </template>
+        <template v-slot:item>
+          <li class="sub-menu-item">
+            <router-link to="/profile">Профиль</router-link>
+          </li>
+          <li class="sub-menu-item" v-on:click="logout"><a>Выйти</a></li>
+        </template>
+      </DropdownMenu>
+      <!--      <li v-on:click="menuAction">-->
+
+      <!--        <transition name="slide-fade">-->
+      <!--          <ul class="sub-menu" v-if="menu">-->
+      <!--            <li>-->
+      <!--              <router-link to="/profile">Профиль</router-link>-->
+      <!--            </li>-->
+      <!--            <li v-on:click="logout"><a>Выйти</a></li>-->
+      <!--          </ul>-->
+      <!--        </transition>-->
+      <!--      </li>-->
     </ul>
   </nav>
 </template>
 
 <script>
 import {getCookie, logout, url} from "@/global";
+import DropdownMenu from "@/components/DropdownMenu";
 import ModalWindow from "@/components/ModalWindow";
 
 export default {
   name: "TopMenu",
-  components: {ModalWindow},
+  components: {DropdownMenu, ModalWindow},
   data() {
     return {
       menu: false,
@@ -161,6 +175,7 @@ export default {
 
 #topMenu {
   display: flex;
+  gap: 16px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -178,35 +193,55 @@ export default {
   white-space: nowrap;
 }
 
-#topMenu li {
+#profile-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.menu-item {
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
   display: flex;
-  margin-right: 16px;
   text-align: center;
 }
 
-.sub-menu {
-  position: absolute;
-  top: 65px;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  background: var(--light);
+.sub-menu-item {
+  background-color: var(--light);
+}
+
+.sub-menu-item a {
+  padding: 10px 0;
+}
+
+.sub-menu-item:last-child {
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
-  overflow: hidden;
-  box-shadow: #0000003b 6px 8px 9px 0px;
 }
 
-.sub-menu li {
-  margin-right: 0 !important;
-  padding: 10px 36px;
-  cursor: pointer;
-}
+/*.sub-menu {*/
+/*  position: absolute;*/
+/*  top: 65px;*/
+/*  left: 0;*/
+/*  right: 0;*/
+/*  z-index: 2;*/
+/*  background: var(--light);*/
+/*  border-bottom-right-radius: 10px;*/
+/*  border-bottom-left-radius: 10px;*/
+/*  overflow: hidden;*/
+/*  box-shadow: #0000003b 6px 8px 9px 0px;*/
+/*}*/
 
-.sub-menu li:hover {
+/*.sub-menu li {*/
+/*  margin-right: 0 !important;*/
+/*  padding: 10px 36px;*/
+/*  cursor: pointer;*/
+/*}*/
+
+.sub-menu-item:hover {
   background: var(--light-mate);
 }
 
@@ -214,13 +249,7 @@ export default {
   background: var(--light);
   border-radius: 10px;
   padding: 0 36px;
-  position: relative;
   user-select: none;
-}
-
-.avatar-arrow {
-  margin-left: 7px;
-  transition: .3s;
 }
 
 .topMenu_icon {
