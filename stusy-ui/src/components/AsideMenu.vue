@@ -99,7 +99,7 @@ const links = [
   background: var(--blue);
 }
 
-.active img {
+.active .LeftMenu_icon {
   filter: invert();
 }
 
