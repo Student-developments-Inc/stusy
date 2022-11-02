@@ -4,7 +4,7 @@
     <div class="home">
       <div class="content">
         <header>
-          <h1>{{ localeHours }}{{ userData.first_name && userData.last_name ? `, ${userData.first_name}` : "" }}</h1>
+          <h1>{{ localeHours }}, {{ name }}</h1>
           <TopMenu/>
         </header>
         <router-view/>
@@ -13,60 +13,55 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import AsideMenu from "@/components/AsideMenu";
 import TopMenu from "@/components/TopMenu";
 import {getCookie, logout, url} from "@/global";
+import {computed, onMounted, ref} from "vue";
 
-export default {
-  name: "HomeLayout",
-  components: {
-    AsideMenu, TopMenu
-  },
-  data() {
-    return {
-      localeHours: "",
-      userData: {
-        first_name: "",
-        last_name: ""
-      }
-    };
-  },
-  methods: {
-    getLocaleWelcome() {
-      this.localeHours = new Date().getHours();
-      if (this.localeHours > 3 && this.localeHours < 12) this.localeHours = "Доброе утро";
-      else if (this.localeHours > 11 && this.localeHours < 19) this.localeHours = "Добрый день";
-      else if (this.localeHours > 18 && this.localeHours < 24) this.localeHours = "Добрый вечер";
-      else if (this.localeHours > 23 || this.localeHours < 4) this.localeHours = "Привет полуночникам";
-    },
-    getUserData() {
-      if (getCookie("ID") === undefined) logout();
-      fetch(`${url}/users/${getCookie("ID")}`, {
-        headers: {
-          "Authorization": `Bearer ${getCookie("TOKEN")}`
-        }
-      }).then(response => {
-        if (response.ok) return response.json();
-        if (response.status === 401) {
-          logout();
-        }
-        if (response.status === 404) this.modal = true;
-      }).then(data => {
-        if (data !== undefined) {
-          this.userData.first_name = data.first_name;
-          this.userData.last_name = data.last_name;
-        }
-      }).catch(err => {
-        console.error("Cannot fetch", err);
-      });
+onMounted(() => {
+  getUserData();
+})
+
+const userData = ref({
+  first_name: '',
+  last_name: ''
+})
+
+const localeHours = computed(() => {
+  let localeHours = new Date().getHours();
+  if (localeHours > 3 && localeHours < 12) return "Доброе утро";
+  else if (localeHours > 11 && localeHours < 19) return "Добрый день";
+  else if (localeHours > 18 && localeHours < 24) return "Добрый вечер";
+  else if (localeHours > 23 || localeHours < 4) return "Привет";
+  throw Error('localHours error')
+})
+
+const name = computed(() => {
+  return (userData.value.first_name && userData.value.last_name) ? userData.value.first_name : '';
+})
+
+function getUserData() {
+  if (getCookie("ID") === undefined) logout();
+  fetch(`${url}/users/${getCookie("ID")}`, {
+    headers: {
+      "Authorization": `Bearer ${getCookie("TOKEN")}`
     }
-  },
-  mounted() {
-    this.getLocaleWelcome();
-    if (getCookie("ID") !== undefined && this.userData.first_name === "") this.getUserData();
-  }
-};
+  }).then(response => {
+    if (response.ok) return response.json();
+    if (response.status === 401) {
+      logout();
+    }
+  }).then(data => {
+    if (data !== undefined) {
+      userData.value.first_name = data.first_name;
+      userData.value.last_name = data.last_name;
+    }
+  }).catch(err => {
+    console.error("Cannot fetch", err);
+  });
+}
+
 </script>
 
 <style scoped>
