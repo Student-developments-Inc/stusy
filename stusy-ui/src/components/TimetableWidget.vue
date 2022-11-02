@@ -4,22 +4,23 @@
     <div class="block-schedule" v-for="item in timetable['ИС-20-Д'][localeDate.split(',')[0]]" :key="item.id">
       <div>
         <ul class="block-schedule_topLeft-content">
-          <li>{{item[1]}}</li>
-          <li>{{item[2]}}</li>
-          <li>{{item[5]}}</li>
+          <li>{{ item[1] }}</li>
+          <li>{{ item[2] }}</li>
+          <li>{{ item[5] }}</li>
         </ul>
         <ul class="block-schedule_topRight-content">
-          <li class="right-post">{{item[3]}}</li>
-          <li>{{item[4]}}</li>
+          <li class="right-post">{{ item[3] }}</li>
+          <li>{{ item[4] }}</li>
         </ul>
       </div>
-      <p>{{item[0]}}</p>
+      <p>{{ item[0] }}</p>
     </div>
   </div>
 </template>
 
 <script>
 import {timetable} from "@/global";
+
 export default {
   name: "TimetableWidget",
   data() {
@@ -69,9 +70,11 @@ export default {
 }
 
 .block-schedule div {
-  display: inline-block;
-  width: 100%;
+  display: flex;
   flex: 1 1 auto;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
 }
 
 .block-schedule_topLeft-content, .block-schedule_topRight-content {
@@ -128,10 +131,34 @@ export default {
 
 .block-schedule p {
   margin: 15px 0;
+  text-align: center;
 }
+
 @media (max-width: 1600px) {
   .block-schedule div {
     width: auto;
+  }
+}
+
+@media (max-width: 1039px) {
+  .block-schedule ul li {
+    margin: 0 0 8px;
+  }
+
+  .block-schedule div {
+
+  }
+
+  .block-schedule ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 670px) {
+  .block-schedule li {
+    width: 100%;
   }
 }
 </style>
