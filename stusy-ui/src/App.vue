@@ -45,6 +45,9 @@ body {
   --blue-mate: #1e42bb;
 
   overflow: hidden;
+
+  max-width: 1920px;
+  margin: 0 auto;
 }
 
 .input-form {
@@ -107,9 +110,7 @@ textarea:focus {
 }
 
 .mainContent {
-  /* height: 100%; */
   display: flex;
-  /* flex-direction: row; */
   justify-content: center;
   align-items: flex-start;
   gap: 16px;
