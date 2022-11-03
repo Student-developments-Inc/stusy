@@ -4,7 +4,7 @@
     <div class="home">
       <div class="content">
         <header>
-          <h1>{{ localeHours }}, {{ name }}</h1>
+          <h1>{{ localeHours }}{{ name }}</h1>
           <TopMenu/>
         </header>
         <router-view/>
@@ -23,10 +23,7 @@ onMounted(() => {
   getUserData();
 })
 
-const userData = ref({
-  first_name: '',
-  last_name: ''
-})
+const userData = ref(null)
 
 const localeHours = computed(() => {
   let localeHours = new Date().getHours();
@@ -38,7 +35,10 @@ const localeHours = computed(() => {
 })
 
 const name = computed(() => {
-  return (userData.value.first_name && userData.value.last_name) ? userData.value.first_name : '';
+  if (userData.value === null) {
+    return '';
+  }
+  return `, ${userData.value.first_name}`;
 })
 
 function getUserData() {
@@ -54,8 +54,7 @@ function getUserData() {
     }
   }).then(data => {
     if (data !== undefined) {
-      userData.value.first_name = data.first_name;
-      userData.value.last_name = data.last_name;
+      userData.value = data;
     }
   }).catch(err => {
     console.error("Cannot fetch", err);
