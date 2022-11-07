@@ -6,7 +6,7 @@
     <p id='dateNowDay'>Сегодня {{ nowDay }}, сейчас
       {{ weather.weather }}&deg;
     </p>
-    <p>У вас 4 пары</p>
+    <p>У вас {{ CountLesson }}</p>
     <p>Температура к концу занятий {{ getDiff }} {{ weather.lastLessonWeather }}°</p>
     <p>Контрольных точек не запланировано</p>
   </div>
@@ -16,44 +16,51 @@
 </template>
 
 <script setup>
-import {ref, computed, onMounted} from 'vue'
-import {weatherCodes, weatherSymbols} from '@/global';
+import {computed, onMounted, ref} from "vue";
+import {weatherCodes, weatherSymbols} from "@/global";
 import ScreenLoader from "@/components/ScreenLoader";
+import TimetableWidget from "@/components/TimetableWidget";
 
 const temperaturePromise = getTemperature();
 onMounted(() => {
   setTemperature(temperaturePromise);
-})
+});
 
-const weather = ref(null)
-let lastLessonTime = 1705
+const weather = ref(null);
+let lastLessonTime = 1705;
 
 const weatherEmoji = computed(() => {
-  return weatherSymbols[weatherCodes[weather.value.weatherCode]]
-})
+  return weatherSymbols[weatherCodes[weather.value.weatherCode]];
+});
 
 const nowDay = computed(() => {
-  return new Date().toLocaleString('ru', {weekday: 'long'});
-})
+  return new Date().toLocaleString("ru", {weekday: "long"});
+});
 
 const getDiff = computed(() => {
-  if (weather.value.weather === weather.value.lastLessonWeather) return 'останется';
-  if (weather.value.weather > weather.value.lastLessonWeather) return 'понизится до';
-  if (weather.value.weather < weather.value.lastLessonWeather) return 'повысится до';
-  throw Error('weather check error')
-})
+  if (weather.value.weather === weather.value.lastLessonWeather) return "останется";
+  if (weather.value.weather > weather.value.lastLessonWeather) return "понизится до";
+  if (weather.value.weather < weather.value.lastLessonWeather) return "повысится до";
+  throw Error("weather check error");
+});
+
+const CountLesson = computed(() => {
+  const valueCountLesson = TimetableWidget.methods.getCountLessons();
+  let lessonDeclination = (valueCountLesson > 4) ? "пар" : "пары";
+  return valueCountLesson + " " + lessonDeclination
+});
 
 async function setTemperature(temperaturePromise) {
   weather.value = await temperaturePromise;
 }
 
 async function getTemperature() {
-  const storedWeather = JSON.parse(localStorage.getItem('weather'));
+  const storedWeather = JSON.parse(localStorage.getItem("weather"));
   if (storedWeather !== null && !isWeatherExpired(storedWeather)) {
     return storedWeather;
   }
   const fetchedWeather = await fetchTemperature();
-  localStorage.setItem('weather', JSON.stringify(fetchedWeather));
+  localStorage.setItem("weather", JSON.stringify(fetchedWeather));
   return fetchedWeather;
 }
 
@@ -80,7 +87,7 @@ function timeIndex() {
 }
 
 function fetchTemperature() {
-  const city = 'Волгодонск';
+  const city = "Волгодонск";
   return fetch(
       `https://wttr.in/${city}?format=j1`
   )
@@ -88,11 +95,11 @@ function fetchTemperature() {
       .then((data) => ({
         weather: parseInt(data.current_condition[0].FeelsLikeC),
         lastLessonWeather: parseInt(data.weather[0].hourly[timeIndex()].FeelsLikeC),
-        weatherCode: data.weather[0].hourly[timeIndex()]['weatherCode'],
-        fetchDate: Math.round(Date.now() / 1000),
+        weatherCode: data.weather[0].hourly[timeIndex()]["weatherCode"],
+        fetchDate: Math.round(Date.now() / 1000)
       }))
       .catch((err) => {
-        return ['Невозможно отправить запрос', err];
+        return ["Невозможно отправить запрос", err];
       });
 }
 

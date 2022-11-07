@@ -31,15 +31,19 @@ export default {
   },
   methods: {
     getDate() {
-      const options = {weekday: 'long', month: 'numeric', day: 'numeric'};
-      this.localeDate = new Date().toLocaleDateString(undefined, options)
-      this.localeDate = this.localeDate.charAt(0).toUpperCase() + this.localeDate.slice(1)
+      const options = {weekday: "long", month: "numeric", day: "numeric"};
+      this.localeDate = new Date().toLocaleDateString(undefined, options);
+      this.localeDate = this.localeDate.charAt(0).toUpperCase() + this.localeDate.slice(1);
+    },
+    getCountLessons() {
+      this.getDate();
+      return Object.keys(timetable["ИС-20-Д"][this.localeDate.split(",")[0]]).length;
     }
   },
   mounted() {
-    this.getDate()
+    this.getDate();
   }
-}
+};
 </script>
 
 <style scoped>
