@@ -70,96 +70,75 @@
           <li class="sub-menu-item" v-on:click="logout"><a>Выйти</a></li>
         </template>
       </DropdownMenu>
-      <!--      <li v-on:click="menuAction">-->
-
-      <!--        <transition name="slide-fade">-->
-      <!--          <ul class="sub-menu" v-if="menu">-->
-      <!--            <li>-->
-      <!--              <router-link to="/profile">Профиль</router-link>-->
-      <!--            </li>-->
-      <!--            <li v-on:click="logout"><a>Выйти</a></li>-->
-      <!--          </ul>-->
-      <!--        </transition>-->
-      <!--      </li>-->
     </ul>
   </nav>
 </template>
 
-<script>
+<script setup>
 import {getCookie, logout, url} from "@/global";
 import DropdownMenu from "@/components/DropdownMenu";
 import ModalWindow from "@/components/ModalWindow";
+import {onMounted, ref} from "vue";
+import { useRouter } from 'vue-router'
 
-export default {
-  name: "TopMenu",
-  components: {DropdownMenu, ModalWindow},
-  data() {
-    return {
-      menu: false,
-      userData: {
-        first_name: "",
-        last_name: ""
-      },
-      modal: false
-    };
-  },
-  methods: {
-    menuAction() {
-      this.menu = !this.menu;
-    },
-    logout() {
-      logout();
-    },
-    getUserData() {
-      fetch(`${url}/users/${getCookie("ID")}`, {
-        headers: {
-          "Authorization": `Bearer ${getCookie("TOKEN")}`
-        }
-      }).then(response => {
-        if (response.ok) return response.json();
-        if (response.status === 401) {
-          logout();
-        }
-        if (response.status === 404) this.modal = true;
-      }).then(data => {
-        if (data !== undefined) {
-          this.userData.first_name = data.first_name;
-          this.userData.last_name = data.last_name;
-        }
-      }).catch(err => {
-        console.error("Cannot fetch", err);
-      });
-    },
-    putUserData() {
-      fetch(`${url}/users/${getCookie("ID")}`, {
-        method: "PUT",
-        headers: {
-          "Authorization": `Bearer ${getCookie("TOKEN")}`
-        },
-        body: JSON.stringify({
-          "first_name": this.userData.first_name,
-          "last_name": this.userData.last_name
-        })
-      }).then(response => {
-        if (response.ok) return response.json();
-        console.log(response)
-        switch (response.status) {
-          case 400:
-            console.log('Неверные данные')
-            break
-        }
-      }).then(data => {
-        console.log(data);
-        this.$router.push('/auth');
-      }).catch(err => {
-        console.error("Cannot fetch" + err);
-      });
+const router = useRouter()
+
+let menu = false
+let userData = ref({
+  first_name: "",
+  last_name: ""
+})
+let modal = ref(false)
+
+onMounted(() => {
+  getUserData();
+})
+
+function getUserData() {
+  fetch(`${url}/users/${getCookie("ID")}`, {
+    headers: {
+      "Authorization": `Bearer ${getCookie("TOKEN")}`
     }
-  },
-  mounted() {
-    this.getUserData();
-  }
-};
+  }).then(response => {
+    if (response.ok) return response.json();
+    if (response.status === 401) {
+      logout();
+    }
+    if (response.status === 404) modal.value = true;
+  }).then(data => {
+    if (data !== undefined) {
+      userData.value.first_name = data.first_name;
+      userData.value.last_name = data.last_name;
+    }
+  }).catch(err => {
+    console.error("Cannot fetch", err);
+  });
+}
+
+function putUserData() {
+  fetch(`${url}/users/${getCookie("ID")}`, {
+    method: "PUT",
+    headers: {
+      "Authorization": `Bearer ${getCookie("TOKEN")}`
+    },
+    body: JSON.stringify({
+      "first_name": userData.value.first_name,
+      "last_name": userData.value.last_name
+    })
+  }).then(response => {
+    if (response.ok) return response.json();
+    switch (response.status) {
+      case 400:
+        console.log('Неверные данные')
+        break
+    }
+  }).then(data => {
+    router.push('/auth');
+  }).catch(err => {
+    console.error("Cannot fetch" + err);
+  });
+}
+
 </script>
 
 <style scoped>
