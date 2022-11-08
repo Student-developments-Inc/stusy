@@ -46,8 +46,12 @@ const getDiff = computed(() => {
 
 const CountLesson = computed(() => {
   const valueCountLesson = TimetableWidget.methods.getCountLessons();
-  let lessonDeclination = (valueCountLesson > 4) ? "пар" : "пары";
-  return valueCountLesson + " " + lessonDeclination
+  if (valueCountLesson) {
+    let lessonDeclination = (valueCountLesson > 4) ? "пар" : "пары";
+    return valueCountLesson + " " + lessonDeclination;
+  } else {
+    return "нету пар";
+  }
 });
 
 async function setTemperature(temperaturePromise) {

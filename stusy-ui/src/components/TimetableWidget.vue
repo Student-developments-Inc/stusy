@@ -37,7 +37,12 @@ export default {
     },
     getCountLessons() {
       this.getDate();
-      return Object.keys(timetable["ИС-20-Д"][this.localeDate.split(",")[0]]).length;
+      const weekDay = timetable['ИС-20-Д'][this.localeDate.split(",")[0]]
+      if (weekDay) {
+        return Object.keys(weekDay).length;
+      } else {
+        return null
+      }
     }
   },
   mounted() {
