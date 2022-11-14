@@ -1,13 +1,13 @@
 <template>
-  <div class="mainContent">
+  <div className="mainContent">
     <HomeWidget/>
-    <TimetableWidget/>
-    <div class="block" id="courses">
+    <TimetableWidget v-if="checkCountLesson()"/>
+    <div className="block" id="courses">
       <div>
         <h1>Ваши курсы</h1>
         <a href="#">Смотреть все</a>
       </div>
-      <div class="block-courses">
+      <div className="block-courses">
         <div>
           <img src="@/assets/data_archiving_and_compression.svg">
           <p>Архивация и сжатие данных</p>
@@ -23,18 +23,21 @@
 <script>
 import {getCookie} from "@/global";
 import HomeWidget from "@/components/HomeWidget";
-import TimetableWidget from "@/components/TimetableWidget"
+import TimetableWidget from "@/components/TimetableWidget";
 
 export default {
   name: "HomeView",
   components: {HomeWidget, TimetableWidget},
   data() {
-    return {
-    };
+    return {}
   },
   methods: {
-      menuAction() {
+    menuAction() {
       this.menu = !this.menu;
+    },
+    checkCountLesson() {
+      let value = TimetableWidget.methods.getCountLessons()
+      return !!value;
     }
   },
   mounted() {
