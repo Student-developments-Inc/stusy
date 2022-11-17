@@ -134,6 +134,7 @@ function putUserData() {
     }
   }).then(data => {
     router.push('/auth');
+    console.log(data)
   }).catch(err => {
     console.error("Cannot fetch" + err);
   });
