@@ -79,7 +79,7 @@ import {getCookie, logout, url} from "@/global";
 import DropdownMenu from "@/components/DropdownMenu";
 import ModalWindow from "@/components/ModalWindow";
 import {onMounted, ref} from "vue";
-import { useRouter } from 'vue-router'
+import {useRouter} from 'vue-router'
 
 const router = useRouter()
 
