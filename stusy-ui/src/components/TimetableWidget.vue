@@ -54,14 +54,6 @@ export default {
   padding: 18px 23px;
 }
 
-#schedule h1 {
-  margin: 0;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  color: var(--dark);
-}
-
 .block-schedule {
   display: flex;
   flex-direction: column;

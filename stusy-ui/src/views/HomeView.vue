@@ -45,7 +45,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 
 .slide-fade-leave-active {
   transition: all .3s ease;
@@ -64,6 +64,14 @@ export default {
   justify-content: center;
   align-content: flex-start;
 }
+.mainContent {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  align-content: flex-start;
+}
 
 .block {
   position: relative;
@@ -78,13 +86,12 @@ export default {
 }
 
 #courses {
-  height: 251px;
   padding: 18px 41px 23px;
   display: flex;
   flex-direction: column;
 }
 
-#courses div h1 {
+.mainContent h1 {
   margin: 0;
   font-style: normal;
   font-weight: 500;
@@ -105,6 +112,7 @@ export default {
 @media (max-width: 1600px) {
   .block {
     width: 100%;
+    margin: 0 0 0 10px;
   }
 }
 </style>

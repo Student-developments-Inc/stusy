@@ -4,8 +4,7 @@
     <div class="home">
       <div class="content">
         <header>
-          <h1>{{ localeHours }}{{ name }}</h1>
-          <TopMenu/>
+          <TopMenu></TopMenu>
         </header>
         <router-view/>
       </div>
@@ -18,6 +17,8 @@ import AsideMenu from "@/components/AsideMenu";
 import TopMenu from "@/components/TopMenu";
 import {getCookie, logout, url} from "@/global";
 import {computed, onMounted, ref} from "vue";
+
+//userData передать в TopMenu
 
 onMounted(() => {
   getUserData();
@@ -76,7 +77,7 @@ function getUserData() {
 .content header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .content header h1 {

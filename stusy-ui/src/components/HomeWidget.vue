@@ -1,13 +1,12 @@
 <template>
   <div class='block' id='weather' v-if="weather !== null">
+    <h1>{{ localeHours }}{{ name }}</h1>
     <span id='wicon'>
       {{ weatherEmoji }}
     </span>
-    <p id='dateNowDay'>Сегодня {{ nowDay }}, сейчас
-      {{ weather.weather }}&deg;
-    </p>
+    <p id='dateNowDay'>Сегодня {{ nowDay }}, {{ weather.weatherText }}, {{ weather.weather }}&deg;</p>
+    <p>К концу занятий температура {{ getDiff }} {{ weather.lastLessonWeather }}°</p>
     <p>У вас {{ CountLesson }}</p>
-    <p>Температура к концу занятий {{ getDiff }} {{ weather.lastLessonWeather }}°</p>
     <p>Контрольных точек не запланировано</p>
   </div>
   <div class="block" id="weather" v-else>
@@ -17,7 +16,7 @@
 
 <script setup>
 import {computed, onMounted, ref} from "vue";
-import {weatherCodes, weatherSymbols} from "@/global";
+import {getCookie, logout, url, weatherCodes, weatherSymbols} from "@/global";
 import ScreenLoader from "@/components/ScreenLoader";
 import TimetableWidget from "@/components/TimetableWidget";
 
@@ -93,14 +92,57 @@ function fetchTemperature() {
   )
       .then((response) => response.json())
       .then((data) => ({
-        weather: parseInt(data.current_condition[0].FeelsLikeC),
-        lastLessonWeather: parseInt(data.weather[0].hourly[timeIndex()].FeelsLikeC),
+        weather: parseInt(data.current_condition[0].temp_C),
+        weatherText: data.current_condition[0].lang_ru[0].value.toLowerCase(),
+        lastLessonWeather: parseInt(data.weather[0].hourly[timeIndex()].tempC),
         weatherCode: data.weather[0].hourly[timeIndex()]["weatherCode"],
         fetchDate: Math.round(Date.now() / 1000)
       }))
       .catch((err) => {
         return ["Невозможно отправить запрос", err];
       });
+}
+
+onMounted(() => {
+  getUserData();
+})
+
+const userData = ref(null)
+
+const localeHours = computed(() => {
+  let localeHours = new Date().getHours();
+  if (localeHours > 3 && localeHours < 12) return "Доброе утро";
+  else if (localeHours > 11 && localeHours < 19) return "Добрый день";
+  else if (localeHours > 18 && localeHours < 24) return "Добрый вечер";
+  else if (localeHours > 23 || localeHours < 4) return "Привет";
+  throw Error('localHours error')
+})
+
+const name = computed(() => {
+  if (userData.value === null) {
+    return '';
+  }
+  return `, ${userData.value.first_name}`;
+})
+
+function getUserData() {
+  if (getCookie("ID") === undefined) logout();
+  fetch(`${url}/users/${getCookie("ID")}`, {
+    headers: {
+      "Authorization": `Bearer ${getCookie("TOKEN")}`
+    }
+  }).then(response => {
+    if (response.ok) return response.json();
+    if (response.status === 401) {
+      logout();
+    }
+  }).then(data => {
+    if (data !== undefined) {
+      userData.value = data;
+    }
+  }).catch(err => {
+    console.error("Cannot fetch", err);
+  });
 }
 
 </script>
@@ -112,7 +154,7 @@ function fetchTemperature() {
 
 
 #weather {
-  height: 220px;
+  min-height: 220px;
 }
 
 #weather p {
