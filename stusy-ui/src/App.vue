@@ -306,4 +306,18 @@ textarea:focus {
   text-align: center;
 }
 
+@media (min-width: 1920px) {
+  #menuVertical {
+    display: block;
+    text-align: center;
+    padding: 39px 24px;
+    margin: 27px 0 0 27px;
+    width: 300px;
+    height: fit-content;
+    box-sizing: border-box;
+    border-radius: 25px !important;
+    background: var(--light);
+  }
+}
+
 </style>
