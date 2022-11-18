@@ -1,6 +1,6 @@
 <template>
   <ModalWindow v-if="modal">
-    <form v-on:submit.prevent="putUserData()">
+    <form class="userData" v-on:submit.prevent="putUserData()">
       <label class="input-form">
         <p>Имя</p>
         <input
@@ -26,16 +26,14 @@
   </ModalWindow>
   <nav>
     <ul id="topMenu">
-      <li class="menu-item">
-        <div class="search">
-          <input type="search" placeholder="Введите поисковой запрос">
-          <a href="#">
-            <button type="submit" class="topMenu_icon">
-              <img src="@/assets/search.svg" alt="Search">
-            </button>
-          </a>
-        </div>
-      </li>
+      <div class="search">
+        <input type="search" placeholder="Введите поисковой запрос">
+        <a href="#">
+          <button type="submit" class="topMenu_icon">
+            <img src="@/assets/search.svg" alt="Search">
+          </button>
+        </a>
+      </div>
       <li class="menu-item">
         <a href="#">
           <span class="topMenu_icon">
@@ -79,20 +77,20 @@ import {getCookie, logout, url} from "@/global";
 import DropdownMenu from "@/components/DropdownMenu";
 import ModalWindow from "@/components/ModalWindow";
 import {onMounted, ref} from "vue";
-import {useRouter} from 'vue-router'
+import {useRouter} from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 
-let menu = false
+let menu = false;
 let userData = ref({
   first_name: "",
   last_name: ""
-})
-let modal = ref(false)
+});
+let modal = ref(false);
 
 onMounted(() => {
   getUserData();
-})
+});
 
 function getUserData() {
   fetch(`${url}/users/${getCookie("ID")}`, {
@@ -129,12 +127,12 @@ function putUserData() {
     if (response.ok) return response.json();
     switch (response.status) {
       case 400:
-        console.log('Неверные данные')
-        break
+        console.log("Неверные данные");
+        break;
     }
   }).then(data => {
-    router.push('/auth');
-    console.log(data)
+    router.push("/auth");
+    console.log(data);
   }).catch(err => {
     console.error("Cannot fetch" + err);
   });
@@ -144,18 +142,12 @@ function putUserData() {
 
 <style scoped>
 
-.search button {
-  height: 100%;
-  border: none;
-  top: 0;
-  right: 0;
-  z-index: 2;
-  cursor: pointer;
-}
-
 #topMenu {
   display: flex;
+  width: 100%;
   gap: 16px;
+  flex-direction: row;
+  justify-content: flex-end;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -168,6 +160,7 @@ function putUserData() {
   justify-content: center;
   text-decoration: none;
   font-size: 18px;
+  min-height: 70px;
   height: 100%;
   position: relative;
   white-space: nowrap;
@@ -185,8 +178,9 @@ function putUserData() {
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
-  display: flex;
   text-align: center;
+  float: right;
+
 }
 
 .sub-menu-item {
@@ -240,24 +234,31 @@ function putUserData() {
 }
 
 .search {
+  position: relative;
   padding: 0;
+  width: 50%;
+}
+
+.search button {
   position: relative;
   display: inline-block;
+  cursor: pointer;
+  z-index: 2;
+  float: right;
 }
 
 input[type="search"] {
   position: absolute;
-  display: inline-block;
-  border-radius: 15px;
+  height: 100%;
+  width: 0;
   border: none;
   outline: none;
-  background: none;
-  padding: 24px 100% 24px 0;
-  width: 0;
-  height: 100%;
   top: 0;
   right: 0;
   z-index: 3;
+  border-radius: 15px;
+  background: none;
+  padding: 1% 72px 1% 0;
   transition: width .4s cubic-bezier(0.000, 0.795, 0.000, 1.000);
   cursor: pointer;
   color: var(--dark);
@@ -268,23 +269,85 @@ input[type="search"] {
 }
 
 input[type="search"]:focus {
-  padding-left: 25px;
-  width: 458px;
+  width: 100%;
   z-index: 1;
   background-color: var(--light);
+  padding: 1% 72px 1% 20px;
   cursor: text;
 }
 
-form {
+.userData {
   background: var(--light);
   padding: 12px;
   border-radius: 20px;
 }
 
-form p {
+.userData p {
   color: #000000;
   font-size: 18px;
   font-weight: bold;
 }
 
+
+@media screen and (max-width: 1000px) {
+  nav {
+    width: 100%;
+  }
+
+  #topMenu {
+    display: flex;
+    flex-direction: row;
+    float: right;
+    gap: 16px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .menu-item {
+    text-align: right;
+  }
+
+  .search {
+    position: relative;
+    width: 100%;
+  }
+
+  input[type="search"] {
+    position: absolute;
+    height: 100%;
+    width: 0;
+    border: none;
+    outline: none;
+    top: 0;
+    right: 0;
+    z-index: 3;
+    border-radius: 15px;
+    background: none;
+    padding: 1% 72px 1% 0;
+    transition: width .4s cubic-bezier(0.000, 0.795, 0.000, 1.000);
+    cursor: pointer;
+    color: var(--dark);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  input[type="search"]:focus {
+    width: 100%;
+    z-index: 1;
+    cursor: text;
+  }
+
+  .search button {
+    position: relative;
+    float: right;
+    cursor: pointer;
+    z-index: 2;
+  }
+}
 </style>

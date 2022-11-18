@@ -30,8 +30,10 @@ import TopMenu from "@/components/TopMenu";
 
 .content header {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin: 12px 0;
 }
 
 .content header h1 {
@@ -46,7 +48,4 @@ import TopMenu from "@/components/TopMenu";
   overflow: auto;
 }
 
-header {
-  margin: 12px 0;
-}
 </style>
