@@ -160,7 +160,6 @@ function putUserData() {
   justify-content: center;
   text-decoration: none;
   font-size: 18px;
-  min-height: 70px;
   height: 100%;
   position: relative;
   white-space: nowrap;
@@ -172,6 +171,7 @@ function putUserData() {
   justify-content: center;
   align-items: center;
   gap: 5px;
+  min-height: 70px;
 }
 
 .menu-item {
