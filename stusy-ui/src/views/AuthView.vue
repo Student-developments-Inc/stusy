@@ -16,7 +16,7 @@
         >
           <p>{{ errorText }}</p>
         </div>
-        <label class="input-form">
+        <div class="input-form">
           <h2>Электронная почта</h2>
           <input
               type="text"
@@ -24,7 +24,7 @@
               v-model="email"
               required
           />
-        </label>
+        </div>
         <div class="input-form">
           <h2 style="float: left">Пароль</h2>
           <a href="#" class="forget" style="float: right">Забыли пароль?</a>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import {url, getCookie} from "@/global";
+import {getCookie, url} from "@/global";
 import ScreenLoader from "@/components/ScreenLoader";
 import ModalWindow from "@/components/ModalWindow";
 
@@ -122,9 +122,10 @@ export default {
   width: 40%;
   background: var(--light);
   display: flex;
-  justify-content: center;
   align-items: center;
   overflow: hidden;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 h1 {
@@ -170,7 +171,6 @@ h1 {
 }
 
 h1.title {
-  position: absolute;
   top: 10px;
 }
 
@@ -207,7 +207,11 @@ h1.title {
   }
 
   h1 {
-    font-size: 12vw;
+    font-size: 11vw;
+  }
+
+  .form h1 {
+    font-size: 9vw;
   }
 }
 </style>
