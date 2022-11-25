@@ -1,13 +1,12 @@
 <template>
-  <div className="mainContent">
-    <HomeWidget/>
-    <TimetableWidget v-if="checkCountLesson()"/>
-    <div className="block" id="courses">
-      <div>
+  <div class="mainContent">
+    <HomeWidget class="block TwoFor"/>
+    <div class="block TwoTwo" id="courses">
+      <div class="blockHeader">
         <h1>Ваши курсы</h1>
         <a href="#">Смотреть все</a>
       </div>
-      <div className="block-courses">
+      <div class="block-courses">
         <div>
           <img src="@/assets/data_archiving_and_compression.svg">
           <p>Архивация и сжатие данных</p>
@@ -18,6 +17,8 @@
         </div>
       </div>
     </div>
+    <TimetableWidget class="TwoFor" v-if="checkCountLesson()"/>
+
   </div>
 </template>
 <script>
@@ -50,6 +51,50 @@ export default {
 
 <style>
 
+.block {
+  position: relative;
+  overflow: hidden;
+  background: var(--light);
+  border-radius: 25px;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  justify-content: space-between;
+  padding: 15px;
+  margin: 5px;
+
+}
+
+.blockHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.block > .block {
+  padding: 0;
+}
+
+.OneOne {
+  height: 145px;
+  width: 145px;
+  background: #000;
+}
+
+.TwoTwo {
+  height: 310px;
+  width: 310px;
+}
+
+.TwoFor {
+  height: 310px;
+  max-height: 310px;
+  width: 640px;
+  max-width: 640px;
+}
+
 .slide-fade-leave-active {
   transition: all .3s ease;
 }
@@ -66,32 +111,6 @@ export default {
   align-items: flex-start;
   justify-content: center;
   align-content: flex-start;
-}
-.mainContent {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: center;
-  align-content: flex-start;
-}
-
-.block {
-  position: relative;
-  overflow: hidden;
-  padding: 38px 39px;
-  background: var(--light);
-  border-radius: 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  margin: 0 10px 10px;
-}
-
-#courses {
-  padding: 18px 41px 23px;
-  display: flex;
-  flex-direction: column;
 }
 
 .mainContent h1 {
@@ -112,10 +131,10 @@ export default {
   text-align: right;
 }
 
-@media (max-width: 1600px) {
-  .block {
-    width: 100%;
-    margin: 0 0 0 10px;
+@media (max-width: 1393px) {
+  .TwoFor {
+    height: 310px;
+    width: 310px;
   }
 }
 </style>
