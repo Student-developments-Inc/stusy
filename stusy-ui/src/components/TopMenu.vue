@@ -141,13 +141,13 @@ function putUserData() {
 </script>
 
 <style scoped>
-
 #topMenu {
   display: flex;
   width: 100%;
   gap: 16px;
   flex-direction: row;
   justify-content: flex-end;
+  align-items: center;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -160,7 +160,6 @@ function putUserData() {
   justify-content: center;
   text-decoration: none;
   font-size: 18px;
-  min-height: 70px;
   height: 100%;
   position: relative;
   white-space: nowrap;
@@ -172,6 +171,7 @@ function putUserData() {
   justify-content: center;
   align-items: center;
   gap: 5px;
+  min-height: 70px;
 }
 
 .menu-item {
@@ -195,25 +195,6 @@ function putUserData() {
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
 }
-
-/*.sub-menu {*/
-/*  position: absolute;*/
-/*  top: 65px;*/
-/*  left: 0;*/
-/*  right: 0;*/
-/*  z-index: 2;*/
-/*  background: var(--light);*/
-/*  border-bottom-right-radius: 10px;*/
-/*  border-bottom-left-radius: 10px;*/
-/*  overflow: hidden;*/
-/*  box-shadow: #0000003b 6px 8px 9px 0px;*/
-/*}*/
-
-/*.sub-menu li {*/
-/*  margin-right: 0 !important;*/
-/*  padding: 10px 36px;*/
-/*  cursor: pointer;*/
-/*}*/
 
 .sub-menu-item:hover {
   background: var(--light-mate);
@@ -295,59 +276,13 @@ input[type="search"]:focus {
   }
 
   #topMenu {
-    display: flex;
-    flex-direction: row;
     float: right;
-    gap: 16px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-  }
-
-  .menu-item {
-    text-align: right;
   }
 
   .search {
-    position: relative;
     width: 100%;
-  }
-
-  input[type="search"] {
-    position: absolute;
-    height: 100%;
-    width: 0;
-    border: none;
-    outline: none;
-    top: 0;
-    right: 0;
-    z-index: 3;
-    border-radius: 15px;
-    background: none;
-    padding: 1% 72px 1% 0;
-    transition: width .4s cubic-bezier(0.000, 0.795, 0.000, 1.000);
-    cursor: pointer;
-    color: var(--dark);
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 21px;
-  }
-
-  input[type="search"]:focus {
-    width: 100%;
-    z-index: 1;
-    cursor: text;
-  }
-
-  .search button {
-    position: relative;
-    float: right;
-    cursor: pointer;
-    z-index: 2;
   }
 }
 </style>
