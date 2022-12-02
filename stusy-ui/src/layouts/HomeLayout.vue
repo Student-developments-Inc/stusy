@@ -48,4 +48,15 @@ import TopMenu from "@/components/TopMenu";
   overflow: auto;
 }
 
+@media (max-width: 700px) {
+  #menuVertical {
+    display: none;
+  }
+
+  .content header {
+    width: 347px;
+    margin: 0 auto;
+  }
+}
+
 </style>

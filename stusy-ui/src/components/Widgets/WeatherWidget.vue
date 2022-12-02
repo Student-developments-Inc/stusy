@@ -1,13 +1,10 @@
 <template>
-  <div class='block' id='weather' v-if="weather !== null">
-    <h1>{{ localeHours }}{{ name }}</h1>
+  <div id='weather' v-if="weather !== null">
     <span id='wicon'>
       {{ weatherEmoji }}
     </span>
     <p id='dateNowDay'>Сегодня {{ nowDay }}, {{ weather.weatherText }}, {{ weather.weather }}&deg;</p>
     <p>К концу занятий температура {{ getDiff }} {{ weather.lastLessonWeather }}°</p>
-    <p>У вас {{ CountLesson }}</p>
-    <p>Контрольных точек не запланировано</p>
   </div>
   <div class="block" id="weather" v-else>
     <ScreenLoader/>
@@ -17,8 +14,7 @@
 <script setup>
 import {computed, onMounted, ref} from "vue";
 import {getCookie, logout, url, weatherCodes, weatherSymbols} from "@/global";
-import ScreenLoader from "@/components/ScreenLoader";
-import TimetableWidget from "@/components/TimetableWidget";
+import ScreenLoader from "@/components/ScreenLoader.vue";
 
 const temperaturePromise = getTemperature();
 onMounted(() => {
@@ -41,16 +37,6 @@ const getDiff = computed(() => {
   if (weather.value.weather > weather.value.lastLessonWeather) return "понизится до";
   if (weather.value.weather < weather.value.lastLessonWeather) return "повысится до";
   throw Error("weather check error");
-});
-
-const CountLesson = computed(() => {
-  const valueCountLesson = TimetableWidget.methods.getCountLessons();
-  if (valueCountLesson) {
-    let lessonDeclination = (valueCountLesson > 4) ? "пар" : "пары";
-    return valueCountLesson + " " + lessonDeclination;
-  } else {
-    return "нету пар";
-  }
 });
 
 async function setTemperature(temperaturePromise) {
@@ -113,22 +99,6 @@ onMounted(() => {
 
 const userData = ref(null)
 
-const localeHours = computed(() => {
-  let localeHours = new Date().getHours();
-  if (localeHours > 3 && localeHours < 12) return "Доброе утро";
-  else if (localeHours > 11 && localeHours < 19) return "Добрый день";
-  else if (localeHours > 18 && localeHours < 24) return "Добрый вечер";
-  else if (localeHours > 23 || localeHours < 4) return "Привет";
-  throw Error('localHours error')
-})
-
-const name = computed(() => {
-  if (userData.value === null) {
-    return '';
-  }
-  return `, ${userData.value.first_name}`;
-})
-
 function getUserData() {
   if (getCookie("ID") === undefined) logout();
   fetch(`${url}/users/${getCookie("ID")}`, {
@@ -159,9 +129,12 @@ function getUserData() {
 
 #weather {
   min-height: 220px;
+  flex-direction: column;
+  justify-content: unset;
+  gap: 30px;
 }
 
-#weather p {
+#weather p, #weather h1 {
   font-size: 24px;
   margin: 0;
   z-index: 1;
@@ -172,5 +145,10 @@ function getUserData() {
   right: -10px;
   top: -15px;
   font-size: 85pt;
+  user-select: none;
+}
+
+#dateNowDay {
+  padding-top: 27px;
 }
 </style>

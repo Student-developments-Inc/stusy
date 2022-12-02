@@ -1,14 +1,14 @@
 <template>
-  <div class="block" id="schedule">
+  <div class="block" id="timetable">
     <h1>{{ localeDate }}</h1>
-    <div class="block-schedule" v-for="item in timetable['ИС-20-Д'][localeDate.split(',')[0]]" :key="item.id">
+    <div class="block-timetable" v-for="item in timetable['ИС-20-Д'][localeDate.split(',')[0]]" :key="item.id">
       <div>
-        <ul class="block-schedule_topLeft-content">
+        <ul class="block-timetable_topLeft-content">
           <li>{{ item[1] }}</li>
           <li>{{ item[2] }}</li>
           <li>{{ item[5] }}</li>
         </ul>
-        <ul class="block-schedule_topRight-content">
+        <ul class="block-timetable_topRight-content">
           <li class="right-post">{{ item[3] }}</li>
           <li>{{ item[4] }}</li>
         </ul>
@@ -52,14 +52,14 @@ export default {
 </script>
 
 <style scoped>
-#schedule {
+#timetable {
   display: flex;
-
   flex-direction: column;
-  padding: 18px 23px;
+  flex-wrap: nowrap;
+  overflow: auto;
 }
 
-.block-schedule {
+.block-timetable {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,7 +70,7 @@ export default {
   border-radius: 15px;
 }
 
-.block-schedule div {
+.block-timetable div {
   display: flex;
   flex: 1 1 auto;
   flex-wrap: wrap;
@@ -78,7 +78,7 @@ export default {
   width: 100%;
 }
 
-.block-schedule_topLeft-content, .block-schedule_topRight-content {
+.block-timetable_topLeft-content, .block-timetable_topRight-content {
   display: flex;
   align-items: center;
   margin: 0;
@@ -87,11 +87,11 @@ export default {
   list-style: none;
 }
 
-.block-schedule_topLeft-content {
+.block-timetable_topLeft-content {
   float: left;
 }
 
-.block-schedule_topLeft-content li {
+.block-timetable_topLeft-content li {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,7 +106,7 @@ export default {
   border-radius: 25px;
 }
 
-.block-schedule_topRight-content {
+.block-timetable_topRight-content {
   float: right;
 }
 
@@ -116,7 +116,7 @@ export default {
   padding: 4px 35px 4px 20px;
 }
 
-.block-schedule_topRight-content li {
+.block-timetable_topRight-content li {
   flex: 1 1 auto;
   margin: 0 0 0 4px;
   text-align: center;
@@ -130,27 +130,27 @@ export default {
   background: var(--light);
 }
 
-.block-schedule p {
+.block-timetable p {
   margin: 15px 0;
   text-align: center;
 }
 
 @media (max-width: 1600px) {
-  .block-schedule div {
+  .block-timetable div {
     width: auto;
   }
 }
 
 @media (max-width: 1039px) {
-  .block-schedule ul li {
+  .block-timetable ul li {
     margin: 0 0 8px;
   }
 
-  .block-schedule div {
+  .block-timetable div {
 
   }
 
-  .block-schedule ul {
+  .block-timetable ul {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -158,7 +158,7 @@ export default {
 }
 
 @media (max-width: 670px) {
-  .block-schedule li {
+  .block-timetable li {
     width: 100%;
   }
 }

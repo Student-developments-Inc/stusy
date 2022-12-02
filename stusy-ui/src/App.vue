@@ -295,6 +295,7 @@ textarea:focus {
 .block-courses div img {
   display: block;
   margin: auto;
+  width: 110px;
 }
 
 .block-courses div p {

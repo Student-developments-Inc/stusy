@@ -1,34 +1,22 @@
 <template>
   <div class="mainContent">
-    <HomeWidget class="block TwoFor"/>
-    <div class="block TwoTwo" id="courses">
-      <div class="blockHeader">
-        <h1>Ваши курсы</h1>
-        <a href="#">Смотреть все</a>
-      </div>
-      <div class="block-courses">
-        <div>
-          <img src="@/assets/data_archiving_and_compression.svg">
-          <p>Архивация и сжатие данных</p>
-        </div>
-        <div>
-          <img src="@/assets/botany_and_plant_physiology.svg">
-          <p>Ботаника и физиология растений</p>
-        </div>
-      </div>
-    </div>
+    <HomeWidget class="block TwoTwo"/>
+    <WeatherWidget class="block TwoTwo"/>
+    <CoursesWidget class="block TwoTwo"/>
     <TimetableWidget class="TwoFor" v-if="checkCountLesson()"/>
 
   </div>
 </template>
 <script>
 import {getCookie} from "@/global";
-import HomeWidget from "@/components/HomeWidget";
-import TimetableWidget from "@/components/TimetableWidget";
+import HomeWidget from "@/components/Widgets/HomeWidget.vue";
+import TimetableWidget from "@/components/Widgets/TimetableWidget.vue";
+import WeatherWidget from "@/components/Widgets/WeatherWidget.vue";
+import CoursesWidget from "@/components/Widgets/CoursesWidget.vue";
 
 export default {
   name: "HomeView",
-  components: {HomeWidget, TimetableWidget},
+  components: {CoursesWidget, WeatherWidget, HomeWidget, TimetableWidget},
   data() {
     return {}
   },
@@ -56,14 +44,19 @@ export default {
   overflow: hidden;
   background: var(--light);
   border-radius: 25px;
-
   display: flex;
   flex-wrap: wrap;
-  align-content: space-between;
+  align-content: space-around;
   justify-content: space-between;
   padding: 15px;
   margin: 5px;
 
+  transition: .2s;
+  transition-timing-function: cubic-bezier(0.08, 0.55, 0.82, 0.41)
+}
+
+.block:hover {
+  transform: scale(1.018);
 }
 
 .blockHeader {
@@ -131,7 +124,7 @@ export default {
   text-align: right;
 }
 
-@media (max-width: 1393px) {
+@media (max-width: 1430px) {
   .TwoFor {
     height: 310px;
     width: 310px;
