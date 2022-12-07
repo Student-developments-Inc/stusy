@@ -132,8 +132,7 @@ export default {
 
 .mainContent {
   display: flex;
-  /* flex-direction: column; */
-  justify-content: flex-start;
+  justify-content: space-evenly;
   align-items: stretch;
   gap: 30px;
   padding: 57px 29px;
@@ -143,8 +142,9 @@ export default {
 .AvatarAndPersonalDataAndContacts {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
   gap: 1%;
+  width: 100%;
+  justify-content: space-evenly;
   flex-wrap: wrap;
 }
 
@@ -239,7 +239,7 @@ h1 {
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 10px;
 }
