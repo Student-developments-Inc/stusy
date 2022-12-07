@@ -279,32 +279,27 @@ textarea:focus {
 
 .block-courses {
   display: flex;
+  width: 100%;
   justify-content: space-between;
-  flex-wrap: wrap;
-  margin: 14px -5px 0 0;
 }
 
-.block-courses div {
-  flex: 1 1;
-  margin: 5px;
-  padding: 21px 10px;
+.course-card {
   border: 1px solid var(--blue);
   border-radius: 25px;
+  padding: 21px 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 160px;
+  width: 195px;
+  user-select: none;
+  cursor: pointer;
 }
 
-.block-courses div img {
+.course-card img {
   display: block;
   margin: auto;
   width: 110px;
-}
-
-.block-courses div p {
-  margin: auto;
-  max-width: 258px;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  text-align: center;
 }
 
 @media (min-width: 1920px) {
