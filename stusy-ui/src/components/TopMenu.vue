@@ -41,13 +41,6 @@
           </span>
         </a>
       </li>
-      <li class="menu-item">
-        <a href="#">
-              <span>
-                <img src="@/assets/avatar.png" alt="Avatar"/>
-              </span>
-        </a>
-      </li>
       <DropdownMenu class="menu-item" :title="``">
         <template v-slot:top-title>
           <a id="profile-title">
