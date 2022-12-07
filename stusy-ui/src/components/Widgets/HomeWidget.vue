@@ -1,6 +1,9 @@
 <template>
-  <div id='home-widget' v-if="home-widget !== null">
-    <h1>{{ localeHours }} {{ userData.first_name }}</h1>
+  <div id='home-widget'>
+    <div class="top">
+      <h1>{{ localeHours }}, {{userData.first_name}}</h1>
+      <img src="@/assets/avatar.jpg" alt="Avatar"/>
+    </div>
     <p>У вас {{ CountLesson }}</p>
     <p>Контрольных точек не запланировано</p>
   </div>
@@ -28,7 +31,7 @@ const localeHours = computed(() => {
   if (localeHours > 3 && localeHours < 12) return "Доброе утро";
   else if (localeHours > 11 && localeHours < 19) return "Добрый день";
   else if (localeHours > 18 && localeHours < 24) return "Добрый вечер";
-  else if (localeHours > 23 || localeHours < 4) return "Привет";
+  else if (localeHours > 23 || localeHours < 4) return "Доброй ночи";
   throw Error("localHours error");
 });
 
@@ -44,11 +47,19 @@ const localeHours = computed(() => {
   min-height: 220px;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 30px;
+  gap: 15px;
 }
 
-#home-widget h1 {
-  padding-top: 27px;
+#home-widget .top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 150px;
+}
+
+.top img  {
+  width: 120px;
+  border-radius: 15px;
 }
 
 #home-widget p, #home-widget h1 {

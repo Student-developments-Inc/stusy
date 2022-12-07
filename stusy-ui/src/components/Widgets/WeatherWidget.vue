@@ -1,10 +1,15 @@
 <template>
   <div id='weather' v-if="weather !== null">
-    <span id='wicon'>
+    <div class="top">
+      <p id='dateNowDay'>{{ weather.weather }}&deg;</p>
+      <span id='wicon'>
       {{ weatherEmoji }}
     </span>
-    <p id='dateNowDay'>Сегодня {{ nowDay }}, {{ weather.weatherText }}, {{ weather.weather }}&deg;</p>
-    <p>К концу занятий температура {{ getDiff }} {{ weather.lastLessonWeather }}°</p>
+
+    </div>
+    <p id='dateNowDay'>{{ nowDay }}, {{ weather.weatherText }}</p>
+
+    <p>К концу занятий <!--температура {{ getDiff }}--> {{ weather.lastLessonWeather }}°</p>
   </div>
   <div class="block" id="weather" v-else>
     <ScreenLoader/>
@@ -32,12 +37,12 @@ const nowDay = computed(() => {
   return new Date().toLocaleString("ru", {weekday: "long"});
 });
 
-const getDiff = computed(() => {
-  if (weather.value.weather === weather.value.lastLessonWeather) return "останется";
-  if (weather.value.weather > weather.value.lastLessonWeather) return "понизится до";
-  if (weather.value.weather < weather.value.lastLessonWeather) return "повысится до";
-  throw Error("weather check error");
-});
+// const getDiff = computed(() => {
+//   if (weather.value.weather === weather.value.lastLessonWeather) return "останется";
+//   if (weather.value.weather > weather.value.lastLessonWeather) return "понизится до";
+//   if (weather.value.weather < weather.value.lastLessonWeather) return "повысится до";
+//   throw Error("weather check error");
+// });
 
 async function setTemperature(temperaturePromise) {
   weather.value = await temperaturePromise;
@@ -105,6 +110,7 @@ function fetchTemperature() {
   flex-direction: column;
   justify-content: unset;
   gap: 30px;
+  flex-wrap: nowrap;
 }
 
 #weather p, #weather h1 {
@@ -114,14 +120,20 @@ function fetchTemperature() {
 }
 
 #weather #wicon {
-  position: absolute;
-  right: -10px;
-  top: -15px;
+  /*position: absolute;*/
+  /*right: -10px;*/
+  /*top: -15px;*/
   font-size: 85pt;
   user-select: none;
 }
 
-#dateNowDay {
-  padding-top: 27px;
+#weather .top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.top #dateNowDay {
+  font-size: 36pt !important;
 }
 </style>
