@@ -5,13 +5,17 @@
       <router-link to="/mycourses">Смотреть все</router-link>
     </div>
     <div class="block-courses">
-      <div>
+      <div class="course-card">
         <img src="@/assets/data_archiving_and_compression.svg">
         <p>Архивация и сжатие данных</p>
       </div>
-      <div>
+      <div class="course-card">
         <img src="@/assets/botany_and_plant_physiology.svg">
         <p>Ботаника и физиология растений</p>
+      </div>
+      <div class="course-card">
+        <img src="@/assets/data_archiving_and_compression.svg">
+        <p>Архивация и сжатие данных</p>
       </div>
     </div>
   </div>
