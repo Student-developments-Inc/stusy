@@ -118,12 +118,11 @@ export default {
   position: relative;
   margin-left: auto;
   padding: 10px;
-  height: 100vh;
   width: 40%;
   background: var(--light);
   display: flex;
   align-items: center;
-  overflow: hidden;
+  /*overflow: hidden;*/
   flex-direction: column;
   justify-content: space-around;
 }
@@ -212,6 +211,13 @@ h1.title {
 
   .form h1 {
     font-size: 9vw;
+  }
+}
+
+@media (min-height: 620px) {
+  .right-content {
+    height: 100vh;
+    justify-content: flex-start
   }
 }
 </style>
