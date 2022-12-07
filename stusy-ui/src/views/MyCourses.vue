@@ -3,35 +3,35 @@
     <div class="coursesMainLeft" id="coursesMain">
       <h1>Мои курсы</h1>
       <div class="block-courses">
-        <div v-on:click="goToCourse(1)">
+        <div v-on:click="goToCourse(1)" class="course-card">
           <img src="@/assets/data_archiving_and_compression.svg">
           <p>Архивация и сжатие данных</p>
         </div>
-        <div v-on:click="goToCourse(1)">
+        <div v-on:click="goToCourse(1)" class="course-card">
           <img src="@/assets/botany_and_plant_physiology.svg">
           <p>Ботаника и физиология растений</p>
         </div>
-        <div v-on:click="goToCourse(1)">
+        <div v-on:click="goToCourse(1)" class="course-card">
           <img src="@/assets/data_archiving_and_compression.svg">
           <p>Архивация и сжатие данных</p>
         </div>
-        <div v-on:click="goToCourse(1)">
+        <div v-on:click="goToCourse(1)" class="course-card">
           <img src="@/assets/botany_and_plant_physiology.svg">
           <p>Ботаника и физиология растений</p>
         </div>
-        <div v-on:click="goToCourse(1)">
+        <div v-on:click="goToCourse(1)" class="course-card">
           <img src="@/assets/data_archiving_and_compression.svg">
           <p>Архивация и сжатие данных</p>
         </div>
-        <div v-on:click="goToCourse(1)">
+        <div v-on:click="goToCourse(1)" class="course-card">
           <img src="@/assets/botany_and_plant_physiology.svg">
           <p>Ботаника и физиология растений</p>
         </div>
-        <div v-on:click="goToCourse(1)">
+        <div v-on:click="goToCourse(1)" class="course-card">
           <img src="@/assets/data_archiving_and_compression.svg">
           <p>Архивация и сжатие данных</p>
         </div>
-        <div v-on:click="goToCourse(1)">
+        <div v-on:click="goToCourse(1)" class="course-card">
           <img src="@/assets/botany_and_plant_physiology.svg">
           <p>Ботаника и физиология растений</p>
         </div>
@@ -89,7 +89,13 @@ h1 {
 }
 
 .block-courses > div {
-  cursor: pointer;
   transition: .3s;
+  margin: 10px;
+}
+
+.block-courses {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 </style>
