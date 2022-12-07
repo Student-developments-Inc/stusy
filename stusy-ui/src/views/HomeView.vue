@@ -1,40 +1,31 @@
 <template>
   <div class="mainContent">
     <HomeWidget class="block TwoTwo"/>
-    <WeatherWidget class="block TwoTwo"/>
-    <CoursesWidget class="block TwoTwo"/>
     <TimetableWidget class="TwoFor" v-if="checkCountLesson()"/>
+    <CoursesWidget class="block TwoFor"/>
+    <WeatherWidget class="block TwoTwo"/>
 
   </div>
 </template>
-<script>
+<script setup>
 import {getCookie} from "@/global";
 import HomeWidget from "@/components/Widgets/HomeWidget.vue";
 import TimetableWidget from "@/components/Widgets/TimetableWidget.vue";
 import WeatherWidget from "@/components/Widgets/WeatherWidget.vue";
 import CoursesWidget from "@/components/Widgets/CoursesWidget.vue";
+import {onMounted} from "vue";
 
-export default {
-  name: "HomeView",
-  components: {CoursesWidget, WeatherWidget, HomeWidget, TimetableWidget},
-  data() {
-    return {}
-  },
-  methods: {
-    menuAction() {
-      this.menu = !this.menu;
-    },
-    checkCountLesson() {
-      let value = TimetableWidget.methods.getCountLessons()
-      return !!value;
-    }
-  },
-  mounted() {
-    if (!getCookie("TOKEN")) {
-      this.$router.push("/auth");
-    }
+function checkCountLesson() {
+  let value = TimetableWidget.methods.getCountLessons()
+  return !!value;
+}
+
+onMounted(()=>{
+  if (!getCookie("TOKEN")) {
+    this.$router.push("/auth");
   }
-};
+})
+
 </script>
 
 <style>
@@ -84,8 +75,8 @@ export default {
 .TwoFor {
   height: 310px;
   max-height: 310px;
-  width: 640px;
-  max-width: 640px;
+  width: 680px;
+  max-width: 680px;
 }
 
 .slide-fade-leave-active {
