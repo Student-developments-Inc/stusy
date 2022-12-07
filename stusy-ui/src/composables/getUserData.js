@@ -1,7 +1,7 @@
 import {ref} from "vue";
 import {getCookie, logout, url} from "@/global";
 
-let userData = ref({
+export let userData = ref({
     first_name: "",
     last_name: ""
 });

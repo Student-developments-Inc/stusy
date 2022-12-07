@@ -13,7 +13,7 @@
 
 <script setup>
 import {computed, onMounted, ref} from "vue";
-import {getCookie, logout, url, weatherCodes, weatherSymbols} from "@/global";
+import {weatherCodes, weatherSymbols} from "@/global";
 import ScreenLoader from "@/components/ScreenLoader.vue";
 
 const temperaturePromise = getTemperature();
@@ -92,33 +92,6 @@ function fetchTemperature() {
         return ["Невозможно отправить запрос", err];
       });
 }
-
-onMounted(() => {
-  getUserData();
-})
-
-const userData = ref(null)
-
-function getUserData() {
-  if (getCookie("ID") === undefined) logout();
-  fetch(`${url}/users/${getCookie("ID")}`, {
-    headers: {
-      "Authorization": `Bearer ${getCookie("TOKEN")}`
-    }
-  }).then(response => {
-    if (response.ok) return response.json();
-    if (response.status === 401) {
-      logout();
-    }
-  }).then(data => {
-    if (data !== undefined) {
-      userData.value = data;
-    }
-  }).catch(err => {
-    console.error("Cannot fetch", err);
-  });
-}
-
 </script>
 
 <style scoped>
