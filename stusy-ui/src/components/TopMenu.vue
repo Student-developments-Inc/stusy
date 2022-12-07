@@ -76,42 +76,13 @@
 import {getCookie, logout, url} from "@/global";
 import DropdownMenu from "@/components/DropdownMenu";
 import ModalWindow from "@/components/ModalWindow";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import {useRouter} from "vue-router";
-import {getUserData} from "@/composables/getUserData";
+import {userData} from "@/composables/getUserData";
 const router = useRouter();
 
 let menu = false;
-// let userData = ref({
-//   first_name: "",
-//   last_name: ""
-// });
 let modal = ref(false);
-const {userData} = getUserData();
-onMounted(() => {
-  // getUserData();
-});
-
-// function getUserData() {
-//   fetch(`${url}/users/${getCookie("ID")}`, {
-//     headers: {
-//       "Authorization": `Bearer ${getCookie("TOKEN")}`
-//     }
-//   }).then(response => {
-//     if (response.ok) return response.json();
-//     if (response.status === 401) {
-//       logout();
-//     }
-//     if (response.status === 404) modal.value = true;
-//   }).then(data => {
-//     if (data !== undefined) {
-//       userData.value.first_name = data.first_name;
-//       userData.value.last_name = data.last_name;
-//     }
-//   }).catch(err => {
-//     console.error("Cannot fetch", err);
-//   });
-// }
 
 function putUserData() {
   fetch(`${url}/users/${getCookie("ID")}`, {
