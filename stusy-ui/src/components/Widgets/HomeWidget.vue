@@ -1,16 +1,16 @@
 <template>
   <div id='home-widget' v-if="home-widget !== null">
-    <h1>{{ localeHours }}{{ name }}</h1>
+    <h1>{{ localeHours }} {{userData.first_name}}</h1>
     <p>У вас {{ CountLesson }}</p>
     <p>Контрольных точек не запланировано</p>
   </div>
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from "vue";
-import {getCookie, logout, url} from "@/global";
+import {computed, onMounted} from "vue";
+// import {getCookie, logout, url} from "@/global";
 import TimetableWidget from "@/components/Widgets/TimetableWidget.vue";
-
+import {getUserData} from "@/composables/getUserData";
 const CountLesson = computed(() => {
   const valueCountLesson = TimetableWidget.methods.getCountLessons();
   if (valueCountLesson) {
@@ -21,11 +21,13 @@ const CountLesson = computed(() => {
   }
 });
 
+const {userData} = getUserData();
+
 onMounted(() => {
-  getUserData();
+  // getUserData();
 })
 
-const userData = ref(null)
+// const userData = ref(null)
 
 const localeHours = computed(() => {
   let localeHours = new Date().getHours();
@@ -36,32 +38,32 @@ const localeHours = computed(() => {
   throw Error('localHours error')
 })
 
-const name = computed(() => {
-  if (userData.value === null) {
-    return '';
-  }
-  return `, ${userData.value.first_name}`;
-})
+// const name = computed(() => {
+//   if (userData.value === null) {
+//     return '';
+//   }
+//   return `, ${userData.value.first_name}`;
+// })
 
-function getUserData() {
-  if (getCookie("ID") === undefined) logout();
-  fetch(`${url}/users/${getCookie("ID")}`, {
-    headers: {
-      "Authorization": `Bearer ${getCookie("TOKEN")}`
-    }
-  }).then(response => {
-    if (response.ok) return response.json();
-    if (response.status === 401) {
-      logout();
-    }
-  }).then(data => {
-    if (data !== undefined) {
-      userData.value = data;
-    }
-  }).catch(err => {
-    console.error("Cannot fetch", err);
-  });
-}
+// function getUserData() {
+//   if (getCookie("ID") === undefined) logout();
+//   fetch(`${url}/users/${getCookie("ID")}`, {
+//     headers: {
+//       "Authorization": `Bearer ${getCookie("TOKEN")}`
+//     }
+//   }).then(response => {
+//     if (response.ok) return response.json();
+//     if (response.status === 401) {
+//       logout();
+//     }
+//   }).then(data => {
+//     if (data !== undefined) {
+//       userData.value = data;
+//     }
+//   }).catch(err => {
+//     console.error("Cannot fetch", err);
+//   });
+// }
 
 </script>
 
