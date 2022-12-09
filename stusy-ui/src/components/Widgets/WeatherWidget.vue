@@ -9,7 +9,8 @@
     </div>
     <p id='dateNowDay'>{{ nowDay }}, {{ weather.weatherText }}</p>
 
-    <p>К концу занятий <!--температура {{ getDiff }}--> {{ weather.lastLessonWeather }}°</p>
+    <p>К концу занятий <!--температура {{ getDiff }}--> {{ weather.lastLessonWeather }}°,
+      {{ weather.weatherStatus }}</p>
   </div>
   <div class="block" id="weather" v-else>
     <ScreenLoader/>
@@ -34,7 +35,7 @@ const weatherEmoji = computed(() => {
 });
 
 const nowDay = computed(() => {
-  return new Date().toLocaleString("ru", {weekday: "long"});
+  return new Date().toLocaleString("ru", {weekday: "long"})[0].toUpperCase() + new Date().toLocaleString("ru", {weekday: "long"}).slice(1)
 });
 
 // const getDiff = computed(() => {
@@ -57,7 +58,7 @@ async function getTemperature() {
   if (fetchedWeather[0] != "Невозможно отправить запрос") {
     localStorage.setItem("weather", JSON.stringify(fetchedWeather));
     return fetchedWeather;
-  //   ОПАСНОСТЬ РЕКУРСИИ!
+    //   ОПАСНОСТЬ РЕКУРСИИ!
   } else getTemperature();
 }
 
@@ -94,6 +95,7 @@ function fetchTemperature() {
         weatherText: data.current_condition[0].lang_ru[0].value.toLowerCase(),
         lastLessonWeather: parseInt(data.weather[0].hourly[timeIndex()].tempC),
         weatherCode: data.weather[0].hourly[timeIndex()]["weatherCode"],
+        weatherStatus: data.weather[0].hourly[timeIndex()]["lang_ru"][0].value.toLowerCase(),
         fetchDate: Math.round(Date.now() / 1000)
       }))
       .catch((err) => {
@@ -134,6 +136,7 @@ function fetchTemperature() {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  height: 120px;
 }
 
 .top #dateNowDay {
