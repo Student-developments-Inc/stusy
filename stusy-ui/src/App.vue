@@ -280,7 +280,8 @@ textarea:focus {
 .block-courses {
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  gap: 5px;
 }
 
 .course-card {
