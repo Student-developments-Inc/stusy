@@ -5,8 +5,6 @@ WORKDIR /api
 COPY go.mod ./
 RUN go mod download
 COPY *.go ./
-ADD server ./server
-ADD config ./config
 
 RUN go get
 RUN go build -o /stusy-api

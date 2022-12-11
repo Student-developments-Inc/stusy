@@ -19,7 +19,124 @@ import (
 	"gorm.io/gorm"
 )
 
-func SignUp() http.HandlerFunc {
+const (
+	ErrorInternal       = "Internal server error. Try again later."
+	ErrorBadJSON        = "You have supplied an invalid JSON body."
+	ErrorBadCredentials = "Invalid credentials. Invalid email or password."
+	ErrorUserExist      = "Email is already in use."
+	ErrorEmailFormat    = "Invalid email format."
+	ErrorShortPass      = "Password is too short (should be >= 8)."
+	ErrorBadToken       = "Token is invalid or expired."
+	ErrorAccess         = "You don't have permissions to make this request."
+	ErrorNameFormat     = "Name should only consist of alphabetical characters."
+	ErrorNotFound       = "Resource not found."
+)
+
+type User struct {
+	ID        uint
+	Email     string
+	Password  []byte
+	Token     string
+	ExpiresAt int64
+}
+
+type UserData struct {
+	ID        uint
+	UserID    uint
+	FirstName string
+	LastName  string
+}
+
+type Route struct {
+	Route   string
+	Methods string
+}
+
+var (
+	Secret	string
+	Port	string
+	DSN	string
+	DB	*gorm.DB
+	r	*mux.Router
+)
+
+// Init funcs
+func
+InitDB() error {
+	var err error
+	DB, err = gorm.Open(mysql.Open(DSN), &gorm.Config{})
+	if err != nil {
+		return err
+	}
+
+	err = DB.AutoMigrate(&User{}, &UserData{})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func
+InitConfig() error {
+	DSN = fmt.Sprintf("%s:%s@tcp(stusy-db)/%s", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
+	Port = ":" + os.Getenv("PORT")
+	Secret = os.Getenv("SECRET")
+
+	if Port == "" || Secret == "" {
+		return fmt.Errorf("some of environment variables are blank or missing (make sure to set them right)")
+	}
+
+	return nil
+}
+
+func
+InitRouter() *mux.Router {
+	r = mux.NewRouter()
+
+	r.HandleFunc("/", List()).Methods("GET", "OPTIONS")
+//	r.HandleFunc("/users", Count()).Methods("GET", "OPTIONS")
+	r.HandleFunc("/users/login", SignIn()).Methods("POST", "OPTIONS")
+	r.HandleFunc("/users/register", SignUp()).Methods("POST", "OPTIONS")
+	r.HandleFunc("/users/{id:[0-9]+}", IsAuth(Info())).Methods("GET", "PUT", "OPTIONS")
+
+	r.Use(mux.CORSMethodMiddleware(r))
+
+	return r
+}
+
+// Handler funcs
+func
+List() http.HandlerFunc {
+	return func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+
+		err := r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+			output := make(map[string]string, 15)
+			pathTemplate, err := route.GetPathTemplate()
+			if err == nil {
+				output["route"] = pathTemplate
+			}
+			methods, err := route.GetMethods()
+			if err == nil {
+				output["methods"] = strings.Join(methods, ",")
+			}
+
+			listMessage(&w, output["route"], output["methods"])
+			return nil
+		})
+
+		if err != nil {
+			WriteError(&w, http.StatusInternalServerError, ErrorInternal)
+			log.Println(err)
+			return
+		}
+	}
+}
+
+func
+SignUp() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -63,20 +180,8 @@ func SignUp() http.HandlerFunc {
 	}
 }
 
-func registerMessage(w *http.ResponseWriter, id *uint) {
-	res, _ := json.MarshalIndent(struct {
-		UserID uint   `json:"user_id"`
-		Href   string `json:"href"`
-	}{
-		UserID: *id,
-		Href:   "https://api.studentsystem.xyz/profile/" + strconv.Itoa(int(*id)),
-	}, "", "	")
-
-	(*w).WriteHeader(http.StatusCreated)
-	(*w).Write(res)
-}
-
-func SignIn() http.HandlerFunc {
+func
+SignIn() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -123,24 +228,8 @@ func SignIn() http.HandlerFunc {
 	}
 }
 
-func loginMessage(w *http.ResponseWriter, token *string, id *uint, expiresAt *int64) {
-	res, _ := json.MarshalIndent(struct {
-		TokenType   string `json:"token_type"`
-		AccessToken string `json:"access_token"`
-		ExpiresIn   int64  `json:"expires_in"`
-		UserID      uint   `json:"user_id"`
-	}{
-		TokenType:   "bearer",
-		AccessToken: *token,
-		ExpiresIn:   *expiresAt - time.Now().Unix(),
-		UserID:      *id,
-	}, "", "	")
-
-	(*w).WriteHeader(http.StatusOK)
-	(*w).Write(res)
-}
-
-func Info() http.HandlerFunc {
+func
+Info() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		token := strings.Split(r.Header.Get("Authorization"), "Bearer ")
 		id, err := strconv.Atoi(mux.Vars(r)["id"])
@@ -165,7 +254,7 @@ func Info() http.HandlerFunc {
 				return
 			}
 
-			GetResponse(&w, &userData.FirstName, &userData.LastName)
+			infoMessage(&w, &userData.FirstName, &userData.LastName)
 			return
 		}
 
@@ -206,7 +295,54 @@ func Info() http.HandlerFunc {
 	}
 }
 
-func GetResponse(w *http.ResponseWriter, first, last *string) {
+// Response funcs
+// TODO: Implement generic func
+func listMessage(w *http.ResponseWriter, path, methods string) {
+	res, _ := json.MarshalIndent(struct {
+		Path    string `json:"route"`
+		Methods string `json:"methods"`
+	}{
+		Path:    path,
+		Methods: methods,
+	}, "", "	")
+
+	(*w).Write(res)
+}
+
+func
+registerMessage(w *http.ResponseWriter, id *uint) {
+	res, _ := json.MarshalIndent(struct {
+		UserID uint   `json:"user_id"`
+		Href   string `json:"href"`
+	}{
+		UserID: *id,
+		Href:   "https://api.studentsystem.xyz/profile/" + strconv.Itoa(int(*id)),
+	}, "", "	")
+
+	(*w).WriteHeader(http.StatusCreated)
+	(*w).Write(res)
+}
+
+func
+loginMessage(w *http.ResponseWriter, token *string, id *uint, expiresAt *int64) {
+	res, _ := json.MarshalIndent(struct {
+		TokenType   string `json:"token_type"`
+		AccessToken string `json:"access_token"`
+		ExpiresIn   int64  `json:"expires_in"`
+		UserID      uint   `json:"user_id"`
+	}{
+		TokenType:   "bearer",
+		AccessToken: *token,
+		ExpiresIn:   *expiresAt - time.Now().Unix(),
+		UserID:      *id,
+	}, "", "	")
+
+	(*w).WriteHeader(http.StatusOK)
+	(*w).Write(res)
+}
+
+func
+infoMessage(w *http.ResponseWriter, first, last *string) {
 	res, _ := json.MarshalIndent(struct {
 		FirstName string `json:"first_name"`
 		LastName  string `json:"last_name"`
@@ -219,31 +355,10 @@ func GetResponse(w *http.ResponseWriter, first, last *string) {
 	(*w).Write(res)
 }
 
-const (
-	ErrorInternal       = "Internal server error. Try again later."
-	ErrorBadJSON        = "You have supplied an invalid JSON body."
-	ErrorBadCredentials = "Invalid credentials. Invalid email or password."
-	ErrorUserExist      = "Email is already in use."
-	ErrorEmailFormat    = "Invalid email format."
-	ErrorShortPass      = "Password is too short (should be >= 8)."
-	ErrorBadToken       = "Token is invalid or expired."
-	ErrorAccess         = "You don't have permissions to make this request."
-	ErrorNameFormat     = "Name should only consist of alphabetical characters."
-	ErrorNotFound       = "Resource not found."
-)
 
-func WriteError(w *http.ResponseWriter, status int, err string) {
-	res, _ := json.MarshalIndent(struct {
-		Message string `json:"error_message"`
-	}{
-		Message: err,
-	}, "", "	")
-
-	(*w).WriteHeader(status)
-	(*w).Write(res)
-}
-
-func ReadJSON(w *http.ResponseWriter, r *http.Request) (map[string]string, error) {
+// Util funcs
+func
+ReadJSON(w *http.ResponseWriter, r *http.Request) (map[string]string, error) {
 	var data map[string]string
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -261,39 +376,21 @@ func ReadJSON(w *http.ResponseWriter, r *http.Request) (map[string]string, error
 	return data, nil
 }
 
-type User struct {
-	ID        uint
-	Email     string
-	Password  []byte
-	Token     string
-	ExpiresAt int64
+func // TODO: Must be generic to work with any struct
+WriteError(w *http.ResponseWriter, status int, err string) {
+	res, _ := json.MarshalIndent(struct {
+		Message string `json:"error_message"`
+	}{
+		Message: err,
+	}, "", "	")
+
+	(*w).WriteHeader(status)
+	(*w).Write(res)
 }
 
-type UserData struct {
-	ID        uint
-	UserID    uint
-	FirstName string
-	LastName  string
-}
-
-var DB *gorm.DB
-
-func InitDB() error {
-	var err error
-	DB, err = gorm.Open(mysql.Open(DSN), &gorm.Config{})
-	if err != nil {
-		return err
-	}
-
-	err = DB.AutoMigrate(&User{}, &UserData{})
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func IsAuth(next http.HandlerFunc) http.HandlerFunc {
+// Middleware
+func
+IsAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -317,8 +414,9 @@ func IsAuth(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func CreateToken(issuer string) (string, int64, error) {
-	expiresAt := time.Now().Add(time.Hour * 1).Unix()
+func
+CreateToken(issuer string) (string, int64, error) {
+	expiresAt := time.Now().Add(time.Hour * 12).Unix()
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    issuer,
 		ExpiresAt: expiresAt,
@@ -331,7 +429,8 @@ func CreateToken(issuer string) (string, int64, error) {
 	return token, expiresAt, nil
 }
 
-func ValidateToken(tokenString string) (bool, error) {
+func
+ValidateToken(tokenString string) (bool, error) {
 	token, err := parseToken(tokenString)
 	if err != nil {
 		return false, err
@@ -344,7 +443,8 @@ func ValidateToken(tokenString string) (bool, error) {
 	return false, nil
 }
 
-func parseToken(tokenString string) (*jwt.Token, error) {
+func
+parseToken(tokenString string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -355,92 +455,18 @@ func parseToken(tokenString string) (*jwt.Token, error) {
 	return token, err
 }
 
-type Route struct {
-	Route   string
-	Methods string
-}
 
-var r = mux.NewRouter()
 
-func New() *mux.Router {
-
-	r.HandleFunc("/", list).Methods("GET", "OPTIONS")
-//	r.HandleFunc("/users", Count()).Methods("GET", "OPTIONS")
-	r.HandleFunc("/users/login", SignIn()).Methods("POST", "OPTIONS")
-	r.HandleFunc("/users/register", SignUp()).Methods("POST", "OPTIONS")
-	r.HandleFunc("/users/{id:[0-9]+}", IsAuth(Info())).Methods("GET", "PUT", "OPTIONS")
-
-	r.Use(mux.CORSMethodMiddleware(r))
-
-	return r
-}
-
-func list(w http.ResponseWriter, _ *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-
-	err := r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
-		output := make(map[string]string, 15)
-		pathTemplate, err := route.GetPathTemplate()
-		if err == nil {
-			output["route"] = pathTemplate
-		}
-		methods, err := route.GetMethods()
-		if err == nil {
-			output["methods"] = strings.Join(methods, ",")
-		}
-
-		listJson(&w, output["route"], output["methods"])
-		return nil
-	})
-
-	if err != nil {
-		WriteError(&w, http.StatusInternalServerError, ErrorInternal)
-		log.Println(err)
-		return
-	}
-
-}
-
-func listJson(w *http.ResponseWriter, path, methods string) {
-	res, _ := json.MarshalIndent(struct {
-		Path    string `json:"route"`
-		Methods string `json:"methods"`
-	}{
-		Path:    path,
-		Methods: methods,
-	}, "", "	")
-
-	(*w).Write(res)
-}
-
-var (
-	Secret string
-	Port   string
-	DSN    string
-)
-
-func Init() error {
-	DSN = fmt.Sprintf("%s:%s@tcp(stusy-db)/%s", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
-	Port = ":" + os.Getenv("PORT")
-	Secret = os.Getenv("SECRET")
-
-	if Port == "" || Secret == "" {
-		return fmt.Errorf("some of environment variables are blank or missing (make sure to set them right)")
-	}
-
-	return nil
-}
-
-func main() {
+func
+main() {
 	var err error
 	log.Println("Initializing config structure")
-	err = Init()
+	err = InitConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for ; ; {
+	for {
 		log.Println("Initializing database connections pool")
 		err = InitDB()
 		if err == nil {
@@ -451,7 +477,7 @@ func main() {
 	}
 
 	log.Println("Starting local server")
-	err = http.ListenAndServe(Port, New())
+	err = http.ListenAndServe(Port, InitRouter())
 	if err != nil {
 		log.Fatal(err)
 	}
