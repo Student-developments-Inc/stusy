@@ -303,41 +303,6 @@ textarea:focus {
   width: 110px;
 }
 
-.skeleton {
-  position: relative;
-  cursor: default;
-}
-
-.skeleton::after {
-  background-image: linear-gradient(
-      90deg,
-      #EEEEEE 0%, #EEEEEE 40%,
-      #DDDDDD 50%, #DDDDDD 55%,
-      #EEEEEE 65%, #EEEEEE 100%
-  );
-  background-size: 400%;
-  animation: skeleton 1500ms infinite;
-  content: '';
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 5px;
-}
-
-@keyframes skeleton {
-  from {
-    background-position: 100% 100%;
-  }
-  to {
-    background-position: 0 0;
-  }
-}
-
 @media (min-width: 1920px) {
   #menuVertical {
     display: block;
