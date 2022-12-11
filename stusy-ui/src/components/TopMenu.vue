@@ -44,11 +44,7 @@
       <DropdownMenu class="menu-item" :title="``">
         <template v-slot:top-title>
           <a id="profile-title">
-                <span>
-                  {{
-                    userData.first_name && userData.last_name ? `${userData.first_name} ${userData.last_name[0]}.` : "Профиль"
-                  }}
-                </span>
+            <span>{{ name }}</span>
             <div class="avatar-arrow" v-bind:style="[menu?{'transform':'rotate(90deg)'}:{}]">
               <img src="@/assets/arrow.svg"/>
             </div>
@@ -66,41 +62,29 @@
 </template>
 
 <script setup>
-import {getCookie, logout, url} from "@/global";
+import {logout} from "@/global";
 import DropdownMenu from "@/components/DropdownMenu";
 import ModalWindow from "@/components/ModalWindow";
-import {ref} from "vue";
-import {useRouter} from "vue-router";
 import {userData} from "@/composables/getUserData";
-const router = useRouter();
+import {computed} from "vue";
+import {putUserData} from "@/composables/putUserData";
+
+const name = computed(() => {
+  return userData.value.first_name && userData.value.last_name ? `${userData.value.first_name} ${userData.value.last_name[0]}.` : "Профиль"
+});
 
 let menu = false;
-let modal = ref(false);
+let modal = false;
 
-function putUserData() {
-  fetch(`${url}/users/${getCookie("ID")}`, {
-    method: "PUT",
-    headers: {
-      "Authorization": `Bearer ${getCookie("TOKEN")}`
-    },
-    body: JSON.stringify({
-      "first_name": userData.first_name,
-      "last_name": userData.last_name
-    })
-  }).then(response => {
-    if (response.ok) return response.json();
-    switch (response.status) {
-      case 400:
-        console.log("Неверные данные");
-        break;
-    }
-  }).then(data => {
-    router.push("/auth");
-    console.log(data);
-  }).catch(err => {
-    console.error("Cannot fetch" + err);
-  });
-}
+// if (userData.value.first_name === "" || userData.value.first_name === undefined || userData.value.first_name === null) {
+//   console.log('Пустой')
+//   console.log('check: ' + userData.value.first_name)
+//   modal = true;
+// } else{
+//   console.log('Не Пустой')
+//   console.log('check:' + userData.value.first_name)
+//   modal = false;
+// }
 
 </script>
 
