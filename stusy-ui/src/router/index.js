@@ -9,13 +9,14 @@ const routes = [
         component: HomeView,
     },
     {
-        path: '/',
+        path: '/landing',
         name: 'Главная',
         meta: {layout: 'EmptyLayout'},
         component: () => import('../views/MainView.vue'),
     },
     {
-        path: '/auth',
+        path: '/',
+        alias : '/auth',
         name: 'Вход',
         meta: {layout: 'EmptyLayout'},
         component: () => import('../views/AuthView.vue'),
