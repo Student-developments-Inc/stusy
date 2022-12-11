@@ -2,34 +2,21 @@ package main
 
 import (
 	"encoding/json"
-	"regexp"
-	"strconv"
+	"fmt"
 	"io/ioutil"
 	"log"
-	"strings"
-	"fmt"
-	"os"
-	"time"
 	"net/http"
+	"os"
+	"regexp"
+	"strconv"
+	"strings"
+	"time"
 
-	"github.com/gorilla/mux"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gorilla/mux"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-)
-
-const (
-	ErrorInternal       = "Internal server error. Try again later."
-	ErrorBadJSON        = "You have supplied an invalid JSON body."
-	ErrorBadCredentials = "Invalid credentials. Invalid email or password."
-	ErrorUserExist      = "Email is already in use."
-	ErrorEmailFormat    = "Invalid email format."
-	ErrorShortPass      = "Password is too short (should be >= 8)."
-	ErrorBadToken       = "Token is invalid or expired."
-	ErrorAccess         = "You don't have permissions to make this request."
-	ErrorNameFormat     = "Name should only consist of alphabetical characters."
-	ErrorNotFound       = "Resource not found."
 )
 
 type User struct {
@@ -47,10 +34,22 @@ type UserData struct {
 	LastName  string
 }
 
-type Route struct {
-	Route   string
-	Methods string
+type Error struct {
+		Message string `json:"error_message"`
 }
+
+const (
+	ErrorInternal       = "Internal server error. Try again later."
+	ErrorBadJSON        = "You have supplied an invalid JSON body."
+	ErrorBadCredentials = "Invalid credentials. Invalid email or password."
+	ErrorUserExist      = "Email is already in use."
+	ErrorEmailFormat    = "Invalid email format."
+	ErrorShortPass      = "Password is too short (should be >= 8)."
+	ErrorBadToken       = "Token is invalid or expired."
+	ErrorAccess         = "You don't have permissions to make this request."
+	ErrorNameFormat     = "Name should only consist of alphabetical characters."
+	ErrorNotFound       = "Resource not found."
+)
 
 var (
 	Secret	string
@@ -123,12 +122,22 @@ List() http.HandlerFunc {
 				output["methods"] = strings.Join(methods, ",")
 			}
 
-			listMessage(&w, output["route"], output["methods"])
+			respond(&w, http.StatusOK, struct {
+					Path    string `json:"route"`
+					Methods string `json:"methods"`
+				}{
+					Path: output["route"],
+					Methods: output["methods"],
+				})
+			
 			return nil
 		})
 
 		if err != nil {
-			WriteError(&w, http.StatusInternalServerError, ErrorInternal)
+			respond(&w, http.StatusInternalServerError, Error{
+					Message: ErrorInternal,
+				})
+
 			log.Println(err)
 			return
 		}
@@ -150,7 +159,9 @@ SignUp() http.HandlerFunc {
 		}
 
 		if len(data["password"]) < 8 {
-			WriteError(&w, http.StatusBadRequest, ErrorShortPass)
+			respond(&w, http.StatusBadRequest, Error{
+					Message: ErrorShortPass,
+				})
 			return
 		}
 
@@ -158,7 +169,9 @@ SignUp() http.HandlerFunc {
 
 		re := regexp.MustCompile(`^[a-zA-Z\d.\-]+@[a-zA-Z\d\-]+\.[a-zA-Z.]`).MatchString
 		if !re(data["email"]) {
-			WriteError(&w, http.StatusBadRequest, ErrorEmailFormat)
+			respond(&w, http.StatusBadRequest, Error{
+					Message: ErrorEmailFormat,
+				})
 			return
 		}
 
@@ -170,13 +183,19 @@ SignUp() http.HandlerFunc {
 		var temp User
 		DB.Where("email = ?", user.Email).First(&temp)
 		if temp.ID != 0 {
-			WriteError(&w, http.StatusForbidden, ErrorUserExist)
+			respond(&w, http.StatusForbidden, Error{
+					Message: ErrorUserExist,
+				})
 			return
 		}
 
 		DB.Create(&user)
 
-		registerMessage(&w, &user.ID)
+		respond(&w, http.StatusCreated, struct {
+				UserID uint `json:"user_id"`
+			}{
+				UserID: user.ID,
+			})
 	}
 }
 
@@ -197,34 +216,45 @@ SignIn() http.HandlerFunc {
 		var user User
 
 		DB.Where("email = ?", strings.ToLower(data["email"])).First(&user)
-
 		if user.ID == 0 {
-			WriteError(&w, http.StatusForbidden, ErrorBadCredentials)
+			respond(&w, http.StatusForbidden, Error{
+					Message: ErrorBadCredentials,
+				})
 			return
 		}
 
 		if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data["password"])); err != nil {
-			WriteError(&w, http.StatusForbidden, ErrorBadCredentials)
+			respond(&w, http.StatusForbidden, Error{
+					Message: ErrorBadCredentials,
+				})
 			return
 		}
 
-		if len(user.Token) > 0 {
-			if ok, _ := ValidateToken(user.Token); ok {
-				loginMessage(&w, &user.Token, &user.ID, &user.ExpiresAt)
+		if len(user.Token) == 0 || !ValidateToken(user.Token) {
+			user.Token, user.ExpiresAt, err = CreateToken(strconv.Itoa(int(user.ID)))
+			if err != nil {
+				log.Println(err)
+				respond(&w, http.StatusInternalServerError, Error{
+						Message: ErrorInternal,
+					})
 				return
 			}
+
+			DB.Save(&user)
 		}
 
-		user.Token, user.ExpiresAt, err = CreateToken(strconv.Itoa(int(user.ID)))
-		if err != nil {
-			log.Println(err)
-			WriteError(&w, http.StatusInternalServerError, ErrorInternal)
-			return
-		}
 
-		DB.Save(&user)
-
-		loginMessage(&w, &user.Token, &user.ID, &user.ExpiresAt)
+		respond(&w, http.StatusOK, struct {
+				TokenType   string `json:"token_type"`
+				AccessToken string `json:"access_token"`
+				ExpiresIn   int64  `json:"expires_in"`
+				UserID      uint   `json:"user_id"`
+			}{
+				TokenType:   "bearer",
+				AccessToken: user.Token,
+				ExpiresIn:   user.ExpiresAt - time.Now().Unix(),
+				UserID:      user.ID,
+			})
 	}
 }
 
@@ -243,18 +273,29 @@ Info() http.HandlerFunc {
 
 		DB.Where("token = ?", token[1]).First(&user)
 		if user.ID != uint(id) {
-			WriteError(&w, http.StatusForbidden, ErrorAccess)
+			respond(&w, http.StatusForbidden, Error{
+					Message: ErrorAccess,
+				})
 			return
 		}
 
 		if r.Method == "GET" {
 			DB.Where("user_id = ?", uint(id)).First(&userData)
 			if userData.UserID == 0 {
-				WriteError(&w, http.StatusNotFound, ErrorNotFound)
+				respond(&w, http.StatusNotFound, Error{
+						Message: ErrorNotFound,
+					})
 				return
 			}
 
-			infoMessage(&w, &userData.FirstName, &userData.LastName)
+			respond(&w, http.StatusOK, struct {
+					FirstName string `json:"first_name"`
+					LastName  string `json:"last_name"`
+				}{
+					FirstName: userData.FirstName,
+					LastName:  userData.LastName,
+				})
+
 			return
 		}
 
@@ -265,7 +306,9 @@ Info() http.HandlerFunc {
 
 		re := regexp.MustCompile(`^\p{L}+$`).MatchString
 		if !re(data["first_name"]) || !re(data["last_name"]) {
-			WriteError(&w, http.StatusBadRequest, ErrorNameFormat)
+			respond(&w, http.StatusBadRequest, Error{
+					Message: ErrorNameFormat,
+				})
 			return
 		}
 
@@ -275,19 +318,16 @@ Info() http.HandlerFunc {
 		userData.FirstName = data["first_name"]
 
 		if userData.ID == 0 {
-
-			res, _ := json.MarshalIndent(struct {
-				FirstName string `json:"first_name"`
-				LastName  string `json:"last_name"`
-			}{
-				FirstName: userData.LastName,
-				LastName:  userData.FirstName,
-			}, "", "	")
+			respond(&w, http.StatusCreated, struct {
+					FirstName string `json:"first_name"`
+					LastName  string `json:"last_name"`
+				}{
+					FirstName: userData.FirstName,
+					LastName:  userData.LastName,
+				})
 
 			userData.UserID = user.ID
 			DB.Create(&userData)
-			w.WriteHeader(http.StatusCreated)
-			w.Write(res)
 			return
 		}
 
@@ -295,97 +335,35 @@ Info() http.HandlerFunc {
 	}
 }
 
-// Response funcs
-// TODO: Implement generic func
-func listMessage(w *http.ResponseWriter, path, methods string) {
-	res, _ := json.MarshalIndent(struct {
-		Path    string `json:"route"`
-		Methods string `json:"methods"`
-	}{
-		Path:    path,
-		Methods: methods,
-	}, "", "	")
-
-	(*w).Write(res)
-}
-
-func
-registerMessage(w *http.ResponseWriter, id *uint) {
-	res, _ := json.MarshalIndent(struct {
-		UserID uint   `json:"user_id"`
-		Href   string `json:"href"`
-	}{
-		UserID: *id,
-		Href:   "https://api.studentsystem.xyz/profile/" + strconv.Itoa(int(*id)),
-	}, "", "	")
-
-	(*w).WriteHeader(http.StatusCreated)
-	(*w).Write(res)
-}
-
-func
-loginMessage(w *http.ResponseWriter, token *string, id *uint, expiresAt *int64) {
-	res, _ := json.MarshalIndent(struct {
-		TokenType   string `json:"token_type"`
-		AccessToken string `json:"access_token"`
-		ExpiresIn   int64  `json:"expires_in"`
-		UserID      uint   `json:"user_id"`
-	}{
-		TokenType:   "bearer",
-		AccessToken: *token,
-		ExpiresIn:   *expiresAt - time.Now().Unix(),
-		UserID:      *id,
-	}, "", "	")
-
-	(*w).WriteHeader(http.StatusOK)
-	(*w).Write(res)
-}
-
-func
-infoMessage(w *http.ResponseWriter, first, last *string) {
-	res, _ := json.MarshalIndent(struct {
-		FirstName string `json:"first_name"`
-		LastName  string `json:"last_name"`
-	}{
-		FirstName: *first,
-		LastName:  *last,
-	}, "", "	")
-
-	(*w).WriteHeader(http.StatusOK)
-	(*w).Write(res)
-}
-
-
 // Util funcs
+func
+respond(w *http.ResponseWriter, status int, data interface{}) {
+	res, _ := json.MarshalIndent(data, "", "	")
+	(*w).WriteHeader(status)
+	(*w).Write(res)
+}
+
 func
 ReadJSON(w *http.ResponseWriter, r *http.Request) (map[string]string, error) {
 	var data map[string]string
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		WriteError(w, http.StatusInternalServerError, ErrorInternal)
+		respond(w, http.StatusInternalServerError, Error{
+				Message: ErrorInternal,
+			})
 		return nil, err
 	}
 
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		WriteError(w, http.StatusBadRequest, ErrorBadJSON)
+		respond(w, http.StatusBadRequest, Error{
+				Message: ErrorBadJSON,
+			})
 		return nil, err
 	}
 
 	return data, nil
-}
-
-func // TODO: Must be generic to work with any struct
-WriteError(w *http.ResponseWriter, status int, err string) {
-	res, _ := json.MarshalIndent(struct {
-		Message string `json:"error_message"`
-	}{
-		Message: err,
-	}, "", "	")
-
-	(*w).WriteHeader(status)
-	(*w).Write(res)
 }
 
 // Middleware
@@ -401,12 +379,16 @@ IsAuth(next http.HandlerFunc) http.HandlerFunc {
 
 		header := strings.Split(r.Header.Get("Authorization"), "Bearer ")
 		if len(header) != 2 || header[0] == "null" {
-			WriteError(&w, http.StatusBadRequest, ErrorBadToken)
+			respond(&w, http.StatusBadRequest, Error{
+					Message: ErrorBadToken,
+				})
 			return
 		}
 
-		if ok, _ := ValidateToken(header[1]); !ok {
-			WriteError(&w, http.StatusUnauthorized, ErrorBadToken)
+		if !ValidateToken(header[1]) {
+			respond(&w, http.StatusUnauthorized, Error{
+					Message: ErrorBadToken,
+				})
 			return
 		}
 
@@ -430,17 +412,17 @@ CreateToken(issuer string) (string, int64, error) {
 }
 
 func
-ValidateToken(tokenString string) (bool, error) {
+ValidateToken(tokenString string) (bool) {
 	token, err := parseToken(tokenString)
 	if err != nil {
-		return false, err
+		return false
 	}
 
 	if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return true, nil
+		return true
 	}
 
-	return false, nil
+	return false
 }
 
 func
@@ -455,11 +437,10 @@ parseToken(tokenString string) (*jwt.Token, error) {
 	return token, err
 }
 
-
-
 func
 main() {
 	var err error
+
 	log.Println("Initializing config structure")
 	err = InitConfig()
 	if err != nil {
