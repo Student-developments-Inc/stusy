@@ -15,8 +15,13 @@ export function getUserData() {
         }
     }).then(response => {
         if (response.ok) return response.json();
-        if (response.status === 401) {
-            logout();
+        switch (response.status) {
+            case 401:
+                logout();
+                break;
+            case 404:
+                // Сделать появление модального окна для ввода данных
+                break;
         }
     }).then(data => {
         if (data !== undefined) {
