@@ -3,6 +3,8 @@ node_modules
 /dist
 stusy-db
 stusy-api/api.exe
+stusy-api/api
+stusy-api/.*
 stusy-api/go.sum
 stusy-api/config/config.go
 
