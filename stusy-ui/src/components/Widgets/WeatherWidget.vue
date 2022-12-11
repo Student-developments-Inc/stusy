@@ -9,18 +9,17 @@
     </div>
     <p id='dateNowDay'>{{ nowDay }}, {{ weather.weatherText }}</p>
 
-    <p>К концу занятий <!--температура {{ getDiff }}--> {{ weather.lastLessonWeather }}°,
+    <p>К концу занятий {{ weather.lastLessonWeather }}°,
       {{ weather.weatherStatus }}</p>
+
   </div>
-  <div class="block" id="weather" v-else>
-    <ScreenLoader/>
+  <div class="block skeleton" id="weather" v-else>
   </div>
 </template>
 
 <script setup>
 import {computed, onMounted, ref} from "vue";
 import {weatherCodes, weatherSymbols} from "@/global";
-import ScreenLoader from "@/components/ScreenLoader.vue";
 
 const temperaturePromise = getTemperature();
 onMounted(() => {
