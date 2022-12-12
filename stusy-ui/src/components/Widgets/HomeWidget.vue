@@ -1,7 +1,7 @@
 <template>
   <div id='home-widget'>
     <div class="top">
-      <h1>{{ localeHours }}, {{userData.first_name}}</h1>
+      <h1>{{ localeHours }}, {{ userData.first_name }}</h1>
       <img src="@/assets/avatar.jpg" alt="Avatar"/>
     </div>
     <p>У вас {{ CountLesson }}</p>
@@ -12,7 +12,7 @@
 <script setup>
 import {computed} from "vue";
 import TimetableWidget from "@/components/Widgets/TimetableWidget.vue";
-import {getUserData} from "@/composables/getUserData";
+import {userData} from "@/composables/getUserData";
 
 const CountLesson = computed(() => {
   const valueCountLesson = TimetableWidget.methods.getCountLessons();
@@ -23,8 +23,6 @@ const CountLesson = computed(() => {
     return "нету пар";
   }
 });
-
-const {userData} = getUserData();
 
 const localeHours = computed(() => {
   let localeHours = new Date().getHours();
@@ -57,7 +55,7 @@ const localeHours = computed(() => {
   height: 150px;
 }
 
-.top img  {
+.top img {
   width: 120px;
   border-radius: 15px;
 }

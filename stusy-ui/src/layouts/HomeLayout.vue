@@ -15,6 +15,12 @@
 <script setup>
 import AsideMenu from "@/components/AsideMenu";
 import TopMenu from "@/components/TopMenu";
+import {onBeforeMount} from "vue";
+import {getUserData} from "@/composables/getUserData";
+
+onBeforeMount(() => {
+  getUserData();
+});
 
 </script>
 

@@ -70,7 +70,7 @@ import {computed} from "vue";
 import {putUserData} from "@/composables/putUserData";
 
 const name = computed(() => {
-  return userData.value.first_name && userData.value.last_name ? `${userData.value.first_name} ${userData.value.last_name[0]}.` : "Профиль"
+  return userData.value.first_name && userData.value.last_name ? `${userData.value.first_name} ${userData.value.last_name[0]}.` : "Профиль";
 });
 
 let menu = false;

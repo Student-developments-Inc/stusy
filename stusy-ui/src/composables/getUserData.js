@@ -4,10 +4,19 @@ import {getCookie, logout, url} from "@/global";
 export let userData = ref({
     id: getCookie("ID"),
     first_name: "",
-    last_name: ""
+    last_name: "",
 });
 
 export function getUserData() {
+    const localeUserData = JSON.parse(localStorage.getItem("userData"));
+    if (localeUserData !== null) {
+        userData.value = localeUserData;
+    } else {
+        fetchUserData();
+    }
+}
+
+function fetchUserData() {
     if (getCookie("ID") === undefined) logout();
     fetch(`${url}/users/${getCookie("ID")}`, {
         headers: {
@@ -25,8 +34,9 @@ export function getUserData() {
         }
     }).then(data => {
         if (data !== undefined) {
-            userData.value.first_name = data.first_name;
-            userData.value.last_name = data.last_name;
+            userData.value = data;
+            localStorage.setItem("userData", JSON.stringify(userData.value));
+            console.log("Finish fetch", userData.value);
         }
     }).catch(err => {
         console.error("Cannot fetch", err);
