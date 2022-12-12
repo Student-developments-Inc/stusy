@@ -35,7 +35,7 @@ type UserData struct {
 }
 
 type Error struct {
-		Message string `json:"error_message"`
+	Message string `json:"error_message"`
 }
 
 const (
@@ -52,23 +52,22 @@ const (
 )
 
 var (
-	Secret	string
-	Port	string
-	DSN	string
-	DB	*gorm.DB
+	secret	string
+	port	string
+	dsn	string
+	db	*gorm.DB
 	r	*mux.Router
 )
 
 // Init funcs
 func
-InitDB() error {
-	var err error
-	DB, err = gorm.Open(mysql.Open(DSN), &gorm.Config{})
+initdb() error {
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return err
 	}
 
-	err = DB.AutoMigrate(&User{}, &UserData{})
+	err = db.AutoMigrate(&User{}, &UserData{})
 	if err != nil {
 		return err
 	}
@@ -77,27 +76,27 @@ InitDB() error {
 }
 
 func
-InitConfig() error {
-	DSN = fmt.Sprintf("%s:%s@tcp(stusy-db)/%s", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
-	Port = ":" + os.Getenv("PORT")
-	Secret = os.Getenv("SECRET")
+initcfg() error {
+	dsn = fmt.Sprintf("%s:%s@tcp(stusy-db)/%s", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
+	port = ":" + os.Getenv("PORT")
+	secret = os.Getenv("SECRET")
 
-	if Port == "" || Secret == "" {
-		return fmt.Errorf("some of environment variables are blank or missing (make sure to set them right)")
+	if port == "" || secret == "" {
+		return fmt.Errorf("some of the environment variables are blank")
 	}
 
 	return nil
 }
 
 func
-InitRouter() *mux.Router {
+initrouter() *mux.Router {
 	r = mux.NewRouter()
 
-	r.HandleFunc("/", List()).Methods("GET", "OPTIONS")
+	r.HandleFunc("/", listroutes()).Methods("GET", "OPTIONS")
 //	r.HandleFunc("/users", Count()).Methods("GET", "OPTIONS")
-	r.HandleFunc("/users/login", SignIn()).Methods("POST", "OPTIONS")
-	r.HandleFunc("/users/register", SignUp()).Methods("POST", "OPTIONS")
-	r.HandleFunc("/users/{id:[0-9]+}", IsAuth(Info())).Methods("GET", "PUT", "OPTIONS")
+	r.HandleFunc("/users/login", userlogin()).Methods("POST", "OPTIONS")
+	r.HandleFunc("/users/register", usercreation()).Methods("POST", "OPTIONS")
+	r.HandleFunc("/users/{id:[0-9]+}", auth(userinfo())).Methods("GET", "PUT", "OPTIONS")
 
 	r.Use(mux.CORSMethodMiddleware(r))
 
@@ -106,19 +105,19 @@ InitRouter() *mux.Router {
 
 // Handler funcs
 func
-List() http.HandlerFunc {
+listroutes() http.HandlerFunc {
 	return func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		err := r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+		err := r.Walk(func(route *mux.Route, r *mux.Router, ancestors []*mux.Route) error {
 			output := make(map[string]string, 15)
-			pathTemplate, err := route.GetPathTemplate()
-			if err == nil {
-				output["route"] = pathTemplate
+			
+			if path, err := route.GetPathTemplate(); err == nil {
+				output["route"] = path
 			}
-			methods, err := route.GetMethods()
-			if err == nil {
+
+			if methods, err := route.GetMethods(); err == nil {
 				output["methods"] = strings.Join(methods, ",")
 			}
 
@@ -145,7 +144,7 @@ List() http.HandlerFunc {
 }
 
 func
-SignUp() http.HandlerFunc {
+usercreation() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -153,7 +152,7 @@ SignUp() http.HandlerFunc {
 			return
 		}
 
-		data, err := ReadJSON(&w, r)
+		data, err := parsereq(&w, r)
 		if err != nil {
 			return
 		}
@@ -162,6 +161,7 @@ SignUp() http.HandlerFunc {
 			respond(&w, http.StatusBadRequest, Error{
 					Message: ErrorShortPass,
 				})
+
 			return
 		}
 
@@ -172,35 +172,36 @@ SignUp() http.HandlerFunc {
 			respond(&w, http.StatusBadRequest, Error{
 					Message: ErrorEmailFormat,
 				})
+
 			return
 		}
 
-		user := User{
+		u := User{
 			Email:    strings.ToLower(data["email"]),
 			Password: password,
 		}
 
-		var temp User
-		DB.Where("email = ?", user.Email).First(&temp)
-		if temp.ID != 0 {
+		var tmp User
+		db.Where("email = ?", u.Email).First(&tmp)
+		if tmp.ID != 0 {
 			respond(&w, http.StatusForbidden, Error{
 					Message: ErrorUserExist,
 				})
 			return
 		}
 
-		DB.Create(&user)
+		db.Create(&u)
 
 		respond(&w, http.StatusCreated, struct {
 				UserID uint `json:"user_id"`
 			}{
-				UserID: user.ID,
+				UserID: u.ID,
 			})
 	}
 }
 
 func
-SignIn() http.HandlerFunc {
+userlogin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -208,30 +209,30 @@ SignIn() http.HandlerFunc {
 			return
 		}
 
-		data, err := ReadJSON(&w, r)
+		data, err := parsereq(&w, r)
 		if err != nil {
 			return
 		}
 
-		var user User
+		var u User
 
-		DB.Where("email = ?", strings.ToLower(data["email"])).First(&user)
-		if user.ID == 0 {
+		db.Where("email = ?", strings.ToLower(data["email"])).First(&u)
+		if u.ID == 0 {
 			respond(&w, http.StatusForbidden, Error{
 					Message: ErrorBadCredentials,
 				})
 			return
 		}
 
-		if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data["password"])); err != nil {
+		if err := bcrypt.CompareHashAndPassword(u.Password, []byte(data["password"])); err != nil {
 			respond(&w, http.StatusForbidden, Error{
 					Message: ErrorBadCredentials,
 				})
 			return
 		}
 
-		if len(user.Token) == 0 || !ValidateToken(user.Token) {
-			user.Token, user.ExpiresAt, err = CreateToken(strconv.Itoa(int(user.ID)))
+		if len(u.Token) == 0 || !ValidateToken(u.Token) {
+			u.Token, u.ExpiresAt, err = CreateToken(strconv.Itoa(int(u.ID)))
 			if err != nil {
 				log.Println(err)
 				respond(&w, http.StatusInternalServerError, Error{
@@ -240,7 +241,7 @@ SignIn() http.HandlerFunc {
 				return
 			}
 
-			DB.Save(&user)
+			db.Save(&u)
 		}
 
 
@@ -251,15 +252,15 @@ SignIn() http.HandlerFunc {
 				UserID      uint   `json:"user_id"`
 			}{
 				TokenType:   "bearer",
-				AccessToken: user.Token,
-				ExpiresIn:   user.ExpiresAt - time.Now().Unix(),
-				UserID:      user.ID,
+				AccessToken: u.Token,
+				ExpiresIn:   u.ExpiresAt - time.Now().Unix(),
+				UserID:      u.ID,
 			})
 	}
 }
 
 func
-Info() http.HandlerFunc {
+userinfo() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		token := strings.Split(r.Header.Get("Authorization"), "Bearer ")
 		id, err := strconv.Atoi(mux.Vars(r)["id"])
@@ -268,11 +269,13 @@ Info() http.HandlerFunc {
 			return
 		}
 
-		var user User
-		var userData UserData
+		var ( 
+			u	User
+			udata	UserData
+		)
 
-		DB.Where("token = ?", token[1]).First(&user)
-		if user.ID != uint(id) {
+		db.Where("token = ?", token[1]).First(&u)
+		if u.ID != uint(id) {
 			respond(&w, http.StatusForbidden, Error{
 					Message: ErrorAccess,
 				})
@@ -280,8 +283,8 @@ Info() http.HandlerFunc {
 		}
 
 		if r.Method == "GET" {
-			DB.Where("user_id = ?", uint(id)).First(&userData)
-			if userData.UserID == 0 {
+			db.Where("user_id = ?", uint(id)).First(&udata)
+			if udata.UserID == 0 {
 				respond(&w, http.StatusNotFound, Error{
 						Message: ErrorNotFound,
 					})
@@ -292,14 +295,14 @@ Info() http.HandlerFunc {
 					FirstName string `json:"first_name"`
 					LastName  string `json:"last_name"`
 				}{
-					FirstName: userData.FirstName,
-					LastName:  userData.LastName,
+					FirstName: udata.FirstName,
+					LastName:  udata.LastName,
 				})
 
 			return
 		}
 
-		data, err := ReadJSON(&w, r)
+		data, err := parsereq(&w, r)
 		if err != nil {
 			return
 		}
@@ -309,25 +312,27 @@ Info() http.HandlerFunc {
 			respond(&w, http.StatusBadRequest, Error{
 					Message: ErrorNameFormat,
 				})
+
 			return
 		}
 
-		DB.Where("user_id = ?", uint(id)).First(&userData)
+		db.Where("user_id = ?", uint(id)).First(&udata)
 
-		userData.LastName = data["last_name"]
-		userData.FirstName = data["first_name"]
+		udata.LastName = data["last_name"]
+		udata.FirstName = data["first_name"]
 
-		if userData.ID == 0 {
+		if udata.ID == 0 {
 			respond(&w, http.StatusCreated, struct {
 					FirstName string `json:"first_name"`
 					LastName  string `json:"last_name"`
 				}{
-					FirstName: userData.FirstName,
-					LastName:  userData.LastName,
+					FirstName: udata.FirstName,
+					LastName:  udata.LastName,
 				})
 
-			userData.UserID = user.ID
-			DB.Create(&userData)
+			udata.UserID = u.ID
+			db.Create(&udata)
+
 			return
 		}
 
@@ -339,12 +344,13 @@ Info() http.HandlerFunc {
 func
 respond(w *http.ResponseWriter, status int, data interface{}) {
 	res, _ := json.MarshalIndent(data, "", "	")
+
 	(*w).WriteHeader(status)
 	(*w).Write(res)
 }
 
 func
-ReadJSON(w *http.ResponseWriter, r *http.Request) (map[string]string, error) {
+parsereq(w *http.ResponseWriter, r *http.Request) (map[string]string, error) {
 	var data map[string]string
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -368,7 +374,7 @@ ReadJSON(w *http.ResponseWriter, r *http.Request) (map[string]string, error) {
 
 // Middleware
 func
-IsAuth(next http.HandlerFunc) http.HandlerFunc {
+auth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -404,7 +410,7 @@ CreateToken(issuer string) (string, int64, error) {
 		ExpiresAt: expiresAt,
 	})
 
-	token, err := claims.SignedString([]byte(Secret))
+	token, err := claims.SignedString([]byte(secret))
 	if err != nil {
 		return "", 0, err
 	}
@@ -412,7 +418,7 @@ CreateToken(issuer string) (string, int64, error) {
 }
 
 func
-ValidateToken(tokenString string) (bool) {
+ValidateToken(tokenString string) bool {
 	token, err := parseToken(tokenString)
 	if err != nil {
 		return false
@@ -431,35 +437,28 @@ parseToken(tokenString string) (*jwt.Token, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(Secret), nil
+		return []byte(secret), nil
 	})
 
 	return token, err
 }
 
+// Driver
 func
 main() {
-	var err error
 
 	log.Println("Initializing config structure")
-	err = InitConfig()
-	if err != nil {
+	if err := initcfg(); err != nil {
 		log.Fatal(err)
 	}
 
-	for {
-		log.Println("Initializing database connections pool")
-		err = InitDB()
-		if err == nil {
-			break
-		} else {
-			time.Sleep(3 * time.Second)
-		}
+	log.Println("Initializing database connections pool")
+	if err := initdb(); err != nil {
+		log.Fatal(err)
 	}
 
 	log.Println("Starting local server")
-	err = http.ListenAndServe(Port, InitRouter())
-	if err != nil {
+	if err := http.ListenAndServe(port, initrouter()); err != nil {
 		log.Fatal(err)
 	}
 }
