@@ -66,7 +66,6 @@ export default {
       this.loading = true;
       fetch(`${url}/user/auth`, {
         method: "POST",
-        mode:'no-cors',
         body: JSON.stringify({
           email: this.email,
           password: this.password
