@@ -149,6 +149,7 @@ func RespondWithJSON(w *http.ResponseWriter, status int, payload interface{}) {
 	res, _ := json.MarshalIndent(payload, "", "	")
 
 	(*w).Header().Set("Content-Type", "application/json")
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).WriteHeader(status)
 	(*w).Write(res)
 }
@@ -251,7 +252,6 @@ func (a *Api) getUsers(w http.ResponseWriter, req *http.Request) {
 
 // /user
 func (a *Api) createUser(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	var pl struct {
 		Email		string `json:"email"`
 		Password	string `json:"password"`
@@ -299,7 +299,6 @@ func validateRegData(pass, email string) bool {
 
 // /user/auth
 func (a *Api) loginUser(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	var pl struct {
 		Email		string `json:"email"`
 		Password	string `json:"password"`
@@ -355,7 +354,6 @@ func validatePassHash(a []byte, b []byte) bool {
 
 // /user/id
 func (a *Api) getUser(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	var udata UserData
 	id, _ := strconv.Atoi(mux.Vars(req)["id"])
 
@@ -372,7 +370,6 @@ func (a *Api) getUser(w http.ResponseWriter, req *http.Request) {
 }
 
 func (a *Api) updateUser(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	var pl struct {
 		First	string `json:"first_name"`
 		Middle	string `json:"middle_name"`
@@ -399,6 +396,7 @@ func (a *Api) updateUser(w http.ResponseWriter, req *http.Request) {
 
 	if udata.ID != 0 {
 		RespondWithError(&w, http.StatusForbidden, "You can't change your name")
+		return
 	}
 
 	udata.FirstName = pl.First
@@ -446,7 +444,6 @@ func (a *Api) getCourse(w http.ResponseWriter, req *http.Request) {
 }
 
 func (a *Api) createCourse(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	var pl struct {
 		Name	string `json:"name"`
 		Desc	string `json:"description"`
