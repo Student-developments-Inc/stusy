@@ -1,7 +1,7 @@
 <template>
   <div class="block" id="timetable">
     <h1>{{ localeDate }}</h1>
-    <div class="block-timetable" v-for="item in timetable['ИС-20-Д'][localeDate.split(',')[0]]" :key="item.id">
+    <div class="block-timetable" v-for="item in localTimetable['ИС-20-Д'][localeDate.split(',')[0]]" :key="item.id">
       <div>
         <ul class="block-timetable_topLeft-content">
           <li>{{ item[1] }}</li>
@@ -18,6 +18,35 @@
   </div>
 </template>
 
+<!--<script setup>-->
+<!--import {timetable} from "@/global";-->
+<!--import {onMounted, ref} from "vue";-->
+
+<!--let localeDate = ref("")-->
+<!--let localTimetable = ref(timetable)-->
+
+<!--function getDate() {-->
+<!--  const options = {weekday: "long", month: "numeric", day: "numeric"};-->
+<!--  localeDate.value = new Date().toLocaleDateString(undefined, options);-->
+<!--  localeDate.value = localeDate.value.charAt(0).toUpperCase() + localeDate.value.slice(1);-->
+<!--}-->
+<!-- -->
+<!--function getCountLessons() {-->
+<!--  getDate();-->
+<!--  const weekDay = timetable['ИС-20-Д'][localeDate.value.split(",")[0]]-->
+<!--  if (weekDay) {-->
+<!--    return Object.keys(weekDay).length;-->
+<!--  } else {-->
+<!--    return null-->
+<!--  }-->
+<!--}-->
+
+<!--onMounted(() => {-->
+<!--  getDate();-->
+<!--});-->
+
+<!--</script>-->
+
 <script>
 import {timetable} from "@/global";
 
@@ -26,7 +55,7 @@ export default {
   data() {
     return {
       localeDate: "",
-      timetable: timetable
+      localTimetable: timetable
     };
   },
   methods: {

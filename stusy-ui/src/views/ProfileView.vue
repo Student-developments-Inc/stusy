@@ -10,12 +10,12 @@
           <p>Номер студенческого: {{ userData.id }}</p>
         </div>
       </div>
-      <form v-on:submit.prevent="submit(userData)">
+      <form v-on:submit.prevent="submit(localUserData)">
         <div class="personalDataForm">
           <label class="input-form">
             <p>Имя</p>
             <input
-                v-model="userData.first_name"
+                v-model="localUserData.first_name"
                 type="text"
                 placeholder="Введите имя"
                 required
@@ -24,7 +24,7 @@
           <label class="input-form">
             <p>Фамилия</p>
             <input
-                v-model="userData.last_name"
+                v-model="localUserData.last_name"
                 type="text"
                 placeholder="Введите фамилию"
                 required
@@ -168,13 +168,18 @@
 </template>
 
 <script setup>
-import {getUserData} from "@/composables/getUserData";
+import {userData} from "@/composables/getUserData";
 import {getCookie, url} from "@/global";
+import {ref} from "vue";
 
-const {userData} = getUserData();
+let localUserData = ref({
+  id: userData.value.id,
+  first_name: userData.value.first_name,
+  last_name: userData.value.last_name,
+});
 
 function submit(userData) {
-  fetch(`${url}/users/${getCookie("ID")}`, {
+  fetch(`${url}/user/${getCookie("ID")}`, {
     method: "PUT",
     headers: {
       "Authorization": `Bearer ${getCookie("TOKEN")}`
@@ -194,8 +199,8 @@ function submit(userData) {
         break;
     }
   })
-      // .then(data => {
-    // console.log(data);
+  // .then(data => {
+  // console.log(data);
   // }).catch(err => {
   //   console.error("Cannot fetch" + err);
   // });

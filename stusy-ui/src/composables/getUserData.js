@@ -18,7 +18,7 @@ export function getUserData() {
 
 function fetchUserData() {
     if (getCookie("ID") === undefined) logout();
-    fetch(`${url}/users/${getCookie("ID")}`, {
+    fetch(`${url}/user/${getCookie("ID")}`, {
         headers: {
             "Authorization": `Bearer ${getCookie("TOKEN")}`
         }

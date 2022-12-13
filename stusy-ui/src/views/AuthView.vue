@@ -64,14 +64,14 @@ export default {
   methods: {
     auth() {
       this.loading = true;
-      fetch(`${url}/users/login`, {
+      fetch(`${url}/user/auth`, {
         method: "POST",
+        mode:'no-cors',
         body: JSON.stringify({
           email: this.email,
           password: this.password
         })
-      })
-          .then((response) => {
+      }).then((response) => {
             return response.json();
           })
           .then((data) => {

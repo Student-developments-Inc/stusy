@@ -4,7 +4,7 @@ import router from "@/router";
 import {userData} from "@/composables/getUserData";
 
 export function putUserData() {
-    fetch(`${url}/users/${getCookie("ID")}`, {
+    fetch(`${url}/user/${getCookie("ID")}`, {
         method: "PUT",
         headers: {
             "Authorization": `Bearer ${getCookie("TOKEN")}`
