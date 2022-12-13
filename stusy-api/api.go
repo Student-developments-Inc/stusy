@@ -319,7 +319,7 @@ func (a *Api) loginUser(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if len(u.Token) == 0 || !a.validateToken(u.Token) {
+	if !a.validateToken(u.Token) {
 		var err error
 		u.Token, u.ExpiresAt, err = a.generateToken(strconv.Itoa(int(u.ID)))
 		if err != nil {
@@ -336,7 +336,7 @@ func (a *Api) loginUser(w http.ResponseWriter, req *http.Request) {
 			TokenType   string `json:"token_type"`
 			AccessToken string `json:"access_token"`
 			ExpiresIn   int64  `json:"expires_in"`
-			UserID      uint   `json:"user_id"`
+			UserID      uint   `json:"uid"`
 		}{
 			TokenType:   "bearer",
 			AccessToken: u.Token,
