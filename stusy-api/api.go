@@ -20,16 +20,16 @@ import (
 
 // DB Models
 type User struct {
-	ID        uint		`json:"id"`
-	Email     string	`json:"email"`
-	Password  []byte	`json:"password"`
-	Token     string	`json:"token"`
-	ExpiresAt int64		`json:"expires_at"`
+	ID		uint
+	Email		string
+	Password	[]byte
+	Token		string
+	ExpiresAt	int64
 }
 
 type UserData struct {
-	ID		uint
-	UserID		uint	`json:"id"`
+	ID		uint	`json:"omit"`
+	UserID		uint	`json:"omit"`
 	FirstName	string	`json:"first_name"`
 	MiddleName	string	`json:"middle_name"`
 	LastName	string	`json:"last_name"`
@@ -40,6 +40,10 @@ type Course struct {
 	Author		uint	`json:"author"`
 	Name		string	`json:"name"`
 	Description	string	`json:"description"`
+}
+
+type CourseData struct {
+
 }
 
 // Command structs
@@ -331,17 +335,7 @@ func (a *Api) loginUser(w http.ResponseWriter, req *http.Request) {
 	}
 
 
-	RespondWithJSON(&w, http.StatusOK, struct {
-			TokenType   string `json:"token_type"`
-			AccessToken string `json:"access_token"`
-			ExpiresIn   int64  `json:"expires_in"`
-			UserID      uint   `json:"uid"`
-		}{
-			TokenType:   "bearer",
-			AccessToken: u.Token,
-			ExpiresIn:   u.ExpiresAt - time.Now().Unix(),
-			UserID:      u.ID,
-		})
+	RespondWithJSON(&w, http.StatusOK, map[string]string{"token": u.Token})
 }
 
 func validatePassHash(a []byte, b []byte) bool {
@@ -363,18 +357,11 @@ func (a *Api) getUser(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	RespondWithJSON(&w, http.StatusOK, map[string]string{
-			"first_name": udata.FirstName,
-			"middle_name": udata.MiddleName,
-			"last_name": udata.LastName})
+	RespondWithJSON(&w, http.StatusOK, &udata)
 }
 
 func (a *Api) updateUser(w http.ResponseWriter, req *http.Request) {
-	var pl struct {
-		First	string `json:"first_name"`
-		Middle	string `json:"middle_name"`
-		Last	string `json:"last_name"`
-	}
+	var pl UserData
 
 	dec := json.NewDecoder(req.Body)
 	if err := dec.Decode(&pl); err != nil {
@@ -384,32 +371,25 @@ func (a *Api) updateUser(w http.ResponseWriter, req *http.Request) {
 	defer req.Body.Close()
 
 	re := regexp.MustCompile(`^\p{L}+$`).MatchString
-	if !re(pl.First) || !re(pl.Middle) || !re(pl.Last) {
+	if !re(pl.FirstName) || !re(pl.MiddleName) || !re(pl.LastName) {
 		RespondWithError(&w, http.StatusBadRequest, ErrorNameFormat)
 		return
 	}
 
-	var udata UserData
 	id, _ := strconv.Atoi(mux.Vars(req)["id"])
 
-	a.DB.Where("user_id = ?", uint(id)).First(&udata)
-
-	if udata.ID != 0 {
+	var t UserData
+	a.DB.Where("user_id = ?", uint(id)).First(&t)
+	if t.ID != 0 {
 		RespondWithError(&w, http.StatusForbidden, "You can't change your name")
 		return
 	}
 
-	udata.FirstName = pl.First
-	udata.MiddleName = pl.Middle
-	udata.LastName = pl.Last
-	udata.UserID = uint(id)
+	pl.UserID = uint(id)
 
-	a.DB.Create(&udata)
+	a.DB.Create(&pl)
 
-	RespondWithJSON(&w, http.StatusCreated, map[string]string{
-			"first_name": udata.FirstName,
-			"middle_name": udata.MiddleName,
-			"last_name": udata.LastName})
+	RespondWithJSON(&w, http.StatusCreated, &pl)
 
 }
 
