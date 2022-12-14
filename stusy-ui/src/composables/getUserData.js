@@ -2,7 +2,6 @@ import {ref} from "vue";
 import {getCookie, logout, url} from "@/global";
 
 export let userData = ref({
-    id: getCookie("ID"),
     first_name: "",
     last_name: "",
 });

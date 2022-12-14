@@ -7,7 +7,7 @@
         </div>
         <div class="nameNum">
           <p class="name">{{ userData.first_name }} {{ userData.last_name }}</p>
-          <p>Номер студенческого: {{ userData.id }}</p>
+          <p>Номер студенческого: {{ localUserData.id }}</p>
         </div>
       </div>
       <form v-on:submit.prevent="submit(localUserData)">
@@ -173,7 +173,7 @@ import {getCookie, url} from "@/global";
 import {ref} from "vue";
 
 let localUserData = ref({
-  id: userData.value.id,
+  id: getCookie("ID"),
   first_name: userData.value.first_name,
   last_name: userData.value.last_name,
 });
