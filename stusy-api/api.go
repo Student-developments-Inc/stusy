@@ -106,6 +106,8 @@ func (c *Config) Init() error {
 }
 
 func (a *Api) initRoutes() {
+	a.Router.HandleFunc("/{.+}", a.preflightCORS).Methods("OPTIONS")
+	a.Router.HandleFunc("/{.+}/{.+}", a.preflightCORS).Methods("OPTIONS")
 	a.Router.HandleFunc("/", a.listRoutes).Methods("GET")
 
 	a.Router.HandleFunc("/users", a.getUsers).Methods("GET")
@@ -216,6 +218,11 @@ func (a *Api) parseToken(s string) (*jwt.Token, error) {
 }
 
 // Endpoint functions' implementations
+
+// /*
+func (a *Api) preflightCORS(w http.ResponseWriter, _ *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+}
 
 // /
 func (a *Api) listRoutes (w http.ResponseWriter, _ *http.Request) {
