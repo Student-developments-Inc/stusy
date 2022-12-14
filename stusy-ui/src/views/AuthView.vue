@@ -82,7 +82,7 @@ export default {
             if (data["access_token"]) {
               this.error = false;
               document.cookie = "TOKEN=" + data["access_token"];
-              document.cookie = "ID=" + data["user_id"];
+              document.cookie = "ID=" + data["uid"];
               this.$router.push("/home");
             }
           })
