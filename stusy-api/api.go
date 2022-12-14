@@ -222,6 +222,7 @@ func (a *Api) parseToken(s string) (*jwt.Token, error) {
 // /*
 func (a *Api) preflightCORS(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
 }
 
 // /
@@ -342,7 +343,13 @@ func (a *Api) loginUser(w http.ResponseWriter, req *http.Request) {
 	}
 
 
-	RespondWithJSON(&w, http.StatusOK, map[string]string{"token": u.Token})
+	RespondWithJSON(&w, http.StatusOK, struct{
+		UserID	uint	`json:"uid"`
+		Token	string	`json:"access_token"`
+	}{
+		UserID:	u.ID,
+		Token:	u.Token,
+	})
 }
 
 func validatePassHash(a []byte, b []byte) bool {
