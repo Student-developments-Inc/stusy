@@ -54,11 +54,13 @@ async function getTemperature() {
     return storedWeather;
   }
   const fetchedWeather = await fetchTemperature();
-  if (fetchedWeather[0] != "Невозможно отправить запрос") {
-    localStorage.setItem("weather", JSON.stringify(fetchedWeather));
-    return fetchedWeather;
-    //   ОПАСНОСТЬ РЕКУРСИИ!
-  } else getTemperature();
+  // if (fetchedWeather[0] != "Невозможно отправить запрос") {
+  //   localStorage.setItem("weather", JSON.stringify(fetchedWeather));
+  //   return fetchedWeather;
+  //   //   ОПАСНОСТЬ РЕКУРСИИ!
+  // } else getTemperature();
+  if (JSON.stringify(fetchedWeather) !== 'Невозможно отправить запрос') localStorage.setItem("weather", JSON.stringify(fetchedWeather));
+  return fetchedWeather;
 }
 
 function isWeatherExpired(weather) {

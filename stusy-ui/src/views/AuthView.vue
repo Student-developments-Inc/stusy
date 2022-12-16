@@ -71,8 +71,8 @@ export default {
           password: this.password
         })
       }).then((response) => {
-            return response.json();
-          })
+        return response.json();
+      })
           .then((data) => {
             if (data["error_message"]) {
               this.error = true;
